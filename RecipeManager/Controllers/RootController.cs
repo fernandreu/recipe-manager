@@ -23,7 +23,7 @@ namespace RecipeManager.Controllers
             var response = new RootResponse
             {
                 Self = Link.To(nameof(this.GetRoot)),
-                Recipes = Link.To(nameof(RecipesController.GetAllRecipes)),
+                Recipes = Link.ToCollection(nameof(RecipesController.GetAllRecipes)),
             };
 
             return this.Ok(response);

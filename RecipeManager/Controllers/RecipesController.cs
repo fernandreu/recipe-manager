@@ -40,7 +40,7 @@ namespace RecipeManager.Controllers
 
                 return new Collection<Recipe>
                 {
-                    Self = Link.To(nameof(this.GetAllRecipes)),
+                    Self = Link.ToCollection(nameof(this.GetAllRecipes)),
                     Value = allRecipes.ToArray(),
                 };
             }
@@ -49,7 +49,7 @@ namespace RecipeManager.Controllers
             return new Collection<Recipe>
             {
                 // Link parameters are set to an empty string if needed so that clicking on that link truly produces the same query
-                Self = Link.To(nameof(this.GetAllRecipes), new { ingredient = ingredient ?? string.Empty }),
+                Self = Link.ToCollection(nameof(this.GetAllRecipes), new { ingredient = ingredient ?? string.Empty }),
                 Value = filteredRecipes.ToArray(),
             };
         }
