@@ -46,6 +46,7 @@ namespace RecipeManager
 
             services.AddMvc(options =>
             {
+                options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add<LinkRewritingFilter>();
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
