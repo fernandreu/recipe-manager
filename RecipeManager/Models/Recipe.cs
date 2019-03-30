@@ -11,12 +11,18 @@ namespace RecipeManager.Models
 {
     using System.Collections.Generic;
 
+    using RecipeManager.Infrastructure;
+
     public class Recipe : Resource
     {
+        [Sortable(Default = true)]
+        [Searchable]
         public string Title { get; set; }
 
         public IEnumerable<Ingredient> Ingredients { get; set; }
 
+        [Sortable]
+        [Searchable]
         public string Details { get; set; }
     }
 }

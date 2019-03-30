@@ -19,7 +19,10 @@ namespace RecipeManager.Services
     {
         Task<Recipe> GetRecipeAsync(Guid id);
 
-        Task<IEnumerable<Recipe>> GetRecipesAsync();
+        Task<PagedResults<Recipe>> GetRecipesAsync(
+            PagingOptions pagingOptions, 
+            SortOptions<Recipe, RecipeEntity> sortOptions,
+            SearchOptions<Recipe, RecipeEntity> searchOptions);
 
         Task<IEnumerable<Recipe>> FindRecipes(string ingredient = null);
     }

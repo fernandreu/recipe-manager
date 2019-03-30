@@ -27,7 +27,7 @@ namespace RecipeManager.Filters
         public void OnException(ExceptionContext context)
         {
             var error = new ApiError();
-
+            
             if (this.env.IsDevelopment())
             {
                 error.Message = context.Exception.Message;

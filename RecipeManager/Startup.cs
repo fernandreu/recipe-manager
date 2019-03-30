@@ -22,6 +22,7 @@ namespace RecipeManager
 
     using RecipeManager.Filters;
     using RecipeManager.Infrastructure;
+    using RecipeManager.Models;
     using RecipeManager.Services;
 
     public class Startup
@@ -33,9 +34,13 @@ namespace RecipeManager
 
         public IConfiguration Configuration { get; }
 
+        public IHostingEnvironment CurrentEnvironment { get; set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PagingOptions>(this.Configuration.GetSection("DefaultPagingOptions"));
+
             services.AddScoped<IRecipeService, DefaultRecipeService>();
 
             services.AddDbContext<RecipeApiDbContext>(options =>
@@ -74,11 +79,22 @@ namespace RecipeManager
                 options.ReportApiVersions = true;
                 options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
             });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errorResponse = new ApiError(context.ModelState);
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            this.CurrentEnvironment = env;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -45,11 +45,25 @@ namespace RecipeManager.Services
             var mapper = this.mappingConfiguration.CreateMapper();
             return mapper.Map<Recipe>(entity);
         }
-
-        public async Task<IEnumerable<Recipe>> GetRecipesAsync()
+        
+        public async Task<PagedResults<Recipe>> GetRecipesAsync(
+            PagingOptions pagingOptions,
+            SortOptions<Recipe, RecipeEntity> sortOptions,
+            SearchOptions<Recipe, RecipeEntity> searchOptions)
         {
-            var query = this.context.Recipes.ProjectTo<Recipe>(this.mappingConfiguration).OrderBy(x => x.Title);
-            return await query.ToArrayAsync();
+            IQueryable<RecipeEntity> query = this.context.Recipes;
+            query = searchOptions.Apply(query);
+            query = sortOptions.Apply(query);
+
+            var size = await query.CountAsync();
+            
+            var items = await query.Skip(pagingOptions.Offset.Value).Take(pagingOptions.Limit.Value).ProjectTo<Recipe>(this.mappingConfiguration).ToArrayAsync();
+            
+            return new PagedResults<Recipe>
+            {
+                Items = items,
+                TotalSize = size,
+            };
         }
 
         public async Task<IEnumerable<Recipe>> FindRecipes(string ingredient = null)

@@ -10,11 +10,11 @@
 namespace RecipeManager.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
 
     using RecipeManager.Models;
     using RecipeManager.Services;
@@ -25,31 +25,43 @@ namespace RecipeManager.Controllers
     {
         private readonly IRecipeService recipeService;
 
-        public RecipesController(IRecipeService recipeService)
+        private readonly PagingOptions defaultPagingOptions;
+
+        public RecipesController(IRecipeService recipeService, IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.recipeService = recipeService;
+            this.defaultPagingOptions = defaultPagingOptionsWrapper.Value;
         }
-
+        
         [HttpGet(Name = nameof(GetAllRecipes))]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Collection<Recipe>>> GetAllRecipes(string ingredient = null)
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<PagedCollection<Recipe>>> GetAllRecipes(
+            [FromQuery] PagingOptions pagingOptions, 
+            [FromQuery] SortOptions<Recipe, RecipeEntity> sortOptions,
+            [FromQuery] SearchOptions<Recipe, RecipeEntity> searchOptions)
         {
-            if (!this.Request.Query.ContainsKey(nameof(ingredient)))
-            {
-                var allRecipes = await this.recipeService.GetRecipesAsync();
+            pagingOptions.Offset = pagingOptions.Offset ?? this.defaultPagingOptions.Offset;
+            pagingOptions.Limit = pagingOptions.Limit ?? this.defaultPagingOptions.Limit;
 
-                return new Collection<Recipe>
-                {
-                    Self = Link.ToCollection(nameof(this.GetAllRecipes)),
-                    Value = allRecipes.ToArray(),
-                };
-            }
-            
+            var recipes = await this.recipeService.GetRecipesAsync(pagingOptions, sortOptions, searchOptions);
+
+            return PagedCollection<Recipe>.Create(
+                Link.ToCollection(nameof(this.GetAllRecipes)), 
+                recipes.Items.ToArray(), 
+                recipes.TotalSize, 
+                pagingOptions);
+        }
+
+        [HttpGet("search", Name = nameof(FindRecipes))]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<Collection<Recipe>>> FindRecipes(string ingredient = null)
+        {
             var filteredRecipes = await this.recipeService.FindRecipes(ingredient);
             return new Collection<Recipe>
             {
                 // Link parameters are set to an empty string if needed so that clicking on that link truly produces the same query
-                Self = Link.ToCollection(nameof(this.GetAllRecipes), new { ingredient = ingredient ?? string.Empty }),
+                Self = Link.ToCollection(nameof(this.FindRecipes), new { ingredient = ingredient ?? string.Empty }),
                 Value = filteredRecipes.ToArray(),
             };
         }

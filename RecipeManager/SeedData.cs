@@ -112,6 +112,36 @@ namespace RecipeManager
                 Details = "Mix everything together and put it into the oven somehow.",
             });
 
+            context.Recipes.Add(new RecipeEntity
+            {
+                Id = Guid.NewGuid(),
+                Title = "Spinach and ricotta cannelloni",
+                Ingredients = new[]
+                {
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "500g spinach",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "300g ricotta",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "12 cannelloni tubes",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "300g mozzarella",
+                    },
+                },
+                Details = "Mix everything together and put it into the oven somehow.",
+            });
+
             await context.SaveChangesAsync();
         }
     }
