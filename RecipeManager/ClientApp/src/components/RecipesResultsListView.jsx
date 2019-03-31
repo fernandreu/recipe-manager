@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
-import { ListGroup, ListGroupItem, Group} from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
+
+const API_URL_ingredientsSearch = "https://localhost:5001/api/recipes?search=ingredients contains "
 
 export class RecipesResultsListView extends Component {
   
 
   constructor (props) {
     super(props);
+    this.handleListEntryClick = this.handleListEntryClick.bind(this);
     this.state = {
-      results_ingredientSearch: []
+      ingredientSearched: "",
+      resultsingredientSearch:[ ]
     };
   }
 
@@ -24,22 +28,41 @@ export class RecipesResultsListView extends Component {
       }
   }
 
+
   issue_searchQuery_ingredientsSearch(search_term){
-    //backendfest
-    console.log("search term received: "+ search_term)
+    var x = []
+    fetch(API_URL_ingredientsSearch + search_term)
+      .then(response => response.json())
+      .then((data) => { this.setState({resultsingredientSearch:data.value}); })
   }
 
+
+  handleListEntryClick(item_id){
+    this.load_recipe_view(item_id)
+  }
+
+
+  load_recipe_view(item_href){
+    var item_href_str_parts = item_href.split("/");
+    var item_id= item_href_str_parts[item_href_str_parts.length-1 ]
+    window.location.assign('/recipe?id='+item_id);
+  }
+
+
   create_ui_entry_result(item){
-    // create the entries ui template (title)
-    <ListGroupItem>Vestibulum at eros</ListGroupItem>
+    return(
+    <ListGroupItem className="userLabel_empty" key={item.href} onClick={()=> {this.handleListEntryClick(item.href)}}>{item.title}</ListGroupItem>
+    )
   }
   
 
   create_ui_list_results(result_entries){
     if (result_entries.length>0){
-      var ui_entryItems_results = result_entries.map(this.create_ui_entry_result)
+      var ui_entryItems_results = result_entries.map(this.create_ui_entry_result, this)
       return (
-      <div>{ui_entryItems_results}</div>
+        <ListGroup>
+          {ui_entryItems_results}
+      </ListGroup>
     )}
     else{
       return( <div>no entries</div>)
@@ -51,10 +74,12 @@ export class RecipesResultsListView extends Component {
     return (
       <div>
         <h1>Results</h1>
-        <ListGroup>
-        {this.create_ui_list_results(this.state.results_ingredientSearch)}
-        </ListGroup>
+        
+        {this.create_ui_list_results(this.state.resultsingredientSearch)}
+   
       </div>
     );
   }
+
+
 }
