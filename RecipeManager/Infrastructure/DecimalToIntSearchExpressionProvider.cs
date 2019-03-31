@@ -33,6 +33,7 @@ namespace RecipeManager.Infrastructure
 
         public override Expression GetComparison(MemberExpression left, string op, ConstantExpression right)
         {
+            // TODO: Add contains operator for strings
             switch (op.ToLower())
             {
                 case "gt": return Expression.GreaterThan(left, right);
