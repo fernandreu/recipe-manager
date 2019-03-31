@@ -4,6 +4,8 @@ import { Label, Container, Row, ListGroup, ListGroupItem } from 'reactstrap';
 
 const API_URL_recipe_id = "https://localhost:5001/api/recipes/"
 
+//DELETE THIS COMMENT: jsut for testing
+
 export class RecipeDetailsView extends Component {
   
 
