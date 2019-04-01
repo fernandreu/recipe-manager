@@ -18,7 +18,7 @@ namespace RecipeManager.Models
 
         public string Title { get; set; }
         
-        public IEnumerable<IngredientEntity> Ingredients { get; set; }
+        public ICollection<IngredientEntity> Ingredients { get; set; }
 
         public string Details { get; set; }
     }

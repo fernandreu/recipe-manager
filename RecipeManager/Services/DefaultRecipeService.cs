@@ -35,7 +35,7 @@ namespace RecipeManager.Services
 
         public async Task<Recipe> GetRecipeAsync(Guid id)
         {
-            var entity = await this.context.Recipes.SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await this.context.Recipes.Include(x => x.Ingredients).SingleOrDefaultAsync(x => x.Id == id);
 
             if (entity == null)
             {

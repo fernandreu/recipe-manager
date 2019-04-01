@@ -20,7 +20,7 @@ namespace RecipeManager.Models
         public string Title { get; set; }
 
         [SearchableIngredient]
-        public IEnumerable<Ingredient> Ingredients { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
 
         [Sortable]
         [Searchable]
