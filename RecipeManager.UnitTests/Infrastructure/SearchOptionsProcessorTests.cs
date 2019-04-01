@@ -43,7 +43,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         }
 
         [Test]
-        public void GetAllTerms_NullOrderBy_ShouldReturnEmptyList()
+        public void GetAllTerms_NullSearchQuery_ShouldReturnEmptyList()
         {
             // Arrange
             var processor = new SearchOptionsProcessor<bool, short>(null);
