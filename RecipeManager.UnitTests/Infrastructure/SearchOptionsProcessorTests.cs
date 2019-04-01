@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SortOptionsProcessorTests.cs" company="MasterChefs">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SearchOptionsProcessorTests.cs" company="MasterChefs">
 //   {{Copyright}}
 // </copyright>
 // <summary>
@@ -16,14 +16,14 @@ namespace RecipeManager.UnitTests.Infrastructure
 
     using RecipeManager.Infrastructure;
 
-    public class SortOptionsProcessorTests
+    public class SearchOptionsProcessorTests
     {
         [Test]
         public void GetAllTerms_NoSpaces_ShouldAssignToNames()
         {
             // Arrange
             var elements = new[] { "abc", "def", "G_hi_jkl", "m_desc" };
-            var processor = new SortOptionsProcessor<int, bool>(elements);
+            var processor = new SearchOptionsProcessor<string, int>(elements);
 
             // Act
             var terms = processor.GetAllTerms().ToArray();
@@ -35,6 +35,9 @@ namespace RecipeManager.UnitTests.Infrastructure
                 foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
                 {
                     Assert.AreEqual(element, term.Name, "Unexpected name");
+                    Assert.IsNull(term.Operator, "Operator is not empty");
+                    Assert.IsNull(term.Value, "Value is not empty");
+                    Assert.IsFalse(term.ValidSyntax, "Syntax is actually valid");
                 }
             });
         }
@@ -43,7 +46,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         public void GetAllTerms_NullOrderBy_ShouldReturnEmptyList()
         {
             // Arrange
-            var processor = new SortOptionsProcessor<string, int>(null); // Types don't matter for this
+            var processor = new SearchOptionsProcessor<bool, short>(null);
 
             // Act
             var terms = processor.GetAllTerms();
