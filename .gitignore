@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /.localhistory/D/Dropbox/Proyectos/C#/RecipeManager/RecipeManager
+/.localhistory/D/Dropbox/Proyectos/C#/RecipeManager/RecipeManager.UnitTests/Infrastructure
