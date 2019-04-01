@@ -11,14 +11,14 @@ namespace RecipeManager.UnitTests.Infrastructure
 {
     using System;
     using System.Linq;
-
-    using NUnit.Framework;
-
+    
     using RecipeManager.Infrastructure;
+
+    using Xunit;
 
     public class SortOptionsProcessorTests
     {
-        [Test]
+        [Fact]
         public void GetAllTerms_NoSpaces_ShouldAssignToNames()
         {
             // Arrange
@@ -29,17 +29,14 @@ namespace RecipeManager.UnitTests.Infrastructure
             var terms = processor.GetAllTerms().ToArray();
 
             // Assert
-            Assert.AreEqual(elements.Length, terms.Length, "Search terms does not have expected number of elements");
-            Assert.Multiple(() =>
+            Assert.Equal(elements.Length, terms.Length);
+            foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
             {
-                foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
-                {
-                    Assert.AreEqual(element, term.Name, "Unexpected name");
-                }
-            });
+                Assert.Equal(element, term.Name);
+            }
         }
 
-        [Test]
+        [Fact]
         public void GetAllTerms_NullOrderBy_ShouldReturnEmptyList()
         {
             // Arrange
@@ -49,7 +46,7 @@ namespace RecipeManager.UnitTests.Infrastructure
             var terms = processor.GetAllTerms();
 
             // Assert
-            Assert.IsEmpty(terms, "Search terms are not empty");
+            Assert.Empty(terms);
         }
     }
 }

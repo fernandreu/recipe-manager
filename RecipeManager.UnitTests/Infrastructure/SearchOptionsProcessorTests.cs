@@ -11,14 +11,14 @@ namespace RecipeManager.UnitTests.Infrastructure
 {
     using System;
     using System.Linq;
-
-    using NUnit.Framework;
-
+    
     using RecipeManager.Infrastructure;
+
+    using Xunit;
 
     public class SearchOptionsProcessorTests
     {
-        [Test]
+        [Fact]
         public void GetAllTerms_NoSpaces_ShouldAssignToNames()
         {
             // Arrange
@@ -29,20 +29,17 @@ namespace RecipeManager.UnitTests.Infrastructure
             var terms = processor.GetAllTerms().ToArray();
 
             // Assert
-            Assert.AreEqual(elements.Length, terms.Length, "Search terms does not have expected number of elements");
-            Assert.Multiple(() =>
+            Assert.Equal(elements.Length, terms.Length);
+            foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
             {
-                foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
-                {
-                    Assert.AreEqual(element, term.Name, "Unexpected name");
-                    Assert.IsNull(term.Operator, "Operator is not empty");
-                    Assert.IsNull(term.Value, "Value is not empty");
-                    Assert.IsFalse(term.ValidSyntax, "Syntax is actually valid");
-                }
-            });
+                Assert.Equal(element, term.Name);
+                Assert.Null(term.Operator);
+                Assert.Null(term.Value);
+                Assert.False(term.ValidSyntax, "Syntax is actually valid");
+            }
         }
 
-        [Test]
+        [Fact]
         public void GetAllTerms_NullSearchQuery_ShouldReturnEmptyList()
         {
             // Arrange
@@ -52,7 +49,7 @@ namespace RecipeManager.UnitTests.Infrastructure
             var terms = processor.GetAllTerms();
 
             // Assert
-            Assert.IsEmpty(terms, "Search terms are not empty");
+            Assert.Empty(terms);
         }
     }
 }

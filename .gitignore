@@ -259,5 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-/.localhistory/D/Dropbox/Proyectos/C#/RecipeManager/RecipeManager
-/.localhistory/D/Dropbox/Proyectos/C#/RecipeManager/RecipeManager.UnitTests/Infrastructure
+
+# Local history
+.localhistory
