@@ -16,7 +16,13 @@ variables:
 steps:
 
 - task: DotNetCoreInstaller@0
-  displayName: Install ASP.NET Core for Integration Tests
+  displayName: Install ASP.NET Core SDK for Build
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.105'
+
+- task: DotNetCoreInstaller@0
+  displayName: Install ASP.NET Core Runtime for Integration Tests
   inputs:
     packageType: 'runtime'
     version: '2.2.3'
