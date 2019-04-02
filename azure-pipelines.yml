@@ -7,8 +7,8 @@ trigger:
 - master
 
 pool:
-  vmImage: 'VS2017-Win2016'
-  # vmImage: 'Ubuntu-16.04'
+  # vmImage: 'VS2017-Win2016'
+  vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
@@ -16,9 +16,9 @@ variables:
 steps:
 
 - task: DotNetCoreInstaller@0
-  displayName: Install ASP.NET Core
+  displayName: Install ASP.NET Core for Integration Tests
   inputs:
-    packageType: 'sdk'
+    packageType: 'release'
     version: '2.2.3'
     
 - script: dotnet build --configuration $(buildConfiguration)
