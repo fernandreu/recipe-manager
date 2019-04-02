@@ -15,3 +15,17 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Run Backend Unit Tests
+  inputs:
+    command: test
+    projects: '**/*UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Run Backend Integration Tests
+  inputs:
+    command: test
+    projects: '**/*Integration/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
