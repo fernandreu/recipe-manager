@@ -27,5 +27,5 @@ steps:
   displayName: Run Backend Integration Tests
   inputs:
     command: test
-    projects: '**/*Integration/*.csproj'
+    projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
