@@ -15,18 +15,20 @@ export default class App extends Component {
 
   render () {
     return (
+      <div><h2>Welcome to React</h2>
       //structure: 
       // - headerlabel
       // |
       // --- form: input , btn
       // --- restults list
       // --- recipe overview
-
+      
       <Layout>
         <Route exact path='/' component = {SearchIngredientFormView} />
         <Route exact path= "/results"  component ={RecipesResultsListView} />
         <Route exact path= "/recipe" component = {RecipeDetailsView}/>
       </Layout>
+      </div>
     );
   }
 }
