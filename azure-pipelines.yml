@@ -7,8 +7,8 @@ trigger:
 - master
 
 pool:
-  # vmImage: 'VS2017-Win2016'
-  vmImage: 'Ubuntu-16.04'
+  vmImage: 'VS2017-Win2016'
+  # vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
@@ -22,8 +22,14 @@ steps:
     packageType: 'sdk'
     version: '2.2.105'
     
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'Build API ($(buildConfiguration))'
+- task: DotNetCoreCLI@2
+  displayName: DotNet Build
+  inputs:
+    command: build
+    arguments: '--configuration $(buildConfiguration)'
+
+# - script: dotnet build --configuration $(buildConfiguration)
+#   displayName: 'Publish API ($(buildConfiguration))'
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
@@ -38,3 +44,21 @@ steps:
     command: test
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: DotNet Publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
+
+- task: AzureRmWebAppDeployment@3
+  displayName: 'Publish To Azure Apps'
+  inputs:
+    azureSubscription: 'AzureResources'
+    WebAppName: 'RecipeManager'
+    Package: $(System.ArtifactsDirectory)/**/*.zip
