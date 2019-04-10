@@ -29,9 +29,11 @@ describe("test the following group", () => {
   });
 
   it("check if comp renders without crashing", () => {
+    // Arrange
+    // Act
+    // Assert
     shallow(<App />);
   });
-
 
   // comparation to SNAPSHOTS??
   it("check if render contains an element", () => {

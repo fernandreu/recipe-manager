@@ -3,36 +3,34 @@ import { Form, Button, Label, Input } from 'reactstrap';
 
 export class SearchIngredientFormView extends Component {
 
-
-  constructor (props) {
+  constructor(props) {
     super(props);
-    this.searchIngredient = this.searchIngredient.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
-  searchIngredient(e){
+  // IGTest: serachIngredient was triggered
+  handleSubmit(e) {
+    this.triggerIngredientSearch();
     e.preventDefault();
-    console.log (this.inputtaskValue.value)
-    if (this.inputtaskValue.value !== "") 
-    {
-      var searchTerm = this.inputtaskValue.value
-      window.location.assign('/results?searchTermIngredient='+searchTerm);
-    }
-    e.preventDefault(); 
   }
 
+  triggerIngredientSearch() {
+    if (this.inputtaskValue.value !== "") {
+      var searchTerm = this.inputtaskValue.value
+      window.location.assign('/results?searchTermIngredient=' + searchTerm);
+    }
+  }
 
-  render () {
+  // unit: comp renders as expected
+  render() {
     return (
       <div>
-        <Form onSubmit={this.searchIngredient}>
-            <Label for="form_input">Search by ingredient</Label>
-            <Input type="text" name="text" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i}  />
-            <Button>Search</Button>
+        <Form onSubmit={this.handleSubmit}>
+          <Label for="form_input">Search by ingredient</Label>
+          <Input type="text" name="text" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i} />
+          <Button>Search</Button>
         </Form>
       </div>
     );
   }
-
-
 }

@@ -1,69 +1,70 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 import { Label, Container, Row, ListGroup, ListGroupItem } from 'reactstrap';
+import axios from "axios"
 
-const API_URL_recipe_id = "https://localhost:5001/api/recipes/"
-
-//DELETE THIS COMMENT: just for testing 2
+const API_URL_recipe_id = "/api/recipes/"
 
 export class RecipeDetailsView extends Component {
-  
 
-  constructor (props) {
+  constructor(props) {
     super(props);
-
     this.state = {
-      recipe_details:[]
+      recipe_details: []
     };
+
+    this.updateRecipeDetails = this.updateRecipeDetails.bind(this);
   }
 
-  
-  componentDidMount(){
-      let url = this.props.location.search;
-      let params = queryString.parse(url);
-      if ("id" in params){
-           this.issue_searchQuery_recipe_details(params.id)
-      } 
-      else{
-        // render nothing
-      }
+  componentDidMount() {
+    this.triggerRecipeDetailsQuery();
   }
 
-
-  issue_searchQuery_recipe_details(search_term){
-    fetch(API_URL_recipe_id + search_term)
-      .then(response => response.json())
-      .then((data) => {this.setState({recipe_details:data}); 
-      }
-    )
+  triggerRecipeDetailsQuery() {
+    let url = this.props.location.search;
+    let params = queryString.parse(url);
+    if ("id" in params) {
+      this.query_search_recipe_details(params.id, this.updateRecipeDetails)
+    }
+    else {
+      // render nothing
+    }
   }
 
-  create_ui_entry_ingredient(item)
-  {
+  updateRecipeDetails(data) {
+    this.setState({ recipe_details: data });
+  }
+
+  query_search_recipe_details(search_term, cb) {
+    axios.get(API_URL_recipe_id + search_term)
+      .then(res => {
+        cb(res.data)
+      });
+  }
+
+  create_ui_entry_ingredient(item) {
     <ListGroupItem> {item.name} </ListGroupItem>
-
-
   }
+
   //todo: add ingredients overview as table
-  create_ui_recipe_view(item){
+  create_ui_recipe_view(item) {
     //var ingredients = item.ingredients.map(this.create_ui_entry_ingredient, this) 
     return (
-        <Container>
-          <Row>
-            <Label type="text">{item.title}</Label> 
-          </Row>
-          <Row>
-            <Label type="text">{item.details}</Label>
-          </Row>     
-          <Row className="ingredients">
-            
-          </Row>  
-        </Container>
+      <Container>
+        <Row>
+          <Label type="text">{item.title}</Label>
+        </Row>
+        <Row>
+          <Label type="text">{item.details}</Label>
+        </Row>
+        <Row className="ingredients">
+
+        </Row>
+      </Container>
     )
   }
 
-
-  render () {
+  render() {
     return (
       <div>
         <h1>Recipe</h1>
@@ -71,6 +72,4 @@ export class RecipeDetailsView extends Component {
       </div>
     );
   }
-
-
 }
