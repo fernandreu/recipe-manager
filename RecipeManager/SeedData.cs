@@ -141,6 +141,41 @@ namespace RecipeManager
                 },
                 Details = "Mix everything together and put it into the oven somehow.",
             });
+            
+            context.Recipes.Add(new RecipeEntity
+            {
+                Id = Guid.NewGuid(),
+                Title = "Vegetarian Fajitas",
+                Ingredients = new[]
+                {
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "2tbsp vegetable oil",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "1 onion, chopped",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "1 red chilli, seeds removed and chopped",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "1 garlic clove, chopped",
+                    },
+                    new IngredientEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "400g tin kidney beans, drained and rinsed",
+                    },
+                },
+                Details = "Check: https://www.bbc.com/food/recipes/fajitas_8651",
+            });
 
             await context.SaveChangesAsync();
         }
