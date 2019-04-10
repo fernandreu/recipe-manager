@@ -28,9 +28,6 @@ steps:
     command: build
     arguments: '--configuration $(buildConfiguration)'
 
-# - script: dotnet build --configuration $(buildConfiguration)
-#   displayName: 'Publish API ($(buildConfiguration))'
-
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
   inputs:
