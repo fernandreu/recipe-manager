@@ -5,6 +5,7 @@ import axios from "axios"
 
 const API_URL_recipe_id = "/api/recipes/"
 
+
 export class RecipeDetailsView extends Component {
 
   constructor(props) {
@@ -19,6 +20,8 @@ export class RecipeDetailsView extends Component {
   componentDidMount() {
     this.triggerRecipeDetailsQuery();
   }
+
+  
 
   triggerRecipeDetailsQuery() {
     let url = this.props.location.search;
