@@ -6,19 +6,22 @@ export class SearchIngredientFormView extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.LINK_SEARCHPAGE = '/results?searchTermIngredient=';
   }
 
   // IGTest: serachIngredient was triggered
   handleSubmit(e) {
-    this.triggerIngredientSearch();
+    console.log(this.inputtaskValue.value);
+    if (this.inputtaskValue.value !== "") {
+    
+    this.triggerIngredientSearch(this.inputtaskValue.value);
+    }
     e.preventDefault();
   }
 
-  triggerIngredientSearch() {
-    if (this.inputtaskValue.value !== "") {
-      var searchTerm = this.inputtaskValue.value
-      window.location.assign('/results?searchTermIngredient=' + searchTerm);
-    }
+  triggerIngredientSearch(searchTerm) {
+
+      window.location.href=this.LINK_SEARCHPAGE +""+ searchTerm;
   }
 
   // unit: comp renders as expected
@@ -27,8 +30,8 @@ export class SearchIngredientFormView extends Component {
       <div>
         <Form onSubmit={this.handleSubmit}>
           <Label for="form_input">Search by ingredient</Label>
-          <Input type="text" name="text" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i} />
-          <Button>Search</Button>
+          <Input type="text" name="inpt" className = "input" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i} />
+          <Button id = "btn" className = "btn">Search</Button>
         </Form>
       </div>
     );
