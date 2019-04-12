@@ -88,6 +88,16 @@ namespace RecipeManager
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowMyApp",
+                    policy => policy
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,6 +120,8 @@ namespace RecipeManager
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCors("AllowMyApp");
 
             app.UseMvc(routes =>
             {
