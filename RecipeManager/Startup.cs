@@ -104,6 +104,8 @@ namespace RecipeManager
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             this.CurrentEnvironment = env;
+            
+            app.UseCors("AllowMyApp");
 
             if (env.IsDevelopment())
             {
@@ -116,8 +118,6 @@ namespace RecipeManager
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
-            app.UseCors("AllowMyApp");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
