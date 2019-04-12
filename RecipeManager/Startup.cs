@@ -104,8 +104,6 @@ namespace RecipeManager
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             this.CurrentEnvironment = env;
-            
-            app.UseCors("AllowMyApp");
 
             if (env.IsDevelopment())
             {
@@ -120,15 +118,19 @@ namespace RecipeManager
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowMyApp");
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+            app.MapWhen(
+                x => x.Request.Path.Value.StartsWith("/api"),
+                builder =>
+                {
+                    builder.UseStatusCodePagesWithReExecute("/api/error/{0}");
+                    builder.UseMvc();
+                });
 
             app.UseSpa(spa =>
             {

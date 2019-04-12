@@ -26,22 +26,26 @@ namespace RecipeManager.Filters
 
         public void OnException(ExceptionContext context)
         {
-            var error = new ApiError();
+            ApiError error;
             
             if (this.env.IsDevelopment())
             {
-                error.Message = context.Exception.Message;
-                error.Detail = context.Exception.StackTrace;
+                error = new ApiError(
+                    500, 
+                    context.Exception.Message,
+                    context.Exception.StackTrace);
             }
             else
             {
-                error.Message = "A server error occurred";
-                error.Detail = context.Exception.Message;
+                error = new ApiError(
+                    500,
+                    "A server error occurred",
+                    context.Exception.Message);
             }
 
             context.Result = new ObjectResult(error)
             {
-                StatusCode = 500
+                StatusCode = error.StatusCode
             };
         }
     }
