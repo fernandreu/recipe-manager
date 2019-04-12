@@ -118,9 +118,6 @@ namespace RecipeManager
             }
 
             app.UseHttpsRedirection();
-
-            app.UseCors("AllowMyApp");
-
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             
@@ -128,6 +125,7 @@ namespace RecipeManager
                 x => x.Request.Path.Value.StartsWith("/api"),
                 builder =>
                 {
+                    builder.UseCors("AllowMyApp");
                     builder.UseStatusCodePagesWithReExecute("/api/error/{0}");
                     builder.UseMvc();
                 });
