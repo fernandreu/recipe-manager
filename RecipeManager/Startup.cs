@@ -88,6 +88,16 @@ namespace RecipeManager
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowMyApp",
+                    policy => policy
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,13 +120,15 @@ namespace RecipeManager
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+            
+            app.MapWhen(
+                x => x.Request.Path.Value.StartsWith("/api"),
+                builder =>
+                {
+                    builder.UseCors("AllowMyApp");
+                    builder.UseStatusCodePagesWithReExecute("/api/error/{0}");
+                    builder.UseMvc();
+                });
 
             app.UseSpa(spa =>
             {
