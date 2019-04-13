@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using RecipeManager.Extensions;
     using RecipeManager.Models;
@@ -32,39 +33,38 @@
                 return null;
             }
 
-            var result = new IngredientSearchTerm();
-
-            // First, check if the first token is any recognized search operator for this
-            var parts = criteria.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var op in ValidSearchOperators)
+            var result = new IngredientSearchTerm
             {
-                if (!parts[0].Is(op))
-                {
-                    continue;
-                }
+                Name = criteria
+            };
 
-                result.Operator = op;
-                parts = parts[1].Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
-                break;
+            // First, check if the last but one token is any recognized search operator for this
+            var parts = criteria.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string quantityAndUnits = null;
+            if (parts.Length > 2)
+            {
+                foreach (var op in ValidSearchOperators)
+                {
+                    if (!parts[parts.Length - 2].Is(op))
+                    {
+                        continue;
+                    }
+
+                    quantityAndUnits = parts[parts.Length - 1];
+                    parts = parts.SkipLast(2).ToArray();
+                    result.Name = string.Join(' ', parts);
+                    result.Operator = op;
+                    break;
+                }
             }
             
-            var quantityAndUnits = parts[0];
-            if (!char.IsDigit(quantityAndUnits[0]))
+            if (quantityAndUnits == null)
             {
                 // Simpler case: no quantity specified
-                result.Name = string.Join(' ', parts);
                 return result;
             }
 
-            if (parts.Length != 2)
-            {
-                // We need at least two tokens, e.g. '3 eggs'. Queries such as '3' do not make sense
-                return null;
-            }
-
-            result.Name = parts[1];
-
-            // Parse first part
+            // Parse first part of quantityAndUnits
             int index;
             for (index = 0; index < quantityAndUnits.Length; ++index)
             {
@@ -83,9 +83,9 @@
 
             result.Quantity = quantity;
 
-            if (index < parts[0].Length)
+            if (index < quantityAndUnits.Length)
             {
-                result.Units = parts[0].Substring(index);
+                result.Units = quantityAndUnits.Substring(index);
             }
 
             return result;
