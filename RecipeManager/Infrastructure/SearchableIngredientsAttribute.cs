@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SearchableIngredientAttribute.cs" company="MasterChefs">
+// <copyright file="SearchableIngredientsAttribute.cs" company="MasterChefs">
 //   {{Copyright}}
 // </copyright>
 // <summary>
-//   Defines the SearchableIngredientAttribute type.
+//   Defines the SearchableIngredientsAttribute type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,9 +13,9 @@ namespace RecipeManager.Infrastructure
     // Ideally, any item property of any IEnumerable<T> collection could be the target of a search.
     // Why not inheriting those search properties from the T class? For example, an individual ingredient search could
     // look like "/ingredients?search=name eq salt", while from recipes, it could be mapped to "/recipes?search=ingredientName eq salt"
-    public class SearchableIngredientAttribute : SearchableAttribute
+    public class SearchableIngredientsAttribute : SearchableAttribute
     {
-        public SearchableIngredientAttribute()
+        public SearchableIngredientsAttribute()
         {
             this.ExpressionProvider = new IngredientExpressionProvider();
         }

@@ -11,10 +11,14 @@ namespace RecipeManager.Models
 {
     using System;
 
-    public class IngredientEntity
+    public class IngredientEntity : IIngredient
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public double Quantity { get; set; }
+
+        public string Units { get; set; }
     }
 }

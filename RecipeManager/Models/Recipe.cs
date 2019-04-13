@@ -13,13 +13,13 @@ namespace RecipeManager.Models
 
     using RecipeManager.Infrastructure;
 
-    public class Recipe : Resource
+    public class Recipe : Resource, IRecipe<Ingredient>
     {
         [Sortable(Default = true)]
         [Searchable]
         public string Title { get; set; }
-
-        [SearchableIngredient]
+        
+        [SearchableIngredients]
         public ICollection<Ingredient> Ingredients { get; set; }
 
         [Sortable]

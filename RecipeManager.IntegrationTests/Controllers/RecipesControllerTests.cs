@@ -10,11 +10,15 @@
 namespace RecipeManager.IntegrationTests.Controllers
 {
     using System;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore.Internal;
+
     using Newtonsoft.Json;
 
+    using RecipeManager.Extensions;
     using RecipeManager.Models;
 
     using Xunit;
@@ -29,16 +33,29 @@ namespace RecipeManager.IntegrationTests.Controllers
         }
 
         [Fact]
-        public async Task CanGetRecipes()
+        public async Task CanGetAllRecipes()
         {
-            // Act
+            // Arrange / Act
             var httpResponse = await this.client.GetAsync("/api/recipes");
             httpResponse.EnsureSuccessStatusCode();
-
-            // Assert
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             var recipes = JsonConvert.DeserializeObject<PagedCollection<Recipe>>(stringResponse);
+
+            // Assert
             Assert.Contains(recipes.Value, r => r.Title.Equals("Spanish Omelet", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Fact]
+        public async Task CanFindRecipeByJustIngredientName()
+        {
+            // Arrange / Act
+            var httpResponse = await this.client.GetAsync("/api/recipes?search=ingredients contains eggs");
+            httpResponse.EnsureSuccessStatusCode();
+            var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            var recipes = JsonConvert.DeserializeObject<PagedCollection<Recipe>>(stringResponse);
+
+            // Assert
+            Assert.All(recipes.Value, r => Assert.Contains(r.Ingredients, i => i.Name.Contains("eggs")));
         }
     }
 }

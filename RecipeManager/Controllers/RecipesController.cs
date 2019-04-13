@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RecipesController.cs" company="MasterChefs">
+// <copyright file="IngredientsController.cs" company="MasterChefs">
 //   {{Copyright}}
 // </copyright>
 // <summary>
-//   Defines the RecipesController type.
+//   Defines the IngredientsController type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

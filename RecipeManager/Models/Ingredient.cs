@@ -9,8 +9,16 @@
 
 namespace RecipeManager.Models
 {
-    public class Ingredient : Resource
+    using RecipeManager.Extensions;
+
+    public class Ingredient : Resource, IIngredient
     {
         public string Name { get; set; }
+
+        public double Quantity { get; set; }
+
+        public string Units { get; set; }
+
+        public string FullName => this.FullName();
     }
 }

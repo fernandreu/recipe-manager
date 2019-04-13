@@ -9,31 +9,27 @@
 
 namespace RecipeManager.Infrastructure
 {
-    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
+    using RecipeManager.Extensions;
     using RecipeManager.Models;
     
     public class IngredientExpressionProvider : DefaultSearchExpressionProvider
     {
         public override Expression GetComparison(MemberExpression left, string op, ConstantExpression right)
         {
-            if (!op.Equals("contains", StringComparison.OrdinalIgnoreCase))
+            if (!op.Is(SearchOperator.Contains))
             {
                 return base.GetComparison(left, op, right);
             }
 
-            // The expression is: Items.Any(x => x.Name.Contains(right, StringComparison.OrdinalIgnoreCase)), with Items being IEnumerable<IngredientEntity>
-            var lambdaVar = Expression.Variable(typeof(IngredientEntity), "x");
-            var nameProperty = Expression.Property(lambdaVar, nameof(IngredientEntity.Name));
-
-            var containsMethod = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string), typeof(StringComparison) });
-            var containsCall = Expression.Call(nameProperty, containsMethod, right, Expression.Constant(StringComparison.OrdinalIgnoreCase));
-            
-            var whereLambda = Expression.Lambda(containsCall, lambdaVar);
-            
-            return Expression.Call(typeof(Enumerable), nameof(Enumerable.Any), new[] { typeof(IngredientEntity) }, left, whereLambda);
+            // The expression is: Items.IsMatch(right), with Items being IEnumerable<IngredientEntity>
+            // However, IsMatch is an extension method, so in reality the expression is: IngredientExtensions.IsMatch(Items, right)
+            var isMatchMethod = typeof(IngredientExtensions).GetMethod(nameof(IngredientExtensions.IsMatch), new[] { typeof(IEnumerable<IIngredient>), typeof(string) });
+            return Expression.Call(isMatchMethod, left, right);
         }
     }
 }

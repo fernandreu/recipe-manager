@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RecipeManager.Extensions;
+
 namespace RecipeManager.Filters
 {
     using System;

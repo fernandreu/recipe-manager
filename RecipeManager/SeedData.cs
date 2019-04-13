@@ -41,17 +41,21 @@ namespace RecipeManager
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "6 eggs",
+                        Quantity = 6,
+                        Name = "eggs",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "2kg potatoes",
+                        Quantity = 2,
+                        Units = "kg",
+                        Name = "potatoes",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "1 onion",
+                        Quantity = 1,
+                        Name = "onion",
                     },
                 },
                 Details = "Peel and slice the potatoes and fry them in a saucepan together with mixed eggs.",
@@ -66,17 +70,22 @@ namespace RecipeManager
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "3 eggs",
+                        Quantity = 3,
+                        Name = "eggs",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "Salt",
+                        Quantity = 1,
+                        Units = "tbsp",
+                        Name = "salt",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "Oil",
+                        Quantity = 1,
+                        Units = "tbsp",
+                        Name = "oil",
                     },
                 },
                 Details = "Beat the eggs, put them in a pan with a bit of oil and a pinch of salt, and wait.",
@@ -91,22 +100,28 @@ namespace RecipeManager
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "6 carrots",
+                        Quantity = 6,
+                        Name = "carrots",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
+                        Quantity = 500,
+                        Units = "g",
                         Name = "Muscovado sugar",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "300g flour",
+                        Quantity = 300,
+                        Units = "g",
+                        Name = "flour",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "2 eggs",
+                        Quantity = 2,
+                        Name = "eggs",
                     },
                 },
                 Details = "Mix everything together and put it into the oven somehow.",
@@ -121,22 +136,29 @@ namespace RecipeManager
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "500g spinach",
+                        Quantity = 500,
+                        Units = "g",
+                        Name = "spinach",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "300g ricotta",
+                        Quantity = 300,
+                        Units = "g",
+                        Name = "ricotta",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "12 cannelloni tubes",
+                        Quantity = 12,
+                        Name = "cannelloni tubes",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "300g mozzarella",
+                        Quantity = 300,
+                        Units = "g",
+                        Name = "mozzarella",
                     },
                 },
                 Details = "Mix everything together and put it into the oven somehow.",
@@ -151,27 +173,34 @@ namespace RecipeManager
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "2tbsp vegetable oil",
+                        Quantity = 2,
+                        Units = "tbsp",
+                        Name = "vegetable oil",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "1 onion, chopped",
+                        Quantity = 1,
+                        Name = "onion, chopped",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "1 red chilli, seeds removed and chopped",
+                        Quantity = 1,
+                        Name = "red chilli, seeds removed and chopped",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "1 garlic clove, chopped",
+                        Quantity = 1,
+                        Name = "garlic clove, chopped",
                     },
                     new IngredientEntity
                     {
                         Id = Guid.NewGuid(),
-                        Name = "400g tin kidney beans, drained and rinsed",
+                        Quantity = 400,
+                        Units = "g",
+                        Name = "tin kidney beans, drained and rinsed",
                     },
                 },
                 Details = "Check: https://www.bbc.com/food/recipes/fajitas_8651",

@@ -12,7 +12,7 @@ namespace RecipeManager.Models
     using System;
     using System.Collections.Generic;
 
-    public class RecipeEntity
+    public class RecipeEntity : IRecipe<IngredientEntity>
     {
         public Guid Id { get; set; }
 

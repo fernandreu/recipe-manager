@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RecipeManager.Extensions;
+using RecipeManager.Models;
+
 namespace RecipeManager.Infrastructure
 {
     using System;
@@ -18,7 +21,7 @@ namespace RecipeManager.Infrastructure
 
         public virtual Expression GetComparison(MemberExpression left, string op, ConstantExpression right)
         {
-            if (!op.Equals("eq", StringComparison.OrdinalIgnoreCase))
+            if (!op.Is(SearchOperator.Equal))
             {
                 throw new ArgumentException($"Invalid operator '{op}'.");
             }

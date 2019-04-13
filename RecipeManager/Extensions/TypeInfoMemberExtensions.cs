@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RecipeManager
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
+namespace RecipeManager.Extensions
+{
     public static class TypeInfoMemberExtensions
     {
         public static IEnumerable<ConstructorInfo> GetAllConstructors(this TypeInfo typeInfo)
