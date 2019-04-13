@@ -45,17 +45,12 @@ steps:
 - script: |
     cd ./RecipeManager/ClientApp
     npm install
+  displayName: Run 'npm install'
 
 - script: |
     cd ./RecipeManager/ClientApp
     npm run test
-
-- task: DotNetCoreCLI@2
   displayName: Run Frontend Tests (Unit, Integration, BDD)
-  inputs:
-    command: npm run test
-    projects: '**/RecipeManager.csproj'
-    arguments: ""
 
 - task: DotNetCoreCLI@2
   displayName: DotNet Publish
