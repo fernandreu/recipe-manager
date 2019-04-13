@@ -30,7 +30,6 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
-  continueOnError: true
   inputs:
     command: test
     projects: '**/*UnitTests/*.csproj'
@@ -38,7 +37,6 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Integration Tests
-  continueOnError: true
   inputs:
     command: test
     projects: '**/*IntegrationTests/*.csproj'
@@ -48,17 +46,11 @@ steps:
     cd ./RecipeManager/ClientApp
     npm install
   displayName: Run 'npm install'
-  continueOnError: true
 
 - script: |
     cd ./RecipeManager/ClientApp
     npm run test
   displayName: Run Frontend Tests (Unit, Integration, BDD)
-  continueOnError: true
-
-- script: exit 1
-  displayName: Abort build if any test failed
-  condition: failed()
 
 - task: DotNetCoreCLI@2
   displayName: DotNet Publish

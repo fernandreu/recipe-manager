@@ -40,12 +40,5 @@ namespace RecipeManager.IntegrationTests.Controllers
             var recipes = JsonConvert.DeserializeObject<PagedCollection<Recipe>>(stringResponse);
             Assert.Contains(recipes.Value, r => r.Title.Equals("Spanish Omelet", StringComparison.OrdinalIgnoreCase));
         }
-
-        [Fact]
-        public void ThisTestWillFail()
-        {
-            // TODO: This is just to test whether the pipeline works well. Remove it afterwards
-            Assert.True(false);
-        }
     }
 }
