@@ -44,24 +44,21 @@ steps:
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: PublishTestResults@2
-  displayName: Publish Backend Test Results
-  inputs:
-    failTaskOnFailedTests: true
-    testRunner: 'VSTest'
-    testResultsFiles: '**/*.trx'
-    searchFolder: '$(Build.BinariesDirectory)'
-    testRunTitle: 'Backend'
-
 - script: |
     cd ./RecipeManager/ClientApp
     npm install
   displayName: Run 'npm install'
+  continueOnError: true
 
 - script: |
     cd ./RecipeManager/ClientApp
     npm run test
   displayName: Run Frontend Tests (Unit, Integration, BDD)
+  continueOnError: true
+
+- script: exit 1
+  displayName: Abort build if any test failed
+  condition: failed()
 
 - task: DotNetCoreCLI@2
   displayName: DotNet Publish
