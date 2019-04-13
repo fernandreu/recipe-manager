@@ -48,8 +48,8 @@ steps:
   displayName: Publish Backend Test Results
   inputs:
     failTaskOnFailedTests: true
-    testRunner: 'XUnit'
-    testResultsFiles: '**/Vs*.trx'
+    testRunner: 'VSTest'
+    testResultsFiles: '**/*.trx'
     testRunTitle: 'Backend'
 
 - script: |
