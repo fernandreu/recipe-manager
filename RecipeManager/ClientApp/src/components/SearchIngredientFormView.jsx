@@ -20,7 +20,6 @@ export class SearchIngredientFormView extends Component {
   }
 
   triggerIngredientSearch(searchTerm) {
-
       window.location.href=this.LINK_SEARCHPAGE +""+ searchTerm;
   }
 
@@ -30,7 +29,7 @@ export class SearchIngredientFormView extends Component {
       <div>
         <Form onSubmit={this.handleSubmit}>
           <Label for="form_input">Search by ingredient</Label>
-          <Input type="text" name="inpt" className = "input" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i} />
+          <Input type="text" id="input" className = "input" placeholder="Enter an ingredient you have" innerRef={(i) => this.inputtaskValue = i} />
           <Button id = "btn" className = "btn">Search</Button>
         </Form>
       </div>

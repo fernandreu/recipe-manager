@@ -42,6 +42,23 @@ steps:
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
+- script: |
+      cd /RecipeManager
+      npm install
+      cd ../
+
+- script: |
+    cd /RecipeManager
+    npm run test
+    cd ../
+    
+- task: DotNetCoreCLI@2
+  displayName: Run Frontend Tests (Unit, Integration, BDD)
+  inputs:
+    command: npm run test
+    projects: '**/**/*UnitTests/*.csproj'
+    arguments: ""
+
 - task: DotNetCoreCLI@2
   displayName: DotNet Publish
   inputs:
