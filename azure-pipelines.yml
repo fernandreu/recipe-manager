@@ -30,6 +30,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
+  continueOnError: true
   inputs:
     command: test
     projects: '**/*UnitTests/*.csproj'
@@ -37,10 +38,19 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Integration Tests
+  continueOnError: true
   inputs:
     command: test
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishTestResults@2
+  displayName: Publish Backend Test Results
+  inputs:
+    failTaskOnFailedTests: true
+    testRunner: 'XUnit'
+    testResultsFiles: '**/Vs*.trx'
+    testRunTitle: 'Backend'
 
 - script: |
     cd ./RecipeManager/ClientApp
