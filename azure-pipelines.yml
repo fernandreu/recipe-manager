@@ -34,7 +34,7 @@ steps:
   inputs:
     command: test
     projects: '**/*UnitTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --logger "trx;LogFileName=$(System.DefaultWorkingDirectory)/TEST-BackendUnit.trx'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Integration Tests
@@ -42,14 +42,15 @@ steps:
   inputs:
     command: test
     projects: '**/*IntegrationTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --logger "trx;LogFileName=$(System.DefaultWorkingDirectory)/TEST-BackendIntegration.trx'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: PublishTestResults@2
   displayName: Publish Backend Test Results
   inputs:
     failTaskOnFailedTests: true
     testRunner: 'VSTest'
-    testResultsFiles: '**/TEST-*.trx'
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(Build.BinariesDirectory)'
     testRunTitle: 'Backend'
 
 - script: |
