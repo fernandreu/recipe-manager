@@ -43,20 +43,18 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - script: |
-      cd /RecipeManager/ClientApp
-      npm install
-      cd ../../
+    cd ./RecipeManager/ClientApp
+    npm install
 
 - script: |
-    cd /RecipeManager/ClientApp
+    cd ./RecipeManager/ClientApp
     npm run test
-    cd ../../
 
 - task: DotNetCoreCLI@2
   displayName: Run Frontend Tests (Unit, Integration, BDD)
   inputs:
     command: npm run test
-    projects: '**/**/*UnitTests/*.csproj'
+    projects: '**/RecipeManager.csproj'
     arguments: ""
 
 - task: DotNetCoreCLI@2
