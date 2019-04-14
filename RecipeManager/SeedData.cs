@@ -206,6 +206,32 @@ namespace RecipeManager
                 Details = "Check: https://www.bbc.com/food/recipes/fajitas_8651",
             });
 
+            for (var i = 1; i < 50; ++i)
+            {
+                context.Recipes.Add(new RecipeEntity
+                {
+                    Id = Guid.NewGuid(),
+                    Title = $"Fake Recipe {i}",
+                    Ingredients = new[]
+                    {
+                        new IngredientEntity
+                        {
+                            Id = Guid.NewGuid(),
+                            Quantity = i,
+                            Name = "eggs",
+                        },
+                        new IngredientEntity
+                        {
+                            Id = Guid.NewGuid(),
+                            Quantity = i * 25 * (i % 2 == 0 ? 0.001 : 1),
+                            Units = i % 2 == 0 ? "kg" : "g",
+                            Name = "sugar",
+                        },
+                    },
+                    Details = "This is just for testing purposes",
+                });
+            }
+
             await context.SaveChangesAsync();
         }
     }
