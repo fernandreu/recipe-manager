@@ -9,10 +9,15 @@
 
 namespace RecipeManager.Models
 {
+    using System;
+
     using Newtonsoft.Json;
 
     public abstract class Resource : Link
     {
+        [JsonProperty(Order = -3, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
+        public Guid Id { get; set; }
+
         [JsonIgnore]
         public Link Self { get; set; }
     }

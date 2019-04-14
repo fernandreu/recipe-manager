@@ -9,6 +9,7 @@
 
 namespace RecipeManager.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using RecipeManager.Infrastructure;
