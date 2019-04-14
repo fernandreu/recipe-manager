@@ -48,7 +48,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_SearchByJustIngredientName_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -59,7 +59,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_LessThanNonDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs lt 12");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.LessThan} 12");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -70,7 +70,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_LessThanOrEqualToNonDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs le 12");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.LessThanOrEqual} 12");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -81,7 +81,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_EqualToNonDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs eq 12");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.Equal} 12");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -92,7 +92,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_GreaterThanOrEqualToNonDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs ge 12");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.GreaterThanOrEqual} 12");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -103,7 +103,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_GreaterThanNonDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs gt 12");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.GreaterThan} 12");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -114,7 +114,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_DimInconsistency_ShouldReturnEmptyList()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains eggs lt 12kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.LessThan} 12kg");
 
             // Assert
             Assert.Empty(recipes.Value);
@@ -124,7 +124,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_UnitsInconsistency_ShouldReturnEmptyList()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar gt 12tbsp");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.GreaterThan} 12tbsp");
 
             // Assert
             Assert.Empty(recipes.Value);
@@ -134,7 +134,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_LessThanDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar lt 0.5kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.LessThan} 0.5kg");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -145,7 +145,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_LessThanOrEqualToDim_ShouldReturnEmptyList()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar le 0.5kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.LessThanOrEqual} 0.5kg");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -156,7 +156,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_EqualToDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar eq 0.5kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.Equal} 0.5kg");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -167,7 +167,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_GreaterThanOrEqualToDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar ge 0.5kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.GreaterThanOrEqual} 0.5kg");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -178,7 +178,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_GreaterThanDim_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await this.TestGetAll("search=ingredients contains sugar gt 0.5kg");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.GreaterThan} 0.5kg");
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -189,7 +189,7 @@ namespace RecipeManager.IntegrationTests.Controllers
         public async Task GetAllRecipes_MultipleQueries_ShouldFindRecipes()
         {
             // Arrange / Act (note: due to how seed data is generated, not all search terms will actually yield non-empty results)
-            var recipes = await this.TestGetAll("search=ingredients contains sugar gt 0.3kg&search=ingredients contains eggs lt 40");
+            var recipes = await this.TestGetAll($"search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} sugar {SearchOperator.GreaterThan} 0.3kg&search={nameof(Recipe.Ingredients)} {SearchOperator.Contains} eggs {SearchOperator.LessThan} 40");
 
             // Assert
             Assert.NotEmpty(recipes.Value);

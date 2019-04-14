@@ -19,7 +19,7 @@ namespace RecipeManager.Models
 
         public static readonly SearchOperator GreaterThan = new SearchOperator("gt");
 
-        public static readonly SearchOperator Contains = new SearchOperator("contains");
+        public static readonly SearchOperator Contains = new SearchOperator("co");
 
         private SearchOperator(string value)
         {
@@ -31,6 +31,11 @@ namespace RecipeManager.Models
         public bool Is(string op)
         {
             return this.Value.Equals(op, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override string ToString()
+        {
+            return this.Value;
         }
     }
 }
