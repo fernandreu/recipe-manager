@@ -14,7 +14,7 @@ export class RecipesResultsListView extends Component {
     };
 
     this.API_URL_ingredientsSearch =
-      "/api/recipes?search=ingredients contains ";
+      "/api/recipes?search=ingredients co ";
     this.API_URL_RECIPE_EP = "/recipe?id=";
 
     this.handleListEntryClick = this.handleListEntryClick.bind(this);

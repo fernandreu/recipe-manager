@@ -59,7 +59,7 @@ describe("BDD flow", () => {
   
     it("given there's an entry, check that it is clickable", () => {
       /*
-      var mockApiURL =  "/api/recipes?search=ingredients contains ";
+      var mockApiURL =  "/api/recipes?search=ingredients co ";
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: 'eggs'
