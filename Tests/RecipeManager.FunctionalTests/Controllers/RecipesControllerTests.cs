@@ -7,18 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RecipeManager.IntegrationTests.Controllers
+namespace RecipeManager.FunctionalTests.Controllers
 {
     using System;
-    using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore.Internal;
-
     using Newtonsoft.Json;
 
-    using RecipeManager.Extensions;
     using RecipeManager.Models;
 
     using UnitsNet;

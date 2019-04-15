@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RecipeManager.IntegrationTests
+namespace RecipeManager.FunctionalTests
 {
     using System;
 

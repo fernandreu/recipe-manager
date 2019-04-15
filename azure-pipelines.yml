@@ -41,6 +41,13 @@ steps:
     command: test
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+    
+- task: DotNetCoreCLI@2
+  displayName: Run Backend Functional Tests
+  inputs:
+    command: test
+    projects: '**/*FunctionalTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 - script: |
     cd ./RecipeManager/ClientApp
@@ -62,6 +69,8 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
+  inputs:
+    artifactName: 'MainArtifact'
 
 - task: AzureRmWebAppDeployment@4
   displayName: 'Publish To Azure Apps'
