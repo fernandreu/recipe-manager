@@ -32,7 +32,7 @@ steps:
   displayName: Run Backend Unit Tests
   inputs:
     command: test
-    projects: tests/*UnitTests/*.csproj'
+    projects: 'tests/*UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
