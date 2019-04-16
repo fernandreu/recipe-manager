@@ -32,21 +32,21 @@ steps:
   displayName: Run Backend Unit Tests
   inputs:
     command: test
-    projects: '**/*UnitTests/*.csproj'
+    projects: tests/*UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Integration Tests
   inputs:
     command: test
-    projects: '**/*IntegrationTests/*.csproj'
+    projects: 'tests/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
     
 - task: DotNetCoreCLI@2
   displayName: Run Backend Functional Tests
   inputs:
     command: test
-    projects: '**/*FunctionalTests/*.csproj'
+    projects: 'tests/*FunctionalTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - script: |
