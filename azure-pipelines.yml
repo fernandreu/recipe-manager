@@ -50,12 +50,12 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - script: |
-    cd ./RecipeManager/ClientApp
+    cd ./src/Web/ClientApp
     npm install
   displayName: Run 'npm install'
 
 - script: |
-    cd ./RecipeManager/ClientApp
+    cd ./src/Web/ClientApp
     npm run test
   displayName: Run Frontend Tests (Unit, Integration, BDD)
 
