@@ -25,12 +25,12 @@
 
         public async Task<T> GetByIdAsync(Guid id)
         {
-            return await this.Context.Set<T>().IncludeAll().FirstOrDefaultAsync(x => x.Id == id);
+            return await this.Context.Set<T>().IncludeAll(true).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await this.Context.Set<T>().ToArrayAsync();
+            return await this.Context.Set<T>().IncludeAll(false).ToArrayAsync();
         }
 
         public async Task<IEnumerable<T>> ListAsync(PagingOptions pagingOptions, SortOptions<T> sortOptions, SearchOptions<T> searchOptions)
@@ -39,7 +39,7 @@
             query = searchOptions.Apply(query);
             query = sortOptions.Apply(query);
 
-            var items = await query.Skip(pagingOptions.Offset.Value).Take(pagingOptions.Limit.Value).IncludeAll().ToArrayAsync();
+            var items = await query.Skip(pagingOptions.Offset.Value).Take(pagingOptions.Limit.Value).IncludeAll(false).ToArrayAsync();
 
             return items;
         }

@@ -3,7 +3,7 @@
     using System;
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class IncludeAttribute : Attribute
+    public abstract class IncludeAttribute : Attribute
     {
     }
 }

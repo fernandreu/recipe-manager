@@ -11,7 +11,7 @@
         [Searchable]
         public string Title { get; set; }
         
-        [Include]
+        [IncludeInAllQueries]
         [SearchableIngredients]
         public ICollection<Ingredient> Ingredients { get; set; }
         

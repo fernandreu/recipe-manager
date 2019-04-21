@@ -11,7 +11,7 @@
 
     public static class QueryableExtensions
     {
-        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query) where T : BaseEntity
+        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery) where T : BaseEntity
         {
             foreach (var prop in typeof(T).GetTypeInfo().GetAllProperties())
             {
@@ -20,8 +20,11 @@
                 {
                     continue;
                 }
-                
-                query = query.Include(prop.Name);
+
+                if (attribute is IncludeInAllQueriesAttribute || (attribute is IncludeInSingleQueriesAttribute && isSingleResultQuery))
+                {
+                    query = query.Include(prop.Name);
+                }
             }
 
             return query;
