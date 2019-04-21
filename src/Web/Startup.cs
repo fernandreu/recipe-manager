@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Startup.cs" company="MasterChefs">
-//   {{Copyright}}
-// </copyright>
-// <summary>
-//   Defines the Startup type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace RecipeManager.Web
 {
     using AutoMapper;
@@ -20,9 +11,12 @@ namespace RecipeManager.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
+    using RecipeManager.ApplicationCore.Interfaces;
+    using RecipeManager.ApplicationCore.Paging;
+    using RecipeManager.Infrastructure.Data;
+    using RecipeManager.Web.Errors;
     using RecipeManager.Web.Filters;
-    using RecipeManager.Web.Infrastructure;
-    using RecipeManager.Web.Models;
+    using RecipeManager.Web.Interfaces;
     using RecipeManager.Web.Services;
 
     public class Startup
@@ -41,7 +35,8 @@ namespace RecipeManager.Web
         {
             services.Configure<PagingOptions>(this.Configuration.GetSection("DefaultPagingOptions"));
 
-            services.AddScoped<IRecipeService, DefaultRecipeService>();
+            services.AddScoped<IRecipeRepository, RecipeRepository>();
+            services.AddScoped<IRecipeResourceService, RecipeResourceService>();
 
             services.AddDbContext<RecipeApiDbContext>(options =>
             {

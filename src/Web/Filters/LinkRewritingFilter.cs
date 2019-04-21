@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LinkRewritingFilter.cs" company="MasterChefs">
-//   {{Copyright}}
-// </copyright>
-// <summary>
-//   Defines the LinkRewritingFilter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RecipeManager.Web.Filters
+﻿namespace RecipeManager.Web.Filters
 {
     using System;
     using System.Collections.Generic;
@@ -19,9 +10,9 @@ namespace RecipeManager.Web.Filters
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc.Routing;
 
-    using RecipeManager.Web.Extensions;
-    using RecipeManager.Web.Infrastructure;
-    using RecipeManager.Web.Models;
+    using RecipeManager.ApplicationCore.Extensions;
+    using RecipeManager.Web.Helpers;
+    using RecipeManager.Web.Resources;
 
     public class LinkRewritingFilter : IAsyncResultFilter
     {
@@ -35,7 +26,7 @@ namespace RecipeManager.Web.Filters
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
             var asObjectResult = context.Result as ObjectResult;
-            var shouldSkip = asObjectResult?.StatusCode >= 400 || !(asObjectResult?.Value is Resource);
+            var shouldSkip = asObjectResult?.StatusCode >= 400 || !(asObjectResult?.Value is BaseResource);
 
             if (shouldSkip)
             {
@@ -70,11 +61,11 @@ namespace RecipeManager.Web.Filters
                 linkProperty.SetValue(model, rewritten);
 
                 // Special handling of the hidden Self property: unwrap into the root object
-                if (linkProperty.Name == nameof(Resource.Self))
+                if (linkProperty.Name == nameof(BaseResource.Self))
                 {
-                    allProperties.SingleOrDefault(p => p.Name == nameof(Resource.Href))?.SetValue(model, rewritten.Href);
-                    allProperties.SingleOrDefault(p => p.Name == nameof(Resource.Method))?.SetValue(model, rewritten.Method);
-                    allProperties.SingleOrDefault(p => p.Name == nameof(Resource.Relations))?.SetValue(model, rewritten.Relations);
+                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Href))?.SetValue(model, rewritten.Href);
+                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Method))?.SetValue(model, rewritten.Method);
+                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Relations))?.SetValue(model, rewritten.Relations);
                 }
             }
 

@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JsonExceptionFilter.cs" company="MasterChefs">
-//   {{Copyright}}
-// </copyright>
-// <summary>
-//   Defines the JsonExceptionFilter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RecipeManager.Web.Filters
+﻿namespace RecipeManager.Web.Filters
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 
-    using RecipeManager.Web.Models;
+    using RecipeManager.Web.Errors;
 
     public class JsonExceptionFilter : IExceptionFilter
     {

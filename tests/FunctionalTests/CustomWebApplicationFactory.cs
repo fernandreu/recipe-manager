@@ -17,6 +17,7 @@ namespace RecipeManager.FunctionalTests
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
+    using RecipeManager.Infrastructure.Data;
     using RecipeManager.Web;
 
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
@@ -28,7 +29,7 @@ namespace RecipeManager.FunctionalTests
                 // Create a new service provider
                 var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
 
-                // Add a database context (AppDbContext) using an in-memory database for testing.
+                // Add a database Context (AppDbContext) using an in-memory database for testing.
                 services.AddDbContext<RecipeApiDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryAppDb");
@@ -52,7 +53,7 @@ namespace RecipeManager.FunctionalTests
                     try
                     {
                         // Seed the database with some specific test data.
-                        await SeedData.AddTestData(appDb);
+                        await RecipeApiDbContextSeed.AddTestData(appDb);
                     }
                     catch (Exception ex)
                     {

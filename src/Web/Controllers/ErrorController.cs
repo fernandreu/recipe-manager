@@ -4,7 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
 
-    using RecipeManager.Web.Models;
+    using RecipeManager.Web.Errors;
 
     [Route("api/[controller]")]
     [ApiController]

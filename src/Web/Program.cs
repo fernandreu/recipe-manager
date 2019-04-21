@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Program.cs" company="MasterChefs">
-//   {{Copyright}}
-// </copyright>
-// <summary>
-//   Defines the Program type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace RecipeManager.Web
 {
     using System;
@@ -15,6 +6,8 @@ namespace RecipeManager.Web
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
+    using RecipeManager.Infrastructure.Data;
 
     public class Program
     {
@@ -37,7 +30,7 @@ namespace RecipeManager.Web
 
                 try
                 {
-                    SeedData.InitializeAsync(services).Wait();
+                    RecipeApiDbContextSeed.InitializeAsync(services).Wait();
                 }
                 catch (Exception ex)
                 {

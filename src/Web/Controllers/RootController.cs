@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RootController.cs" company="MasterChefs">
-//   {{Copyright}}
-// </copyright>
-// <summary>
-//   Defines the RootController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace RecipeManager.Web.Controllers
+﻿namespace RecipeManager.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using RecipeManager.Web.Models;
+    using RecipeManager.Web.Resources;
 
     [Route("api/")]
     [ApiController]
@@ -23,7 +14,7 @@ namespace RecipeManager.Web.Controllers
             var response = new RootResponse
             {
                 Self = Link.To(nameof(this.GetRoot)),
-                Recipes = Link.ToCollection(nameof(RecipesController.GetAllRecipes)),
+                Recipes = Link.ToCollection(nameof(RecipesController.ListAll)),
             };
 
             return this.Ok(response);

@@ -12,7 +12,8 @@ namespace RecipeManager.UnitTests.Infrastructure
     using System;
     using System.Linq;
 
-    using RecipeManager.Web.Infrastructure;
+    using RecipeManager.ApplicationCore.Entities;
+    using RecipeManager.ApplicationCore.Search;
 
     using Xunit;
 
@@ -23,7 +24,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         {
             // Arrange
             var elements = new[] { "abc", "def", "G_hi_jkl", "m_desc" };
-            var processor = new SearchOptionsProcessor<string, int>(elements);
+            var processor = new SearchOptionsProcessor<Recipe>(elements);
 
             // Act
             var terms = processor.GetAllTerms().ToArray();
@@ -43,7 +44,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         public void GetAllTerms_NullSearchQuery_ShouldReturnEmptyList()
         {
             // Arrange
-            var processor = new SearchOptionsProcessor<bool, short>(null);
+            var processor = new SearchOptionsProcessor<Recipe>(null);
 
             // Act
             var terms = processor.GetAllTerms();

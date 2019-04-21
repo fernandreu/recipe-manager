@@ -12,7 +12,8 @@ namespace RecipeManager.UnitTests.Infrastructure
     using System;
     using System.Linq;
 
-    using RecipeManager.Web.Infrastructure;
+    using RecipeManager.ApplicationCore.Entities;
+    using RecipeManager.ApplicationCore.Sort;
 
     using Xunit;
 
@@ -23,7 +24,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         {
             // Arrange
             var elements = new[] { "abc", "def", "G_hi_jkl", "m_desc" };
-            var processor = new SortOptionsProcessor<int, bool>(elements);
+            var processor = new SortOptionsProcessor<Recipe>(elements);
 
             // Act
             var terms = processor.GetAllTerms().ToArray();
@@ -40,7 +41,7 @@ namespace RecipeManager.UnitTests.Infrastructure
         public void GetAllTerms_NullOrderBy_ShouldReturnEmptyList()
         {
             // Arrange
-            var processor = new SortOptionsProcessor<string, int>(null); // Types don't matter for this
+            var processor = new SortOptionsProcessor<Recipe>(null); // Types don't matter for this
 
             // Act
             var terms = processor.GetAllTerms();
