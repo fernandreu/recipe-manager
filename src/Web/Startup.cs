@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace RecipeManager.Web
 {
     using AutoMapper;
@@ -61,10 +63,7 @@ namespace RecipeManager.Web
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddAutoMapper(options =>
-            {
-                options.AddProfile<MappingProfile>();
-            });
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddApiVersioning(options =>
             {
