@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "src\Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{63F41EE9-0A02-4C01-A57A-40CCEC330B04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\WebApi\WebApi.csproj", "{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\WebApi\WebApi.csproj", "{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "src\WebClient\WebClient.csproj", "{15FC2EEE-E821-4985-B67B-D6086E9FCFBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15FC2EEE-E821-4985-B67B-D6086E9FCFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15FC2EEE-E821-4985-B67B-D6086E9FCFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15FC2EEE-E821-4985-B67B-D6086E9FCFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15FC2EEE-E821-4985-B67B-D6086E9FCFBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{FAD05F9C-B437-40ED-B09B-030E9CDCD8F2} = {AA84833C-2DC5-42A9-9F20-52FD2FC7ABE1}
 		{63F41EE9-0A02-4C01-A57A-40CCEC330B04} = {AA84833C-2DC5-42A9-9F20-52FD2FC7ABE1}
 		{1A844CF1-79D0-47CF-BB76-161E3FF9A5D4} = {AA84833C-2DC5-42A9-9F20-52FD2FC7ABE1}
+		{15FC2EEE-E821-4985-B67B-D6086E9FCFBA} = {AA84833C-2DC5-42A9-9F20-52FD2FC7ABE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FEB142C-6194-4EAE-9CC1-AFBB512B175C}
