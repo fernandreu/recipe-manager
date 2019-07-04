@@ -1,0 +1,65 @@
+﻿@page "/recipes"
+@using System.Web
+@using WebClient.Resources
+@inject HttpClient Http
+
+<h1>Recipes</h1>
+
+
+Search recipes by the ingredients they contain.
+
+<p>@StatusMessage</p>
+
+<MainSearch OnSearch="@OnSearch" />
+
+@if (Results != null)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var forecast in Results.Value)
+        {
+            <tr>
+                <td>@forecast.Title</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+
+Collection<RecipeResource> Results { get; set; }
+
+private string StatusMessage { get; set; } = "Status Message";
+
+private void OnSearch(string searchText)
+{
+    this.LoadDataAsync(searchText).ConfigureAwait(false);
+}
+
+private async Task LoadDataAsync(string searchText)
+{
+    ////this.StatusMessage = $"SearchText: {searchText}";
+    var builder = new UriBuilder("https://localhost/recipes");
+    builder.Port = 44364;
+    var query = HttpUtility.ParseQueryString(builder.Query);
+    if (!string.IsNullOrWhiteSpace(searchText))
+    {
+        query["search"] = $"ingredients co {searchText}";
+    }
+
+    builder.Query = query.ToString();
+    this.StatusMessage = $"Uri: {builder}";
+    this.Results = null;
+    this.StateHasChanged();
+    this.Results = await Http.GetJsonAsync<Collection<RecipeResource>>(builder.ToString());
+    this.StateHasChanged();
+    // Production URL: https://recipemanager.azurewebsites.net/
+}
+}

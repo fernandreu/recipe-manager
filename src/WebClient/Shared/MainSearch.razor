@@ -1,0 +1,36 @@
+<div>
+    <MatTextField @bind-Value="@SearchText" Label="Enter an ingredient you have"/>
+
+    <MatButton Label="Search" Raised="true" Icon="search" OnClick="@OnSearchClicked"/>
+</div>
+
+
+@code {
+
+private string searchText;
+
+[Parameter]
+private string SearchText
+{
+    get => this.searchText;
+    set
+    {
+        if (this.searchText == value)
+        {
+            return;
+        }
+
+        this.searchText = value;
+        this.StateHasChanged();
+    }
+}
+
+[Parameter]
+private EventCallback<string> OnSearch { get; set; }
+
+private void OnSearchClicked(UIMouseEventArgs e)
+{
+    this.OnSearch.InvokeAsync(this.SearchText).ConfigureAwait(false);
+}
+
+}
