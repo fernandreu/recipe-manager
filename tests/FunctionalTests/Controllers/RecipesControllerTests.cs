@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RecipeManager.WebApi;
+using RecipeManager.WebApi.Resources;
+
 namespace RecipeManager.FunctionalTests.Controllers
 {
     using System;
@@ -16,8 +19,6 @@ namespace RecipeManager.FunctionalTests.Controllers
     using Newtonsoft.Json;
 
     using RecipeManager.ApplicationCore.Search;
-    using RecipeManager.Web;
-    using RecipeManager.Web.Resources;
 
     using UnitsNet;
 
@@ -202,7 +203,7 @@ namespace RecipeManager.FunctionalTests.Controllers
 
         private async Task<PagedCollection<RecipeResource>> TestGetAll(string query = null)
         {
-            var httpResponse = await this.client.GetAsync("/api/recipes" + (query != null ? $"?{query}" : string.Empty));
+            var httpResponse = await this.client.GetAsync("/recipes" + (query != null ? $"?{query}" : string.Empty));
             httpResponse.EnsureSuccessStatusCode();
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<PagedCollection<RecipeResource>>(stringResponse);
