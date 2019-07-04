@@ -15,18 +15,22 @@ variables:
 
 steps:
 
-# This specific SDK is needed for the integration tests
 - task: DotNetCoreInstaller@0
   displayName: Install ASP.NET Core SDK
   inputs:
     packageType: 'sdk'
-    version: '2.2.105'
+    version: '3.0.100-preview6-012264'
     
 - task: DotNetCoreCLI@2
-  displayName: DotNet Build
+  displayName: DotNet Build Backend
   inputs:
     command: build
     arguments: '--configuration $(buildConfiguration)'
+    projects: |
+     src/ApplicationCore/*.csproj
+     src/Infrastructure/*.csproj
+     src/WebAPI/*.csproj
+     tests/**/*.csproj
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
@@ -49,18 +53,8 @@ steps:
     projects: 'tests/*FunctionalTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- script: |
-    cd ./src/Web/ClientApp
-    npm install
-  displayName: Run 'npm install'
-
-- script: |
-    cd ./src/Web/ClientApp
-    npm run test
-  displayName: Run Frontend Tests (Unit, Integration, BDD)
-
 - task: DotNetCoreCLI@2
-  displayName: DotNet Publish
+  displayName: Zip Backend
   inputs:
     command: publish
     publishWebProjects: False
@@ -68,9 +62,9 @@ steps:
     zipAfterPublish: True
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifacts'
+  displayName: 'Publish Backend'
   inputs:
-    artifactName: 'MainArtifact'
+    artifactName: 'WebAPI'
 
 - task: AzureRmWebAppDeployment@4
   displayName: 'Publish To Azure Apps'

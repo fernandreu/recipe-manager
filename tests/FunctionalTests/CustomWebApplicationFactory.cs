@@ -18,7 +18,6 @@ namespace RecipeManager.FunctionalTests
     using Microsoft.Extensions.Logging;
 
     using RecipeManager.Infrastructure.Data;
-    using RecipeManager.Web;
 
     public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {
