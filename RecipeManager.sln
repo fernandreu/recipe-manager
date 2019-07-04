@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29021.104
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "src\Web\Web.csproj", "{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{5A355D8F-2002-4000-B59D-ACB42168BE58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{EFD783D0-92CC-42B5-AF07-D638A42DD66D}"
@@ -35,10 +33,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A355D8F-2002-4000-B59D-ACB42168BE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5A355D8F-2002-4000-B59D-ACB42168BE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A355D8F-2002-4000-B59D-ACB42168BE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,7 +66,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D5F8C14D-2DFE-4BF5-867C-F3F9D1F0BDBC} = {AA84833C-2DC5-42A9-9F20-52FD2FC7ABE1}
 		{5A355D8F-2002-4000-B59D-ACB42168BE58} = {BCB58CA7-E211-4223-9F73-A7595E74D182}
 		{EFD783D0-92CC-42B5-AF07-D638A42DD66D} = {BCB58CA7-E211-4223-9F73-A7595E74D182}
 		{E38A48CC-2BB2-437B-A63B-F979C34F5D29} = {BCB58CA7-E211-4223-9F73-A7595E74D182}
