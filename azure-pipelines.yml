@@ -26,11 +26,6 @@ steps:
   inputs:
     command: build
     arguments: '--configuration $(buildConfiguration)'
-    projects: |
-     src/ApplicationCore/*.csproj
-     src/Infrastructure/*.csproj
-     src/WebAPI/*.csproj
-     tests/**/*.csproj
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
