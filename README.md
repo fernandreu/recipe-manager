@@ -24,7 +24,7 @@ To test the REST API of the backend server, visit the following link:
 
 https://recipemanager.azurewebsites.net
 
-Check the [wiki](wiki/API-Documentation) to know how to interrogate the API.
+Check the [wiki](https://github.com/fernandreu/recipe-manager/wiki/API-Documentation) to know how to interrogate the API.
 
 # Other considerations
 
