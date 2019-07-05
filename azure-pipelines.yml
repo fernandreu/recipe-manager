@@ -6,17 +6,13 @@
 trigger:
 - master
 
-parameters:
-  vmImage: 'VS2017-Win2016'
-  # vmImage: 'Ubuntu-16.04'
-
 variables:
   buildConfiguration: 'Release'
 
 jobs:
 - job: WebAPI
   pool:
-    vmImage: ${{ parameters.vmImage }}
+    vmImage: 'VS2017-Win2016'
   steps:
 
   - task: DotNetCoreInstaller@0
@@ -83,7 +79,7 @@ jobs:
       
 - job: WebAPI
   pool:
-    vmImage: ${{ parameters.vmImage }}
+    vmImage: 'VS2017-Win2016'
   steps:
   
   - task: DotNetCoreInstaller@0
