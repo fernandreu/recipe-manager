@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
+using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.WebApi.Errors
 {
-    public class ApiError
+    public class ApiError : BaseResource
     {
         public ApiError()
         {

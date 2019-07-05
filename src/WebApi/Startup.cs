@@ -104,7 +104,7 @@ namespace RecipeManager.WebApi
             app.UseHttpsRedirection();
             
             app.UseCors("AllowMyApp");
-            ////app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseMvc();
         }
     }
