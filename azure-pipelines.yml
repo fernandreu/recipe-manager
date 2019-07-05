@@ -66,4 +66,5 @@ steps:
   inputs:
     azureSubscription: 'AzureResources'
     WebAppName: 'RecipeManager'
+    UseWebDeploy: True
     Package: $(System.ArtifactsDirectory)/**/*.zip
