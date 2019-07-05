@@ -18,7 +18,9 @@ buy them all at once), or useful reminders when a recipe date approaches (in cas
 
 # Try it live
 
-**The client-side blazor app is not live yet. This will be hosted on GitHub Pages on the near future.**
+The client-side blazor app is live on GitHub Pages:
+
+https://fernando.andreu.info/recipe-manager/
 
 To test the REST API of the backend server, visit the following link:
 
