@@ -77,7 +77,7 @@ jobs:
       Package: $(System.ArtifactsDirectory)/**/*.zip
       ResourceGroupName: RecipeManagerResourceGroup
       
-- job: WebAPI
+- job: WebClient
   pool:
     vmImage: 'VS2017-Win2016'
   steps:
