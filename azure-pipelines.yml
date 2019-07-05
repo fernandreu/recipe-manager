@@ -26,6 +26,11 @@ steps:
   inputs:
     command: build
     arguments: '--configuration $(buildConfiguration)'
+    projects: |
+      src/ApplicationCore/*.csproj
+      src/Infrastructure/*.csproj
+      src/WebAPI/*.csproj
+      tests/**/*.csproj
 
 - task: DotNetCoreCLI@2
   displayName: Run Backend Unit Tests
@@ -52,7 +57,7 @@ steps:
   displayName: Zip Backend
   inputs:
     command: publish
-    publishWebProjects: True
+    publishWebProjects: False
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 
