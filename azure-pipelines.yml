@@ -6,72 +6,129 @@
 trigger:
 - master
 
-pool:
+parameters:
   vmImage: 'VS2017-Win2016'
   # vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
 
-steps:
+jobs:
+- job: WebAPI
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
 
-- task: DotNetCoreInstaller@0
-  displayName: Install ASP.NET Core SDK
-  inputs:
-    packageType: 'sdk'
-    version: '3.0.100-preview6-012264'
+  - task: DotNetCoreInstaller@0
+    displayName: Install ASP.NET Core SDK
+    inputs:
+      packageType: 'sdk'
+      version: '2.2.105'
     
-- task: DotNetCoreCLI@2
-  displayName: DotNet Build Backend
-  inputs:
-    command: build
-    arguments: '--configuration $(buildConfiguration)'
-    projects: |
-      src/ApplicationCore/*.csproj
-      src/Infrastructure/*.csproj
-      src/WebAPI/*.csproj
-      tests/**/*.csproj
+  # Important: if WebClient is built, the Azure deployment might fail (give 404 errors)
+  - task: DotNetCoreCLI@2
+    displayName: DotNet Build Backend
+    inputs:
+      command: build
+      arguments: '--configuration $(buildConfiguration)'
+      projects: |
+        src/ApplicationCore/*.csproj
+        src/Infrastructure/*.csproj
+        src/WebAPI/*.csproj
+        tests/**/*.csproj
 
-- task: DotNetCoreCLI@2
-  displayName: Run Backend Unit Tests
-  inputs:
-    command: test
-    projects: 'tests/*UnitTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: Run Backend Unit Tests
+    inputs:
+      command: test
+      projects: 'tests/*UnitTests/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Run Backend Integration Tests
-  inputs:
-    command: test
-    projects: 'tests/*IntegrationTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: Run Backend Integration Tests
+    inputs:
+      command: test
+      projects: 'tests/*IntegrationTests/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
     
-- task: DotNetCoreCLI@2
-  displayName: Run Backend Functional Tests
-  inputs:
-    command: test
-    projects: 'tests/*FunctionalTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: Run Backend Functional Tests
+    inputs:
+      command: test
+      projects: 'tests/*FunctionalTests/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Zip Backend
-  inputs:
-    command: publish
-    publishWebProjects: False
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
+  - task: DotNetCoreCLI@2
+    displayName: Zip Backend
+    inputs:
+      command: publish
+      publishWebProjects: False
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: True
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Backend'
-  inputs:
-    artifactName: 'WebAPI'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Backend'
+    inputs:
+      artifactName: 'WebAPI'
 
-- task: AzureRmWebAppDeployment@4
-  displayName: 'Publish To Azure Apps'
-  inputs:
-    azureSubscription: 'AzureResources'
-    WebAppName: 'RecipeManager'
-    UseWebDeploy: True
-    DeploymentType: webDeploy
-    Package: $(System.ArtifactsDirectory)/**/*.zip
-    ResourceGroupName: RecipeManagerResourceGroup
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Publish To Azure Apps'
+    inputs:
+      azureSubscription: 'AzureResources'
+      WebAppName: 'RecipeManager'
+      UseWebDeploy: True
+      DeploymentType: webDeploy
+      Package: $(System.ArtifactsDirectory)/**/*.zip
+      ResourceGroupName: RecipeManagerResourceGroup
+      
+- job: WebAPI
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+  
+  - task: DotNetCoreInstaller@0
+    displayName: Install ASP.NET Core SDK
+    inputs:
+      packageType: 'sdk'
+      version: '3.0.100-preview6-012264'
+
+  - task: DotNetCoreCLI@2
+    displayName: DotNet Build Frontend
+    inputs:
+      command: build
+      arguments: '--configuration $(buildConfiguration)'
+      projects: |
+        src/WebClient/*.csproj
+
+  # TODO: Run frontend tests
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish App
+    inputs:
+      command: publish
+      # Important: If you zip the publish, the GitHub Pages script will need to unzip it first
+      zipAfterPublish: false
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      projects: |
+        src/WebClient/*.csproj
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifacts'
+    inputs:
+      pathtoPublish: $(Build.ArtifactStagingDirectory)/WebClient
+      artifactName: 'WebClient'
+
+  - script: |
+      git config --global user.name "$NAME"
+      git config --global user.email "$EMAIL"
+      cd $(Build.ArtifactStagingDirectory)/WebClient/WebClient/dist
+      git init
+      git checkout -b gh-pages
+      git add -A
+      git commit -m "Create build $(Build.BuildId)"
+      git push -f https://$PAT@github.com/fernandreu/recipe-manager.git gh-pages
+    displayName: 'Publish to GitHub Pages'
+    env:
+      PAT: $(GitHubPAT)
+      NAME: $(GitHubName)
+      EMAIL: $(GitHubEmail)

@@ -45,9 +45,15 @@ private void OnSearch(string searchText)
 
 private async Task LoadDataAsync(string searchText)
 {
-    ////this.StatusMessage = $"SearchText: {searchText}";
+    #if DEBUG
     var builder = new UriBuilder("https://localhost/recipes");
     builder.Port = 44364;
+    #else
+    var builder = new UriBuilder("https://recipemanager.azurewebsites.net/recipes");
+    builder.Port = 80;
+    #endif
+
+    ////this.StatusMessage = $"SearchText: {searchText}";
     var query = HttpUtility.ParseQueryString(builder.Query);
     if (!string.IsNullOrWhiteSpace(searchText))
     {
@@ -60,6 +66,5 @@ private async Task LoadDataAsync(string searchText)
     this.StateHasChanged();
     this.Results = await Http.GetJsonAsync<Collection<RecipeResource>>(builder.ToString());
     this.StateHasChanged();
-    // Production URL: https://recipemanager.azurewebsites.net/
 }
 }
