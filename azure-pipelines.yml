@@ -81,7 +81,7 @@ jobs:
       
 - job: WebClient
   pool:
-    vmImage: 'VS2017-Win2016'
+    vmImage: 'ubuntu-latest'
   steps:
   
   - task: DotNetCoreInstaller@0
