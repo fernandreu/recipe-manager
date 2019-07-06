@@ -50,7 +50,6 @@ private async Task LoadDataAsync(string searchText)
     builder.Port = 44364;
     #else
     var builder = new UriBuilder("https://recipemanager.azurewebsites.net/recipes");
-    builder.Port = 80;
     #endif
 
     ////this.StatusMessage = $"SearchText: {searchText}";
