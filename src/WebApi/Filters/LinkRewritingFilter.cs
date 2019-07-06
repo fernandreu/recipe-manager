@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
 using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi.Helpers;
-using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.WebApi.Filters
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebClient.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public class RecipeResource : BaseResource
     {

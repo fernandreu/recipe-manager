@@ -1,6 +1,9 @@
-﻿namespace WebClient.Resources
+﻿using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Interfaces;
+
+namespace RecipeManager.ApplicationCore.Resources
 {
-    public class IngredientResource : BaseResource
+    public class IngredientResource : BaseResource, IIngredient
     {
         public string Name { get; set; }
 
@@ -14,6 +17,6 @@
         /// The explicit definition of FullName as a property (and not just the extension method) means it will be
         /// automatically shown when returned in a controller's method. As it is get-only, Entity Framework will not
         /// store it in the database even if it was defined in the Ingredient
-        ////public string FullName => this.FullName();
+        public string FullName => this.FullName();
     }
 }

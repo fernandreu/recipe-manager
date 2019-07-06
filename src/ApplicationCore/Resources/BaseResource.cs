@@ -1,14 +1,14 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace WebClient.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public abstract class BaseResource : Link
     {
         [JsonProperty(Order = -3, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
         public Guid Id { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
+        [JsonIgnore]
         public Link Self { get; set; }
     }
 }

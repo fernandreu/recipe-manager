@@ -1,4 +1,4 @@
-﻿namespace WebClient.Resources
+﻿namespace RecipeManager.ApplicationCore.Resources
 {
     public class RootResponse : BaseResource
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Newtonsoft.Json;
 
-namespace WebClient.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public class Link
     {

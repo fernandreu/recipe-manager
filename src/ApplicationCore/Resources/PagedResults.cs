@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RecipeManager.WebApi.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public class PagedResults<T>
     {

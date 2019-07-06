@@ -5,10 +5,10 @@ using AutoMapper;
 using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
+using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Search;
 using RecipeManager.ApplicationCore.Sort;
 using RecipeManager.WebApi.Interfaces;
-using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.WebApi.Services
 {

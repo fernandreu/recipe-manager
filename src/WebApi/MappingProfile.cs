@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using RecipeManager.ApplicationCore.Entities;
-using RecipeManager.WebApi.Resources;
+using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi
 {

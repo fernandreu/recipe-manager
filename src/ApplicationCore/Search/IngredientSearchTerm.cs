@@ -38,7 +38,7 @@
             };
 
             // First, check if the last but one token is any recognized search operator for this
-            var parts = criteria.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var parts = criteria.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             string quantityAndUnits = null;
             if (parts.Length > 2)
             {
@@ -51,7 +51,7 @@
 
                     quantityAndUnits = parts[parts.Length - 1];
                     parts = parts.SkipLast(2).ToArray();
-                    result.Name = string.Join(' ', parts);
+                    result.Name = string.Join(" ", parts);
                     result.Operator = op;
                     break;
                 }

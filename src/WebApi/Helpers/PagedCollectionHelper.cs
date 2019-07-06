@@ -1,33 +1,14 @@
 ﻿using System;
 using Microsoft.AspNetCore.Routing;
-using Newtonsoft.Json;
 using RecipeManager.ApplicationCore.Paging;
+using RecipeManager.ApplicationCore.Resources;
 
-namespace RecipeManager.WebApi.Resources
+namespace RecipeManager.WebApi.Helpers
 {
-    public class PagedCollection<T> : Collection<T>
+    public static class PagedCollectionHelper
     {
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public int? Offset { get; set; }
-        
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public int? Limit { get; set; }
 
-        public int Size { get; set; }
-        
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Link First { get; set; }
-        
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Link Previous { get; set; }
-        
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Link Next { get; set; }
-        
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Link Last { get; set; }
-
-        public static PagedCollection<T> Create(Link self, T[] items, int size, PagingOptions pagingOptions) =>
+        public static PagedCollection<T> Create<T>(Link self, T[] items, int size, PagingOptions pagingOptions) =>
             new PagedCollection<T>
             {
                 Self = self,
