@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace RecipeManager.WebApi.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public abstract class BaseResource : Link
     {

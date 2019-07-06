@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
-using RecipeManager.WebApi.Resources;
+using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi.Errors
 {

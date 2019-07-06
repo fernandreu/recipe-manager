@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Paging;
+using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Search;
 using RecipeManager.ApplicationCore.Sort;
+using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
-using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.WebApi.Controllers
 {
@@ -41,7 +42,7 @@ namespace RecipeManager.WebApi.Controllers
 
             var recipes = await this.recipeService.ListAsync(pagingOptions, sortOptions, searchOptions);
 
-            return PagedCollection<RecipeResource>.Create(
+            return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAll)), 
                 recipes.Items.ToArray(), 
                 recipes.TotalSize, 

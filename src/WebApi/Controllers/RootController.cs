@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RecipeManager.WebApi.Resources;
+using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi.Controllers
 {

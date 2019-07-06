@@ -7,8 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi;
-using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.FunctionalTests.Controllers
 {

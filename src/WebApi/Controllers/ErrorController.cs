@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi.Errors;
-using RecipeManager.WebApi.Resources;
 
 namespace RecipeManager.WebApi.Controllers
 {

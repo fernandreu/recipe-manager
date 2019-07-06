@@ -1,7 +1,7 @@
 ﻿using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 
-namespace RecipeManager.WebApi.Resources
+namespace RecipeManager.ApplicationCore.Resources
 {
     public class IngredientResource : BaseResource, IIngredient
     {

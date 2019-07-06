@@ -1,4 +1,4 @@
-﻿namespace RecipeManager.WebApi.Resources
+﻿namespace RecipeManager.ApplicationCore.Resources
 {
     public class RootResponse : BaseResource
     {
