@@ -1,4 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Sort
+﻿using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Interfaces;
+
+namespace RecipeManager.ApplicationCore.Sort
 {
     using System;
     using System.Collections.Generic;
@@ -115,6 +118,35 @@
             }
 
             return modifiedQuery;
+        }
+
+        public void Apply(ISpecification<T> spec)
+        {
+            spec.OrderBy.Clear();
+
+            var terms = this.GetValidTerms().ToArray();
+
+            if (!terms.Any())
+            {
+                terms = GetTermsFromModel().Where(t => t.Default).ToArray();
+            }
+
+            if (!terms.Any())
+            {
+                return;
+            }
+
+            foreach (var term in terms)
+            {
+                var propertyInfo = ExpressionHelper.GetPropertyInfo<T>(term.EntityName ?? term.Name);
+                var obj = ExpressionHelper.Parameter<T>();
+
+                // x => x.Property
+                var key = ExpressionHelper.GetPropertyExpression(obj, propertyInfo);
+                var keySelector = ExpressionHelper.GetLambda(typeof(T), typeof(object), obj, key) as Expression<Func<T, object>>;
+
+                spec.OrderBy.Add((keySelector, term.Descending));
+            }
         }
 
         private static IEnumerable<SortTerm> GetTermsFromModel()

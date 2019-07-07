@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Search;
@@ -12,9 +13,6 @@ namespace RecipeManager.WebApi.Interfaces
     {
         Task<RecipeResource> GetByIdAsync(Guid id);
 
-        Task<PagedResults<RecipeResource>> ListAsync(
-            PagingOptions pagingOptions, 
-            SortOptions<Recipe> sortOptions,
-            SearchOptions<Recipe> searchOptions);
+        Task<PagedResults<RecipeResource>> ListAsync(ISpecification<Recipe> spec);
     }
 }

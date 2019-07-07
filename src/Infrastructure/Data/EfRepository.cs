@@ -33,24 +33,19 @@
             return await this.Context.Set<T>().IncludeAll(false).ToArrayAsync();
         }
 
-        public async Task<IEnumerable<T>> ListAsync(PagingOptions pagingOptions, SortOptions<T> sortOptions, SearchOptions<T> searchOptions)
+        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
         {
-            IQueryable<T> query = this.Context.Set<T>();
-            query = searchOptions.Apply(query);
-            query = sortOptions.Apply(query);
-
-            var items = await query.Skip(pagingOptions.Offset.Value).Take(pagingOptions.Limit.Value).IncludeAll(false).ToArrayAsync();
-
-            return items;
+            return await this.ApplySpecification(spec).ToListAsync();
         }
 
-        public async Task<int> CountAsync(SortOptions<T> sortOptions, SearchOptions<T> searchOptions)
+        public async Task<int> CountAsync(ISpecification<T> spec)
         {
-            IQueryable<T> query = this.Context.Set<T>();
-            query = searchOptions.Apply(query);
-            query = sortOptions.Apply(query);
-
-            return await query.CountAsync();
+            return await this.ApplySpecification(spec).CountAsync();
         }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator.GetQuery(this.Context.Set<T>().AsQueryable(), spec);
+        }    
     }
 }

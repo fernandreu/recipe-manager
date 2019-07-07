@@ -1,10 +1,12 @@
-﻿namespace RecipeManager.ApplicationCore.Sort
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Interfaces;
 
+namespace RecipeManager.ApplicationCore.Sort
+{
     using RecipeManager.ApplicationCore.Entities;
 
     public class SortOptions<T> : IValidatableObject where T : BaseEntity

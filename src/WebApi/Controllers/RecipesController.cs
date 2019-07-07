@@ -8,6 +8,7 @@ using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Search;
 using RecipeManager.ApplicationCore.Sort;
+using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -40,7 +41,8 @@ namespace RecipeManager.WebApi.Controllers
             pagingOptions.Offset = pagingOptions.Offset ?? this.defaultPagingOptions.Offset;
             pagingOptions.Limit = pagingOptions.Limit ?? this.defaultPagingOptions.Limit;
 
-            var recipes = await this.recipeService.ListAsync(pagingOptions, sortOptions, searchOptions);
+            var spec = new RecipeSpecification(pagingOptions, searchOptions, sortOptions);
+            var recipes = await this.recipeService.ListAsync(spec);
 
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAll)), 
