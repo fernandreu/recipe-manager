@@ -9,7 +9,7 @@ using RecipeManager.ApplicationCore.Sort;
 
 namespace RecipeManager.WebApi.Interfaces
 {
-    public interface IRecipeResourceService
+    public interface IRecipeService
     {
         Task<RecipeResource> GetByIdAsync(Guid id);
 

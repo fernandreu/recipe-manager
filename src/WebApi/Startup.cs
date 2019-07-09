@@ -33,8 +33,7 @@ namespace RecipeManager.WebApi
         {
             services.Configure<PagingOptions>(this.Configuration.GetSection("DefaultPagingOptions"));
 
-            services.AddScoped<IRecipeRepository, RecipeRepository>();
-            services.AddScoped<IRecipeResourceService, RecipeResourceService>();
+            services.AddScoped<IRecipeService, RecipeService>();
 
             services.AddDbContext<RecipeApiDbContext>(options =>
             {

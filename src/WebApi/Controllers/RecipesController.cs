@@ -18,12 +18,12 @@ namespace RecipeManager.WebApi.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly IRecipeResourceService recipeService;
+        private readonly IRecipeService recipeService;
 
         private readonly PagingOptions defaultPagingOptions;
 
         public RecipesController(
-            IRecipeResourceService recipeService,
+            IRecipeService recipeService,
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.recipeService = recipeService;
