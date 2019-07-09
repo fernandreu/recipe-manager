@@ -3,7 +3,7 @@ using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi.Interfaces
 {
-    public interface IRecipeService : IAsyncService<Recipe, RecipeResource>
+    public interface IIngredientService : IAsyncService<Ingredient, IngredientResource>
     {
     }
 }
