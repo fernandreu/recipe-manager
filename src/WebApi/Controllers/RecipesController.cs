@@ -34,21 +34,24 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<PagedCollection<RecipeResource>>> ListAll(
-            [FromQuery] PagingOptions pagingOptions, 
-            [FromQuery] SortOptions<Recipe> sortOptions,
-            [FromQuery] SearchOptions<Recipe> searchOptions)
+            [FromQuery] SpecificationOptions<Recipe> options)
         {
-            pagingOptions.Offset = pagingOptions.Offset ?? this.defaultPagingOptions.Offset;
-            pagingOptions.Limit = pagingOptions.Limit ?? this.defaultPagingOptions.Limit;
+            if (options.Paging == null)
+            {
+                options.Paging = this.defaultPagingOptions;
+            }
 
-            var spec = new RecipeSpecification(pagingOptions, searchOptions, sortOptions);
+            options.Paging.Offset = options.Paging.Offset ?? this.defaultPagingOptions.Offset;
+            options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
+
+            var spec = new RecipeSpecification(options);
             var recipes = await this.recipeService.ListAsync(spec);
 
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAll)), 
                 recipes.Items.ToArray(), 
                 recipes.TotalSize, 
-                pagingOptions);
+                options.Paging);
         }
 
         [HttpGet("{recipeId}", Name = nameof(GetRecipeById))]

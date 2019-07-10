@@ -46,16 +46,14 @@ namespace RecipeManager.ApplicationCore.Specifications
             this.OrderBy.Add((orderByExpression, descending));
         }
 
-        protected void ApplySortOptions(SortOptions<T> sortOptions)
+        protected void ApplyOptions(SpecificationOptions<T> options)
         {
-            var processor = new SortOptionsProcessor<T>(sortOptions.OrderBy);
-            processor.Apply(this);
-        }
-
-        protected void ApplySearchOptions(SearchOptions<T> searchOptions)
-        {
-            var processor = new SearchOptionsProcessor<T>(searchOptions.Search);
-            processor.Apply(this);
+            new SearchOptionsProcessor<T>(options.Search).Apply(this);
+            new SortOptionsProcessor<T>(options.OrderBy).Apply(this);
+            if (options.Paging != null)
+            {
+                this.ApplyPaging(options.Paging.Offset ?? 0, options.Paging.Limit ?? int.MaxValue);
+            }
         }
     }
 }
