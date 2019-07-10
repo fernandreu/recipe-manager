@@ -8,6 +8,7 @@ using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Search;
 using RecipeManager.ApplicationCore.Sort;
+using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -17,12 +18,12 @@ namespace RecipeManager.WebApi.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly IRecipeResourceService recipeService;
+        private readonly IRecipeService recipeService;
 
         private readonly PagingOptions defaultPagingOptions;
 
         public RecipesController(
-            IRecipeResourceService recipeService,
+            IRecipeService recipeService,
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.recipeService = recipeService;
@@ -33,20 +34,24 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<PagedCollection<RecipeResource>>> ListAll(
-            [FromQuery] PagingOptions pagingOptions, 
-            [FromQuery] SortOptions<Recipe> sortOptions,
-            [FromQuery] SearchOptions<Recipe> searchOptions)
+            [FromQuery] SpecificationOptions<Recipe> options)
         {
-            pagingOptions.Offset = pagingOptions.Offset ?? this.defaultPagingOptions.Offset;
-            pagingOptions.Limit = pagingOptions.Limit ?? this.defaultPagingOptions.Limit;
+            if (options.Paging == null)
+            {
+                options.Paging = this.defaultPagingOptions;
+            }
 
-            var recipes = await this.recipeService.ListAsync(pagingOptions, sortOptions, searchOptions);
+            options.Paging.Offset = options.Paging.Offset ?? this.defaultPagingOptions.Offset;
+            options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
+
+            var spec = new RecipeSpecification(options);
+            var recipes = await this.recipeService.ListAsync(spec);
 
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAll)), 
                 recipes.Items.ToArray(), 
                 recipes.TotalSize, 
-                pagingOptions);
+                options.Paging);
         }
 
         [HttpGet("{recipeId}", Name = nameof(GetRecipeById))]

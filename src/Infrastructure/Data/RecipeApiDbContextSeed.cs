@@ -223,6 +223,28 @@
                 });
             }
 
+            context.Users.Add(new User
+            {
+                Id = Guid.NewGuid(),
+                UserName = "fernandreu",
+                Ingredients = new[]
+                {
+                    new Ingredient
+                    {
+                        Id = Guid.NewGuid(),
+                        Quantity = 50,
+                        Name = "eggs",
+                    },
+                    new Ingredient
+                    {
+                        Id = Guid.NewGuid(),
+                        Quantity = 200,
+                        Units = "kg",
+                        Name = "sugar",
+                    },
+                }
+            });
+
             await context.SaveChangesAsync();
         }
     }

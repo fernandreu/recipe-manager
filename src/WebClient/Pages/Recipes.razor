@@ -14,21 +14,24 @@ Search recipes by the ingredients they contain.
 
 @if (Results != null)
 {
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Title</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var forecast in Results.Value)
-        {
-            <tr>
-                <td>@forecast.Title</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    foreach (var recipe in Results.Value)
+    {
+        <MatCard Style="margin: 8px; padding: 8px;" Stroke="true">
+            <h1>@recipe.Title</h1>
+            <MatTable Items="@recipe.Ingredients">
+                <MatTableHeader>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Units</th>
+                </MatTableHeader>
+                <MatTableRow>
+                    <td>@context.Name</td>
+                    <td>@context.Quantity</td>
+                    <td>@context.Units</td>
+                </MatTableRow>
+            </MatTable>
+        </MatCard>
+    }
 }
 
 @code
@@ -63,7 +66,7 @@ private async Task LoadDataAsync(string searchText)
     this.StatusMessage = $"Uri: {builder}";
     this.Results = null;
     this.StateHasChanged();
-    this.Results = await Http.GetJsonAsync<Collection<RecipeResource>>(builder.ToString());
+    this.Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(builder.ToString());
     this.StateHasChanged();
 }
 }

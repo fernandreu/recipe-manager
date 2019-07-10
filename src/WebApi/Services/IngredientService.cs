@@ -1,0 +1,16 @@
+﻿using AutoMapper;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Resources;
+using RecipeManager.Infrastructure.Data;
+using RecipeManager.WebApi.Interfaces;
+
+namespace RecipeManager.WebApi.Services
+{
+    public class IngredientService : ServiceBase<Ingredient, IngredientResource>, IIngredientService
+    {
+        public IngredientService(RecipeApiDbContext context, IConfigurationProvider mappingConfiguration) : 
+            base(context, mappingConfiguration)
+        {
+        }
+    }
+}

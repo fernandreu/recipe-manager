@@ -1,4 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Search
+﻿using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Interfaces;
+
+namespace RecipeManager.ApplicationCore.Search
 {
     using System;
     using System.Collections.Generic;
@@ -124,6 +127,39 @@
             }
 
             return modifiedQuery;
+        }
+        
+        public void Apply(ISpecification<T> spec)
+        {
+            spec.Criteria.Clear();
+
+            var terms = this.GetValidTerms().ToArray();
+            if (!terms.Any())
+            {
+                return;
+            }
+
+            foreach (var term in terms)
+            {
+                var propertyInfo = ExpressionHelper.GetPropertyInfo<T>(term.Name);
+                var obj = ExpressionHelper.Parameter<T>();
+
+                // Build up the LINQ expression backwards
+                // x => x.Property == "Value";
+
+                // x.Property
+                var left = ExpressionHelper.GetPropertyExpression(obj, propertyInfo);
+
+                // "Value"
+                var right = term.ExpressionProvider.GetValue(term.Value);
+
+                // x.Property == "Value"
+                var comparisonExpression = term.ExpressionProvider.GetComparison(left, term.Operator, right);
+
+                // x => x.Property == "Value"
+                var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression) as Expression<Func<T, bool>>;
+                spec.Criteria.Add(lambdaExpression);
+            }
         }
 
         private static IEnumerable<SearchTerm> GetTermsFromModel()
