@@ -7,6 +7,7 @@ namespace RecipeManager.ApplicationCore.Entities
     {
         public string UserName { get; set; }
 
+        [IncludeInSingleQueries]
         [SearchableIngredients]
         public ICollection<Ingredient> Ingredients { get; set; }
     }

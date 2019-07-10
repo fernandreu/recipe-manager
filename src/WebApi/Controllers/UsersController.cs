@@ -6,8 +6,6 @@ using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.ApplicationCore.Search;
-using RecipeManager.ApplicationCore.Sort;
 using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
@@ -16,25 +14,25 @@ namespace RecipeManager.WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class RecipesController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IRecipeService recipeService;
+        private readonly IUserService userService;
 
         private readonly PagingOptions defaultPagingOptions;
 
-        public RecipesController(
-            IRecipeService recipeService,
+        public UsersController(
+            IUserService userService,
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
-            this.recipeService = recipeService;
+            this.userService = userService;
             this.defaultPagingOptions = defaultPagingOptionsWrapper.Value;
         }
         
-        [HttpGet(Name = nameof(ListAllRecipes))]
+        [HttpGet(Name = nameof(ListAllUsers))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<PagedCollection<RecipeResource>>> ListAllRecipes(
-            [FromQuery] SpecificationOptions<Recipe> options)
+        public async Task<ActionResult<PagedCollection<UserResource>>> ListAllUsers(
+            [FromQuery] SpecificationOptions<User> options)
         {
             if (options.Paging == null)
             {
@@ -44,28 +42,28 @@ namespace RecipeManager.WebApi.Controllers
             options.Paging.Offset = options.Paging.Offset ?? this.defaultPagingOptions.Offset;
             options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
 
-            var spec = new RecipeSpecification(options);
-            var recipes = await this.recipeService.ListAsync(spec);
+            var spec = new UserSpecification(options);
+            var users = await this.userService.ListAsync(spec);
 
             return PagedCollectionHelper.Create(
-                Link.ToCollection(nameof(this.ListAllRecipes)), 
-                recipes.Items.ToArray(), 
-                recipes.TotalSize, 
+                Link.ToCollection(nameof(this.ListAllUsers)), 
+                users.Items.ToArray(), 
+                users.TotalSize, 
                 options.Paging);
         }
 
-        [HttpGet("{recipeId}", Name = nameof(GetRecipeById))]
+        [HttpGet("{userId}", Name = nameof(GetUserById))]
         [ProducesResponseType(404)]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<RecipeResource>> GetRecipeById(Guid recipeId)
+        public async Task<ActionResult<UserResource>> GetUserById(Guid userId)
         {
-            var recipe = await this.recipeService.GetByIdAsync(recipeId);
-            if (recipe == null)
+            var user = await this.userService.GetByIdAsync(userId);
+            if (user == null)
             {
                 return this.NotFound();
             }
 
-            return recipe;
+            return user;
         }
     }
 }
