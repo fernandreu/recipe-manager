@@ -38,14 +38,6 @@ namespace RecipeManager.Infrastructure.Extensions
             var query = specification.Criteria.Aggregate(inputQuery, 
                 (current, criterion) => current.Where(criterion));
 
-            // Includes all expression-based includes
-            query = specification.Includes.Aggregate(query,
-                (current, include) => current.Include(include));
-
-            // Include any string-based include statements
-            query = specification.IncludeStrings.Aggregate(query,
-                (current, include) => current.Include(include));
-
             // Apply ordering if expressions are set
             IOrderedQueryable<T> ordered = null;
             foreach (var (expr, desc) in specification.OrderBy)

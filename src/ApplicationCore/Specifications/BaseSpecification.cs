@@ -8,13 +8,9 @@ using RecipeManager.ApplicationCore.Sort;
 
 namespace RecipeManager.ApplicationCore.Specifications
 {
-    public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
+    public abstract class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
     {
         public List<Expression<Func<T, bool>>> Criteria { get; } = new List<Expression<Func<T, bool>>>();
-
-        public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
-
-        public List<string> IncludeStrings { get; } = new List<string>();
 
         public List<(Expression<Func<T, object>>, bool)> OrderBy { get; } = new List<(Expression<Func<T, object>>, bool)>();
 
@@ -23,16 +19,6 @@ namespace RecipeManager.ApplicationCore.Specifications
         public int Skip { get; private set; }
 
         public bool IsPagingEnabled { get; private set; } = false;
-
-        protected void AddInclude(Expression<Func<T, object>> includeExpression)
-        {
-            this.Includes.Add(includeExpression);
-        }
-
-        protected void AddInclude(string includeString)
-        {
-            this.IncludeStrings.Add(includeString);
-        }
 
         protected void ApplyPaging(int skip, int take)
         {

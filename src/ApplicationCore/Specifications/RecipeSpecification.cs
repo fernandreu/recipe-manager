@@ -6,7 +6,6 @@ namespace RecipeManager.ApplicationCore.Specifications
     {
         public RecipeSpecification(SpecificationOptions<Recipe> options)
         {
-            this.AddInclude(x => x.Ingredients);
             this.ApplyOptions(options);
         }
     }

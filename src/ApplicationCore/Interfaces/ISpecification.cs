@@ -8,10 +8,6 @@ namespace RecipeManager.ApplicationCore.Interfaces
     {
         List<Expression<Func<T, bool>>> Criteria { get; }
 
-        List<Expression<Func<T, object>>> Includes { get; }
-
-        List<string> IncludeStrings { get; }
-
         /// <summary>
         /// The bool parameter is whether OrderBy should be descending or not
         /// </summary>

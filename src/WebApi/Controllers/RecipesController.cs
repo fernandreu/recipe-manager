@@ -6,8 +6,6 @@ using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.ApplicationCore.Search;
-using RecipeManager.ApplicationCore.Sort;
 using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
