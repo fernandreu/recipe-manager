@@ -83,7 +83,8 @@ jobs:
       
 - job: WebClient
   pool:
-    vmImage: 'ubuntu-latest'
+    # WebCompiler (for SASS files) only works on Windows for now
+    vmImage: 'VS2017-Win2016'
   steps:
   
   - task: DotNetCoreInstaller@0
@@ -119,14 +120,14 @@ jobs:
       artifactName: 'WebClient'
 
   - script: |
-      git config --global user.name "$NAME"
-      git config --global user.email "$EMAIL"
+      git config --global user.name "%NAME%"
+      git config --global user.email "%EMAIL%"
       cd $(Build.ArtifactStagingDirectory)/WebClient/WebClient/dist
       git init
       git checkout -b gh-pages
       git add -A
       git commit -m "Create build $(Build.BuildId)"
-      git push -f https://$PAT@github.com/fernandreu/recipe-manager.git gh-pages
+      git push -f https://%PAT%@github.com/fernandreu/recipe-manager.git gh-pages
     displayName: 'Publish to GitHub Pages'
     env:
       PAT: $(GitHubPAT)
