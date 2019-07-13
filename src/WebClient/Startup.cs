@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using WebClient.Models;
 
 namespace WebClient
 {
@@ -7,6 +8,7 @@ namespace WebClient
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<UserSession>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
