@@ -13,5 +13,9 @@ namespace RecipeManager.WebApi.Interfaces
         Task<TResource> GetByIdAsync(Guid id);
 
         Task<PagedResults<TResource>> ListAsync(ISpecification<TEntity> spec);
+
+        Task<TResource> CreateAsync(TResource model);
+
+        Task<TResource> UpdateAsync(Guid id, TResource model);
     }
 }

@@ -57,13 +57,35 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<RecipeResource>> GetRecipeById(Guid recipeId)
         {
-            var recipe = await this.recipeService.GetByIdAsync(recipeId);
-            if (recipe == null)
+            var result = await this.recipeService.GetByIdAsync(recipeId);
+            if (result == null)
             {
                 return this.NotFound();
             }
 
-            return recipe;
+            return result;
+        }
+
+        [HttpPost(Name = nameof(CreateRecipe))]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<RecipeResource>> CreateRecipe(RecipeResource model)
+        {
+            var result = await this.recipeService.CreateAsync(model);
+            return result;
+        }
+
+        [HttpPut("{recipeId}", Name = nameof(UpdateRecipe))]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<RecipeResource>> UpdateRecipe(Guid recipeId, RecipeResource model)
+        {
+            var result = await this.recipeService.UpdateAsync(recipeId, model);
+            if (result == null)
+            {
+                return this.NotFound();
+            }
+
+            return result;
         }
     }
 }
