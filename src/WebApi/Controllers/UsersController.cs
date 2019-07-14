@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Entities;
@@ -28,6 +29,7 @@ namespace RecipeManager.WebApi.Controllers
             this.defaultPagingOptions = defaultPagingOptionsWrapper.Value;
         }
         
+        [Authorize]
         [HttpGet(Name = nameof(ListAllUsers))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
