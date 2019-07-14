@@ -1,8 +1,10 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using RecipeManager.ApplicationCore.Models;
 using WebClient.Login;
 using WebClient.Models;
@@ -33,9 +35,13 @@ namespace WebClient.Services
 
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
-            var result = await this.httpClient.PostJsonAsync<RegisterResult>( this.serverConfig.UrlTo("accounts"), registerModel);
-
-            return result;
+            var json = JsonConvert.SerializeObject(registerModel);
+            using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
+            {
+                var response = await this.httpClient.PostAsync(this.serverConfig.UrlTo("accounts"), content);
+                var result = JsonConvert.DeserializeObject<RegisterResult>(await response.Content.ReadAsStringAsync());
+                return result;
+            }
         }
 
         public async Task<LoginResult> Login(LoginModel loginModel)

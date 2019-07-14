@@ -20,6 +20,8 @@ namespace RecipeManager.WebApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromBody] RegisterModel model)
         {
             var newUser = new IdentityUser
