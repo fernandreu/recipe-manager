@@ -28,7 +28,7 @@ namespace RecipeManager.WebApi
 
                 try
                 {
-                    RecipeApiDbContextSeed.InitializeAsync(services).Wait();
+                    DbContextSeed.InitializeAsync(services).Wait();
                 }
                 catch (Exception ex)
                 {

@@ -8,14 +8,14 @@
 
     using RecipeManager.ApplicationCore.Entities;
 
-    public static class RecipeApiDbContextSeed
+    public static class DbContextSeed
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            await AddTestData(services.GetRequiredService<RecipeApiDbContext>());
+            await AddTestData(services.GetRequiredService<ApplicationDbContext>());
         }
 
-        public static async Task AddTestData(RecipeApiDbContext context)
+        public static async Task AddTestData(ApplicationDbContext context)
         {
             if (context.Recipes.Any())
             {
@@ -223,7 +223,7 @@
                 });
             }
 
-            context.Users.Add(new User
+            context.AppUsers.Add(new User
             {
                 Id = Guid.NewGuid(),
                 UserName = "fernandreu",

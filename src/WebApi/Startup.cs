@@ -1,12 +1,16 @@
 ﻿using System.Reflection;
+using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
@@ -37,11 +41,28 @@ namespace RecipeManager.WebApi
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIngredientService, IngredientService>();
 
-            services.AddDbContext<RecipeApiDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 // TODO: Swap out for a real database in production
                 options.UseInMemoryDatabase("recipesdb");
             });
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = this.Configuration["JwtIssuer"],
+                        ValidAudience = this.Configuration["JwtAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration["JwtSecurityKey"])),
+                    };
+                });
 
             services.AddMvc(options =>
             {
@@ -106,6 +127,9 @@ namespace RecipeManager.WebApi
             
             app.UseCors("AllowMyApp");
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }

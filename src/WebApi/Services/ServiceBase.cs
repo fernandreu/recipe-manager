@@ -17,11 +17,11 @@ namespace RecipeManager.WebApi.Services
         where TEntity : BaseEntity
         where TResource : BaseResource
     {
-        protected readonly RecipeApiDbContext Context;
+        protected readonly ApplicationDbContext Context;
 
         protected readonly IConfigurationProvider MappingConfiguration;
 
-        public ServiceBase(RecipeApiDbContext context, IConfigurationProvider mappingConfiguration)
+        public ServiceBase(ApplicationDbContext context, IConfigurationProvider mappingConfiguration)
         {
             this.Context = context;
             this.MappingConfiguration = mappingConfiguration;

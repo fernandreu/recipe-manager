@@ -1,7 +1,10 @@
 ﻿@page "/recipes"
+@using System.Collections.Specialized
 @using System.Web
 @using RecipeManager.ApplicationCore.Resources
+@using WebClient.Models
 @inject HttpClient Http
+@inject ServerConfig ServerConfig
 
 <h1>Recipes</h1>
 
@@ -48,25 +51,18 @@ private void OnSearch(string searchText)
 
 private async Task LoadDataAsync(string searchText)
 {
-    #if DEBUG
-    var builder = new UriBuilder("https://localhost/recipes");
-    builder.Port = 44364;
-    #else
-    var builder = new UriBuilder("https://recipemanager.azurewebsites.net/recipes");
-    #endif
-
-    ////this.StatusMessage = $"SearchText: {searchText}";
-    var query = HttpUtility.ParseQueryString(builder.Query);
+    var queryParameters = new NameValueCollection();
     if (!string.IsNullOrWhiteSpace(searchText))
     {
-        query["search"] = $"ingredients co {searchText}";
+        queryParameters["search"] = $"ingredients co {searchText}";
     }
 
-    builder.Query = query.ToString();
-    this.StatusMessage = $"Uri: {builder}";
+    var uri = ServerConfig.UrlTo("recipes", queryParameters);
+
+    this.StatusMessage = $"Uri: {uri}";
     this.Results = null;
     this.StateHasChanged();
-    this.Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(builder.ToString());
+    this.Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(uri);
     this.StateHasChanged();
 }
 }
