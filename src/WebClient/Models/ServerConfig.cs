@@ -13,7 +13,7 @@ namespace WebClient.Models
 #else
         public string BaseUrl { get; } = "https://recipemanager.azurewebsites.net";
 
-        public string Port { get; } = 443;
+        public int Port { get; } = 443;
 #endif
 
         public string UrlTo(string endpoint, NameValueCollection queryParameters = null)
