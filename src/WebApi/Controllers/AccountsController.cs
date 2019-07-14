@@ -45,6 +45,7 @@ namespace RecipeManager.WebApi.Controllers
             });
         }
 
+        [HttpGet("user")]
         public IActionResult GetUser()
         {
             if (!this.User.Identity.IsAuthenticated)

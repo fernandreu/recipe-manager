@@ -9,7 +9,7 @@
     protected override async Task OnInitAsync()
     {
         await AuthService.Logout();
-        UriHelper.NavigateTo("/");
+        UriHelper.NavigateTo("/recipe-manager");
     }
 
 }
