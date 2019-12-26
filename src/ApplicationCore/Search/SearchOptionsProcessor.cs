@@ -131,8 +131,10 @@ namespace RecipeManager.ApplicationCore.Search
         
         public void Apply(ISpecification<T> spec)
         {
-            spec.Criteria.Clear();
-
+            // TODO: Split these between client and server criteria depending on the type of expression
+            spec.ServerCriteria.Clear();
+            spec.ClientCriteria.Clear();
+            
             var terms = this.GetValidTerms().ToArray();
             if (!terms.Any())
             {
@@ -158,7 +160,7 @@ namespace RecipeManager.ApplicationCore.Search
 
                 // x => x.Property == "Value"
                 var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression) as Expression<Func<T, bool>>;
-                spec.Criteria.Add(lambdaExpression);
+                spec.ClientCriteria.Add(lambdaExpression);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Interfaces;
+using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.ApplicationCore.Sort
 {
@@ -122,7 +123,7 @@ namespace RecipeManager.ApplicationCore.Sort
 
         public void Apply(ISpecification<T> spec)
         {
-            spec.OrderBy.Clear();
+            spec.OrderByClauses.Clear();
 
             var terms = this.GetValidTerms().ToArray();
 
@@ -145,7 +146,7 @@ namespace RecipeManager.ApplicationCore.Sort
                 var key = ExpressionHelper.GetPropertyExpression(obj, propertyInfo);
                 var keySelector = ExpressionHelper.GetLambda(typeof(T), typeof(object), obj, key) as Expression<Func<T, object>>;
 
-                spec.OrderBy.Add((keySelector, term.Descending));
+                spec.OrderByClauses.Add(new OrderByClause<T>(keySelector, term.Descending));
             }
         }
 

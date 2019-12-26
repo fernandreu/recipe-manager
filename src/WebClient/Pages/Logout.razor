@@ -1,15 +1,15 @@
 @page "/logout"
 @using WebClient.Services
 @inject IAuthService AuthService
-@inject IUriHelper UriHelper
+@inject NavigationManager NavigationManager
 
 
 @code {
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         await AuthService.Logout();
-        UriHelper.NavigateTo("/recipe-manager");
+        NavigationManager.NavigateTo("/recipe-manager");
     }
 
 }

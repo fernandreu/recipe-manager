@@ -41,14 +41,15 @@ namespace RecipeManager.WebApi.Services
         
         public async Task<PagedResults<TResource>> ListAsync(ISpecification<TEntity> spec)
         {
-            var query = this.Context.Set<TEntity>().IncludeAll(false).With(spec);
-            var size = await query.CountAsync();
-            var items = await query.ProjectTo<TResource>(this.MappingConfiguration).ToArrayAsync();
+            var entities = await this.Context.Set<TEntity>().IncludeAll(false).ApplyAsync(spec);
+
+            var mapper = this.MappingConfiguration.CreateMapper();
+            var items = entities.Items.Select(x => mapper.Map<TResource>(x)).ToArray();
             
             return new PagedResults<TResource>
             {
                 Items = items,
-                TotalSize = size,
+                TotalSize = entities.TotalSize,
             };
         }
 

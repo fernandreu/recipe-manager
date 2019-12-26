@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using RecipeManager.ApplicationCore.Models;
 using WebClient.Login;

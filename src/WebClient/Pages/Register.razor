@@ -2,7 +2,7 @@
 @using RecipeManager.ApplicationCore.Models
 @using WebClient.Services
 @inject IAuthService AuthService
-@inject IUriHelper UriHelper
+@inject NavigationManager NavigationManager
 
 <h1>Register</h1>
 
@@ -57,7 +57,7 @@
 
         if (result.Successful)
         {
-            UriHelper.NavigateTo("/recipe-manager/login");
+            NavigationManager.NavigateTo("/recipe-manager/login");
         }
         else
         {

@@ -1,16 +1,16 @@
-﻿using RecipeManager.ApplicationCore.Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RecipeManager.ApplicationCore.Attributes;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Interfaces;
+using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.Infrastructure.Extensions
 {
-    using System.Linq;
-    using System.Reflection;
-
-    using Microsoft.EntityFrameworkCore;
-
-    using RecipeManager.ApplicationCore.Attributes;
-    using RecipeManager.ApplicationCore.Entities;
-    using RecipeManager.ApplicationCore.Extensions;
-
     public static class QueryableExtensions
     {
         public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery) where T : BaseEntity
@@ -32,37 +32,51 @@ namespace RecipeManager.Infrastructure.Extensions
             return query;
         }
 
-        public static IQueryable<T> With<T>(this IQueryable<T> inputQuery, ISpecification<T> specification) where T : BaseEntity
+        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T> specification) where T : BaseEntity
         {
-            // modify the IQueryable using the specification's criteria expression
-            var query = specification.Criteria.Aggregate(inputQuery, 
+            var query = specification.ServerCriteria.Aggregate(
+                inputQuery, 
                 (current, criterion) => current.Where(criterion));
 
-            // Apply ordering if expressions are set
             IOrderedQueryable<T> ordered = null;
-            foreach (var (expr, desc) in specification.OrderBy)
+            foreach (var clause in specification.OrderByClauses)
             {
                 if (ordered == null)
                 {
-                    ordered = desc ? query.OrderByDescending(expr) : query.OrderBy(expr);
+                    ordered = clause.Descending ? query.OrderByDescending(clause.Expression) : query.OrderBy(clause.Expression);
                 }
                 else
                 {
-                    ordered = desc ? ordered.ThenByDescending(expr) : ordered.ThenBy(expr);
+                    ordered = clause.Descending ? ordered.ThenByDescending(clause.Expression) : ordered.ThenBy(clause.Expression);
                 }
 
                 query = ordered;
             }
 
-            // Apply paging if enabled
+            // TODO: Cache compile calls. If no expression analysis is done, ClientCauses could store them directly instead of the expressions
+            var raw = await query.ToListAsync();
+            var filtered = specification.ClientCriteria.Aggregate(
+                (IEnumerable<T>)raw,
+                (current, criterion) => current.Where(criterion.Compile()))
+                .ToArray();
+
+            var result = new PagedResults<T>
+            {
+                TotalSize = filtered.Length
+            };
+
             if (specification.IsPagingEnabled)
             {
-                query = query
+
+                filtered = filtered
                     .Skip(specification.Skip)
-                    .Take(specification.Take);
+                    .Take(specification.Take)
+                    .ToArray();
             }
 
-            return query;
+            result.Items = filtered;
+
+            return result;
         }
     }
 }

@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.ApplicationCore.Interfaces
 {
     public interface ISpecification<T>
     {
-        List<Expression<Func<T, bool>>> Criteria { get; }
+        /// <summary>
+        /// Any where clause which can be evaluated server-side (e.g. using simple SQL expressions)
+        /// </summary>
+        ICollection<Expression<Func<T, bool>>> ServerCriteria { get; }
 
         /// <summary>
-        /// The bool parameter is whether OrderBy should be descending or not
+        /// Any where clause which cannot be evaluated server-side (e.g. using custom C# functions)
         /// </summary>
-        List<(Expression<Func<T, object>>, bool)> OrderBy { get; }
+        ICollection<Expression<Func<T, bool>>> ClientCriteria { get; }
+
+        ICollection<OrderByClause<T>> OrderByClauses { get; }
 
         int Take { get; }
 

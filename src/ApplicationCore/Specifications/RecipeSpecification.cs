@@ -2,7 +2,7 @@
 
 namespace RecipeManager.ApplicationCore.Specifications
 {
-    public class RecipeSpecification : BaseSpecification<Recipe>
+    public class RecipeSpecification : Specification<Recipe>
     {
         public RecipeSpecification(SpecificationOptions<Recipe> options)
         {

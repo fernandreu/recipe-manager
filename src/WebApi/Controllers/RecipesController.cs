@@ -39,8 +39,8 @@ namespace RecipeManager.WebApi.Controllers
                 options.Paging = this.defaultPagingOptions;
             }
 
-            options.Paging.Offset = options.Paging.Offset ?? this.defaultPagingOptions.Offset;
-            options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
+            options.Paging.Offset ??= this.defaultPagingOptions.Offset;
+            options.Paging.Limit ??= this.defaultPagingOptions.Limit;
 
             var spec = new RecipeSpecification(options);
             var recipes = await this.recipeService.ListAsync(spec);

@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Components.Web
 <div>
     <MatTextField @bind-Value="@SearchText" Label="Enter an ingredient you have"/>
 
@@ -10,7 +11,7 @@
 private string searchText;
 
 [Parameter]
-private string SearchText
+public string SearchText
 {
     get => this.searchText;
     set
@@ -26,9 +27,9 @@ private string SearchText
 }
 
 [Parameter]
-private EventCallback<string> OnSearch { get; set; }
+public EventCallback<string> OnSearch { get; set; }
 
-private void OnSearchClicked(UIMouseEventArgs e)
+private void OnSearchClicked(MouseEventArgs e)
 {
     this.OnSearch.InvokeAsync(this.SearchText).ConfigureAwait(false);
 }

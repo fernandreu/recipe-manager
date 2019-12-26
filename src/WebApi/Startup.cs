@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
@@ -30,7 +31,7 @@ namespace RecipeManager.WebApi
 
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment CurrentEnvironment { get; set; }
+        public IWebHostEnvironment CurrentEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -47,7 +48,7 @@ namespace RecipeManager.WebApi
                 options.UseInMemoryDatabase("recipesdb");
             });
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -64,11 +65,11 @@ namespace RecipeManager.WebApi
                     };
                 });
 
-            services.AddMvc(options =>
+            services.AddControllers(options =>
             {
                 options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add<LinkRewritingFilter>();
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            });
 
             services.AddRouting(options =>
             {
@@ -107,7 +108,7 @@ namespace RecipeManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             this.CurrentEnvironment = env;
 
@@ -130,7 +131,11 @@ namespace RecipeManager.WebApi
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
