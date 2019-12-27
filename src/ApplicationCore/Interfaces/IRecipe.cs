@@ -1,8 +1,8 @@
-﻿namespace RecipeManager.ApplicationCore.Interfaces
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace RecipeManager.ApplicationCore.Interfaces
+{
     public interface IRecipe<TIngredient> where TIngredient : IIngredient
     {
         Guid Id { get; set; }

@@ -7,16 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Search;
+using Xunit;
+
 namespace RecipeManager.UnitTests.Infrastructure
 {
-    using System;
-    using System.Linq;
-
-    using RecipeManager.ApplicationCore.Entities;
-    using RecipeManager.ApplicationCore.Search;
-
-    using Xunit;
-
     public class SearchOptionsProcessorTests
     {
         [Fact]

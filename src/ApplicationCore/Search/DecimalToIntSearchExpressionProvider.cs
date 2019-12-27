@@ -1,10 +1,9 @@
-﻿using RecipeManager.ApplicationCore.Models;
+﻿using System;
+using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Models;
 
 namespace RecipeManager.ApplicationCore.Search
 {
-    using System;
-    using System.Linq.Expressions;
-
     public class DecimalToIntSearchExpressionProvider : SearchExpressionProvider
     {
         public override ConstantExpression GetValue(string input)

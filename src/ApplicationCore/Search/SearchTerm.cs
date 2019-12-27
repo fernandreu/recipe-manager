@@ -1,7 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Search
-{
-    using RecipeManager.ApplicationCore.Interfaces;
+﻿using RecipeManager.ApplicationCore.Interfaces;
 
+namespace RecipeManager.ApplicationCore.Search
+{
     public class SearchTerm
     {
         public string Name { get; set; }

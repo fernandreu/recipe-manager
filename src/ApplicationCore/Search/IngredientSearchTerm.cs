@@ -1,11 +1,10 @@
-﻿namespace RecipeManager.ApplicationCore.Search
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using RecipeManager.ApplicationCore.Extensions;
+
+namespace RecipeManager.ApplicationCore.Search
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using RecipeManager.ApplicationCore.Extensions;
-
     public class IngredientSearchTerm
     {
         private static readonly IEnumerable<SearchOperator> ValidSearchOperators = new[]

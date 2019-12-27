@@ -1,18 +1,16 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using RecipeManager.ApplicationCore.Attributes;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.ApplicationCore.Sort
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using RecipeManager.ApplicationCore.Attributes;
-    using RecipeManager.ApplicationCore.Entities;
-    using RecipeManager.ApplicationCore.Helpers;
-
     public class SortOptionsProcessor<T> where T : BaseEntity
     {
         private readonly string[] orderBy;

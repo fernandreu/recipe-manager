@@ -1,7 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Search
-{
-    using System;
+﻿using System;
 
+namespace RecipeManager.ApplicationCore.Search
+{
     /// <summary>
     /// Contains all possible operators that can be used in a search query
     /// </summary>

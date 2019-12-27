@@ -7,16 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Sort;
+using Xunit;
+
 namespace RecipeManager.UnitTests.Infrastructure
 {
-    using System;
-    using System.Linq;
-
-    using RecipeManager.ApplicationCore.Entities;
-    using RecipeManager.ApplicationCore.Sort;
-
-    using Xunit;
-
     public class SortOptionsProcessorTests
     {
         [Fact]

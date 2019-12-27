@@ -1,7 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Paging
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace RecipeManager.ApplicationCore.Paging
+{
     public class PagingOptions
     {
         [Range(1, 99999, ErrorMessage = "Offset must be greater than 0.")]

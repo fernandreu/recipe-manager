@@ -1,17 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Entities;
-using RecipeManager.ApplicationCore.Helpers;
+using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Models;
 
 namespace RecipeManager.ApplicationCore.Search
 {
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-
-    using RecipeManager.ApplicationCore.Extensions;
-    using RecipeManager.ApplicationCore.Interfaces;
-
     public class IngredientExpressionProvider : SearchExpressionProvider
     {
         public override ExpressionResult Evaluate(MemberExpression left, string op, ConstantExpression right)

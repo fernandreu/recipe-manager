@@ -1,14 +1,12 @@
-﻿namespace RecipeManager.ApplicationCore.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using RecipeManager.ApplicationCore.Interfaces;
+using RecipeManager.ApplicationCore.Search;
+using UnitsNet;
+
+namespace RecipeManager.ApplicationCore.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using RecipeManager.ApplicationCore.Interfaces;
-    using RecipeManager.ApplicationCore.Search;
-
-    using UnitsNet;
-
     /// <summary>
     /// Defines all instance methods that are common to both ingredient resources and ingredient entities
     /// </summary>

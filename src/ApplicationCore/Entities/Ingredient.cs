@@ -1,7 +1,7 @@
-﻿namespace RecipeManager.ApplicationCore.Entities
-{
-    using RecipeManager.ApplicationCore.Interfaces;
+﻿using RecipeManager.ApplicationCore.Interfaces;
 
+namespace RecipeManager.ApplicationCore.Entities
+{
     public class Ingredient : BaseEntity, IIngredient
     {
         public string Name { get; set; }

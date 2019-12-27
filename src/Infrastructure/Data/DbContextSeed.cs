@@ -1,13 +1,11 @@
-﻿namespace RecipeManager.Infrastructure.Data
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using RecipeManager.ApplicationCore.Entities;
+
+namespace RecipeManager.Infrastructure.Data
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Microsoft.Extensions.DependencyInjection;
-
-    using RecipeManager.ApplicationCore.Entities;
-
     public static class DbContextSeed
     {
         public static async Task InitializeAsync(IServiceProvider services)

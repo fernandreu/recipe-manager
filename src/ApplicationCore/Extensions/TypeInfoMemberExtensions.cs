@@ -1,9 +1,9 @@
-﻿namespace RecipeManager.ApplicationCore.Extensions
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
+namespace RecipeManager.ApplicationCore.Extensions
+{
     public static class TypeInfoMemberExtensions
     {
         public static IEnumerable<ConstructorInfo> GetAllConstructors(this TypeInfo typeInfo)

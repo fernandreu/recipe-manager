@@ -1,10 +1,10 @@
-﻿namespace RecipeManager.ApplicationCore.Helpers
-{
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
+namespace RecipeManager.ApplicationCore.Helpers
+{
     public class ExpressionHelper
     {
         private static readonly MethodInfo LambdaMethod = typeof(Expression)

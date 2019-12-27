@@ -1,10 +1,9 @@
-﻿namespace RecipeManager.ApplicationCore.Entities
+﻿using System.Collections.Generic;
+using RecipeManager.ApplicationCore.Attributes;
+using RecipeManager.ApplicationCore.Interfaces;
+
+namespace RecipeManager.ApplicationCore.Entities
 {
-    using System.Collections.Generic;
-
-    using RecipeManager.ApplicationCore.Attributes;
-    using RecipeManager.ApplicationCore.Interfaces;
-
     public class Recipe : BaseEntity, IRecipe<Ingredient>
     {
         [Sortable(Default = true)]

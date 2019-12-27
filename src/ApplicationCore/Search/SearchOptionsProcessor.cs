@@ -1,17 +1,15 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using RecipeManager.ApplicationCore.Attributes;
+using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
 
 namespace RecipeManager.ApplicationCore.Search
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using RecipeManager.ApplicationCore.Attributes;
-    using RecipeManager.ApplicationCore.Entities;
-    using RecipeManager.ApplicationCore.Helpers;
-
     public class SearchOptionsProcessor<T> where T : BaseEntity
     {
         private readonly string[] searchQuery;

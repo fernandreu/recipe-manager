@@ -1,7 +1,7 @@
+using Xunit;
+
 namespace RecipeManager.IntegrationTests.Services
 {
-    using Xunit;
-
     public class RecipeServiceTests
     {
         [Fact]

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RecipeManager.ApplicationCore.Entities;
 
 namespace RecipeManager.Infrastructure.Data
 {
-    using RecipeManager.ApplicationCore.Entities;
-
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions options)
