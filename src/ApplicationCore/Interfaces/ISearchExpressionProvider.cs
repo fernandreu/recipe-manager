@@ -1,4 +1,6 @@
-﻿namespace RecipeManager.ApplicationCore.Interfaces
+﻿using RecipeManager.ApplicationCore.Models;
+
+namespace RecipeManager.ApplicationCore.Interfaces
 {
     using System.Linq.Expressions;
 
@@ -6,6 +8,6 @@
     {
         ConstantExpression GetValue(string input);
 
-        Expression GetComparison(MemberExpression left, string op, ConstantExpression right);
+        ExpressionResult Evaluate(MemberExpression left, string op, ConstantExpression right);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RecipeManager.ApplicationCore.Search
+﻿using RecipeManager.ApplicationCore.Models;
+
+namespace RecipeManager.ApplicationCore.Search
 {
     using System;
     using System.Linq.Expressions;
@@ -22,18 +24,18 @@
             return Expression.Constant(justDigits);
         }
 
-        public override Expression GetComparison(MemberExpression left, string op, ConstantExpression right)
+        public override ExpressionResult Evaluate(MemberExpression left, string op, ConstantExpression right)
         {
             // TODO: Add contains operator for strings
             switch (op.ToLower())
             {
-                case "gt": return Expression.GreaterThan(left, right);
-                case "gte": return Expression.GreaterThanOrEqual(left, right);
-                case "lt": return Expression.LessThan(left, right);
-                case "lte": return Expression.LessThanOrEqual(left, right);
-                
+                case "gt": return new ExpressionResult { ServerSide = Expression.GreaterThan(left, right) };
+                case "gte": return new ExpressionResult { ServerSide = Expression.GreaterThanOrEqual(left, right) };
+                case "lt": return new ExpressionResult { ServerSide = Expression.LessThan(left, right) };
+                case "lte": return new ExpressionResult { ServerSide = Expression.LessThanOrEqual(left, right) };
+
                 // If nothing matches, fall back to base implementation
-                default: return base.GetComparison(left, op, right);
+                default: return base.Evaluate(left, op, right);
             }
         }
     }

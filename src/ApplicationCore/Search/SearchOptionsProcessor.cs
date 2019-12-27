@@ -92,43 +92,6 @@ namespace RecipeManager.ApplicationCore.Search
             }
         }
         
-        public IQueryable<T> Apply(IQueryable<T> query)
-        {
-            var terms = this.GetValidTerms().ToArray();
-            if (!terms.Any())
-            {
-                return query;
-            }
-
-            var modifiedQuery = query;
-
-            foreach (var term in terms)
-            {
-                var propertyInfo = ExpressionHelper.GetPropertyInfo<T>(term.Name);
-                var obj = ExpressionHelper.Parameter<T>();
-
-                // Build up the LINQ expression backwards
-                // query = query.Where(x => x.Property == "Value");
-
-                // x.Property
-                var left = ExpressionHelper.GetPropertyExpression(obj, propertyInfo);
-
-                // "Value"
-                var right = term.ExpressionProvider.GetValue(term.Value);
-
-                // x.Property == "Value"
-                var comparisonExpression = term.ExpressionProvider.GetComparison(left, term.Operator, right);
-
-                // x => x.Property == "Value"
-                var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression);
-
-                // query = query.Where(...)
-                modifiedQuery = ExpressionHelper.CallWhere(modifiedQuery, lambdaExpression);
-            }
-
-            return modifiedQuery;
-        }
-        
         public void Apply(ISpecification<T> spec)
         {
             // TODO: Split these between client and server criteria depending on the type of expression
@@ -156,11 +119,21 @@ namespace RecipeManager.ApplicationCore.Search
                 var right = term.ExpressionProvider.GetValue(term.Value);
 
                 // x.Property == "Value"
-                var comparisonExpression = term.ExpressionProvider.GetComparison(left, term.Operator, right);
+                var comparisonExpression = term.ExpressionProvider.Evaluate(left, term.Operator, right);
 
                 // x => x.Property == "Value"
-                var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression) as Expression<Func<T, bool>>;
-                spec.ClientCriteria.Add(lambdaExpression);
+
+                if (comparisonExpression.ServerSide != null)
+                {
+                    var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ServerSide) as Expression<Func<T, bool>>;
+                    spec.ServerCriteria.Add(lambdaExpression);
+                }
+
+                if (comparisonExpression.ClientSide != null)
+                {
+                    var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ClientSide) as Expression<Func<T, bool>>;
+                    spec.ClientCriteria.Add(lambdaExpression);
+                }
             }
         }
 
