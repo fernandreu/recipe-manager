@@ -20,11 +20,11 @@ namespace RecipeManager.ApplicationCore.Search
 
         public double? Quantity { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Units { get; set; }
+        public string? Units { get; set; }
 
-        public static IngredientSearchTerm Parse(string criteria)
+        public static IngredientSearchTerm? Parse(string? criteria)
         {
             if (string.IsNullOrWhiteSpace(criteria))
             {
@@ -38,17 +38,17 @@ namespace RecipeManager.ApplicationCore.Search
 
             // First, check if the last but one token is any recognized search operator for this
             var parts = criteria.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-            string quantityAndUnits = null;
+            string? quantityAndUnits = null;
             if (parts.Length > 2)
             {
                 foreach (var op in ValidSearchOperators)
                 {
-                    if (!parts[parts.Length - 2].Is(op))
+                    if (!parts[^2].Is(op))
                     {
                         continue;
                     }
 
-                    quantityAndUnits = parts[parts.Length - 1];
+                    quantityAndUnits = parts[^1];
                     parts = parts.SkipLast(2).ToArray();
                     result.Name = string.Join(" ", parts);
                     result.Operator = op;

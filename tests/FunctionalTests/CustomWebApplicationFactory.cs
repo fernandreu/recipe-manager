@@ -37,25 +37,23 @@ namespace RecipeManager.FunctionalTests
                 var sp = services.BuildServiceProvider();
 
                 // Create a scope to obtain a reference to the database contexts
-                using (var scope = sp.CreateScope())
+                using var scope = sp.CreateScope();
+                var scopedServices = scope.ServiceProvider;
+                var appDb = scopedServices.GetRequiredService<ApplicationDbContext>();
+
+                var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+
+                // Ensure the database is created.
+                appDb.Database.EnsureCreated();
+
+                try
                 {
-                    var scopedServices = scope.ServiceProvider;
-                    var appDb = scopedServices.GetRequiredService<ApplicationDbContext>();
-
-                    var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-
-                    // Ensure the database is created.
-                    appDb.Database.EnsureCreated();
-
-                    try
-                    {
-                        // Seed the database with some specific test data.
-                        await DbContextSeed.AddTestData(appDb);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, $"An error occurred seeding the database with test messages. Error: {ex.Message}");
-                    }
+                    // Seed the database with some specific test data.
+                    await DbContextSeed.AddTestData(appDb);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, $"An error occurred seeding the database with test messages. Error: {ex.Message}");
                 }
             });
         }

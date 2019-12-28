@@ -9,6 +9,6 @@ namespace RecipeManager.ApplicationCore.Interfaces
 
         string Title { get; set; }
 
-        ICollection<TIngredient> Ingredients { get; }
+        ICollection<TIngredient>? Ingredients { get; }
     }
 }

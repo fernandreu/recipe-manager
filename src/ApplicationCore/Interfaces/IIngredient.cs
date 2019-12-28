@@ -6,6 +6,6 @@
 
         double Quantity { get; set; }
 
-        string Units { get; set; }
+        string? Units { get; set; }
     }
 }

@@ -13,9 +13,9 @@ namespace RecipeManager.ApplicationCore.Sort
 {
     public class SortOptionsProcessor<T> where T : BaseEntity
     {
-        private readonly string[] orderBy;
+        private readonly string[]? orderBy;
 
-        public SortOptionsProcessor(string[] orderBy)
+        public SortOptionsProcessor(string[]? orderBy)
         {
             this.orderBy = orderBy;
         }
@@ -143,6 +143,11 @@ namespace RecipeManager.ApplicationCore.Sort
                 // x => x.Property
                 var key = ExpressionHelper.GetPropertyExpression(obj, propertyInfo);
                 var keySelector = ExpressionHelper.GetLambda(typeof(T), typeof(object), obj, key) as Expression<Func<T, object>>;
+
+                if (keySelector == null)
+                {
+                    continue;
+                }
 
                 spec.OrderByClauses.Add(new OrderByClause<T>(keySelector, term.Descending));
             }

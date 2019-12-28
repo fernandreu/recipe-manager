@@ -19,10 +19,14 @@ namespace RecipeManager.ApplicationCore.Search
             }
 
             var searchTerm = IngredientSearchTerm.Parse(right.Value?.ToString());
-            var result = new ExpressionResult
+            
+            var result = new ExpressionResult();
+            if (searchTerm == null)
             {
-                ServerSide = GenerateContainsExpression(left, searchTerm.Name)
-            };
+                return result;
+            }
+
+            result.ServerSide = GenerateContainsExpression(left, searchTerm.Name);
 
             if (searchTerm.Quantity == null)
             {

@@ -5,10 +5,10 @@ namespace RecipeManager.ApplicationCore.Entities
 {
     public class User : BaseEntity
     {
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
 
         [IncludeInSingleQueries]
         [SearchableIngredients]
-        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Ingredient>? Ingredients { get; set; }
     }
 }

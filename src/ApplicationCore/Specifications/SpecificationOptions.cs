@@ -12,11 +12,11 @@ namespace RecipeManager.ApplicationCore.Specifications
     public class SpecificationOptions<T> : IValidatableObject
         where T : BaseEntity
     {
-        public string[] Search { get; set; }
+        public string[]? Search { get; set; }
 
-        public string[] OrderBy { get; set; }
+        public string[]? OrderBy { get; set; }
         
-        public PagingOptions Paging { get;set; }
+        public PagingOptions? Paging { get;set; }
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

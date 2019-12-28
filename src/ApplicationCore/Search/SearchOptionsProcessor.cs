@@ -12,9 +12,9 @@ namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchOptionsProcessor<T> where T : BaseEntity
     {
-        private readonly string[] searchQuery;
+        private readonly string[]? searchQuery;
 
-        public SearchOptionsProcessor(string[] searchQuery)
+        public SearchOptionsProcessor(string[]? searchQuery)
         {
             this.searchQuery = searchQuery;
         }
@@ -123,13 +123,13 @@ namespace RecipeManager.ApplicationCore.Search
 
                 if (comparisonExpression.ServerSide != null)
                 {
-                    var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ServerSide) as Expression<Func<T, bool>>;
+                    var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ServerSide);
                     spec.ServerCriteria.Add(lambdaExpression);
                 }
 
                 if (comparisonExpression.ClientSide != null)
                 {
-                    var lambdaExpression = ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ClientSide) as Expression<Func<T, bool>>;
+                    var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ClientSide);
                     spec.ClientCriteria.Add(lambdaExpression);
                 }
             }

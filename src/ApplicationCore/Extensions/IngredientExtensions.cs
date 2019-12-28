@@ -34,36 +34,36 @@ namespace RecipeManager.ApplicationCore.Extensions
             }
 
             var quantity = searchTerm.Quantity.Value;
-            if (searchTerm.Units != null && !TryConvertUnits(searchTerm.Units, ingredient.Units, ref quantity))
+            if (searchTerm.Units != null && ingredient.Units != null && !TryConvertUnits(searchTerm.Units, ingredient.Units, ref quantity))
             {
                 return false;
             }
 
-            const double Tolerance = 1e-2;
+            const double tolerance = 1e-2;
 
             if (searchTerm.Operator == SearchOperator.LessThan)
             {
-                return ingredient.Quantity < quantity - Tolerance;
+                return ingredient.Quantity < quantity - tolerance;
             }
             
             if (searchTerm.Operator == SearchOperator.LessThanOrEqual)
             {
-                return ingredient.Quantity <= quantity + Tolerance;
+                return ingredient.Quantity <= quantity + tolerance;
             }
             
             if (searchTerm.Operator == SearchOperator.Equal)
             {
-                return Math.Abs(quantity - ingredient.Quantity) < Tolerance;
+                return Math.Abs(quantity - ingredient.Quantity) < tolerance;
             }
 
             if (searchTerm.Operator == SearchOperator.GreaterThanOrEqual)
             {
-                return ingredient.Quantity >= quantity - Tolerance;
+                return ingredient.Quantity >= quantity - tolerance;
             }
             
             if (searchTerm.Operator == SearchOperator.GreaterThan)
             {
-                return ingredient.Quantity > quantity + Tolerance;
+                return ingredient.Quantity > quantity + tolerance;
             }
             
             // Unrecognized operator

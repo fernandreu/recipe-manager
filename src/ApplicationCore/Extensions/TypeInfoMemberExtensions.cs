@@ -29,14 +29,15 @@ namespace RecipeManager.ApplicationCore.Extensions
 
         private static IEnumerable<T> GetAll<T>(this TypeInfo typeInfo, Func<TypeInfo, IEnumerable<T>> accessor)
         {
-            while (typeInfo != null)
+            TypeInfo? tmp = typeInfo;
+            while (tmp != null)
             {
-                foreach (var t in accessor(typeInfo))
+                foreach (var t in accessor(tmp))
                 {
                     yield return t;
                 }
 
-                typeInfo = typeInfo.BaseType?.GetTypeInfo();
+                tmp = tmp.BaseType?.GetTypeInfo();
             }
         }
     }

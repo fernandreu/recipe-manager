@@ -2,8 +2,8 @@
 {
     public class RootResponse : BaseResource
     {
-        public Link Recipes { get; set; }
+        public Link? Recipes { get; set; }
 
-        public Link Users { get; set; }
+        public Link? Users { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace RecipeManager.ApplicationCore.Models
     {
         public bool Successful { get; set; }
 
-        public IEnumerable<string> Errors { get; set; }
+        public IEnumerable<string>? Errors { get; set; }
     }
 }

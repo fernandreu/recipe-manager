@@ -9,6 +9,6 @@ namespace RecipeManager.ApplicationCore.Resources
         public Guid Id { get; set; }
 
         [JsonIgnore]
-        public Link Self { get; set; }
+        public Link? Self { get; set; }
     }
 }

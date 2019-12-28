@@ -8,14 +8,14 @@ namespace RecipeManager.ApplicationCore.Entities
     {
         [Sortable(Default = true)]
         [Searchable]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         
         [IncludeInAllQueries]
         [SearchableIngredients]
-        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Ingredient>? Ingredients { get; set; }
         
         [Sortable]
         [Searchable]
-        public string Details { get; set; }
+        public string? Details { get; set; }
     }
 }

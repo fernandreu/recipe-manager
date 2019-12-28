@@ -5,11 +5,11 @@ namespace RecipeManager.ApplicationCore.Resources
 {
     public class IngredientResource : BaseResource, IIngredient
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public double Quantity { get; set; }
 
-        public string Units { get; set; }
+        public string? Units { get; set; }
         
         /// <summary>
         /// Gets a combination of quantity, units and name of this ingredient (e.g. "1kg rice")

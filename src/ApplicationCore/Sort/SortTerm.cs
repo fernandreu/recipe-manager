@@ -2,9 +2,9 @@
 {
     public class SortTerm
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string EntityName { get; set; }
+        public string? EntityName { get; set; }
 
         public bool Descending { get; set; }
 
