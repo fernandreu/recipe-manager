@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Newtonsoft.Json;
 
 namespace RecipeManager.ApplicationCore.Resources
@@ -11,7 +12,7 @@ namespace RecipeManager.ApplicationCore.Resources
         public string? Href { get; set; }
 
         [JsonProperty(Order = -3, PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
-        public string[]? Relations { get; set; }
+        public IReadOnlyCollection<string>? Relations { get; set; }
 
         [JsonProperty(Order = -2, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
         [DefaultValue(GetMethod)]

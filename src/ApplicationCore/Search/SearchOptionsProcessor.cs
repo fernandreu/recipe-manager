@@ -12,9 +12,9 @@ namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchOptionsProcessor<T> where T : BaseEntity
     {
-        private readonly string[]? searchQuery;
+        private readonly IReadOnlyCollection<string>? searchQuery;
 
-        public SearchOptionsProcessor(string[]? searchQuery)
+        public SearchOptionsProcessor(IReadOnlyCollection<string>? searchQuery)
         {
             this.searchQuery = searchQuery;
         }
@@ -92,6 +92,11 @@ namespace RecipeManager.ApplicationCore.Search
         
         public void Apply(ISpecification<T> spec)
         {
+            if (spec == null)
+            {
+                throw new ArgumentNullException(nameof(spec));
+            }
+
             // TODO: Split these between client and server criteria depending on the type of expression
             spec.ServerCriteria.Clear();
             spec.ClientCriteria.Clear();

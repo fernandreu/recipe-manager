@@ -1,7 +1,10 @@
-﻿namespace RecipeManager.ApplicationCore.Resources
+﻿using System;
+using System.Collections.Generic;
+
+namespace RecipeManager.ApplicationCore.Resources
 {
     public class Collection<T> : BaseResource
     {
-        public T[] Value { get; set; } = new T[0];
+        public IReadOnlyCollection<T>? Value { get; set; }
     }
 }

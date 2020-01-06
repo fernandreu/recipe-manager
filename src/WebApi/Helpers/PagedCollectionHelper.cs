@@ -5,14 +5,14 @@ using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi.Helpers
 {
-    public static class PagedCollectionHelper
+    internal static class PagedCollectionHelper
     {
 
         public static PagedCollection<T> Create<T>(Link self, T[] items, int size, PagingOptions pagingOptions) =>
             new PagedCollection<T>
             {
-                Self = self,
                 Value = items,
+                Self = self,
                 Size = size,
                 Offset = pagingOptions.Offset,
                 Limit = pagingOptions.Limit,
@@ -22,7 +22,7 @@ namespace RecipeManager.WebApi.Helpers
                 Last = GetLastLink(self, size, pagingOptions),
             };
             
-        private static Link GetNextLink(Link self, int size, PagingOptions pagingOptions)
+        private static Link? GetNextLink(Link self, int size, PagingOptions pagingOptions)
         {
             if (pagingOptions?.Limit == null)
             {
@@ -53,7 +53,7 @@ namespace RecipeManager.WebApi.Helpers
             return newLink;
         }
 
-        private static Link GetLastLink(Link self, int size, PagingOptions pagingOptions)
+        private static Link? GetLastLink(Link self, int size, PagingOptions pagingOptions)
         {
             if (pagingOptions?.Limit == null)
             {
@@ -80,7 +80,7 @@ namespace RecipeManager.WebApi.Helpers
             return newLink;
         }
 
-        private static Link GetPreviousLink(Link self, int size, PagingOptions pagingOptions)
+        private static Link? GetPreviousLink(Link self, int size, PagingOptions pagingOptions)
         {
             if (pagingOptions?.Limit == null)
             {

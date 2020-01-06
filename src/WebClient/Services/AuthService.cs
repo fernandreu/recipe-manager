@@ -37,12 +37,10 @@ namespace WebClient.Services
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
             var json = JsonConvert.SerializeObject(registerModel);
-            using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
-            {
-                var response = await this.httpClient.PostAsync(this.serverConfig.UrlTo("accounts"), content);
-                var result = JsonConvert.DeserializeObject<RegisterResult>(await response.Content.ReadAsStringAsync());
-                return result;
-            }
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await this.httpClient.PostAsync(this.serverConfig.UrlTo("accounts"), content);
+            var result = JsonConvert.DeserializeObject<RegisterResult>(await response.Content.ReadAsStringAsync());
+            return result;
         }
 
         public async Task<LoginResult> Login(LoginModel loginModel)

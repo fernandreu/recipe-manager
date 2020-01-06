@@ -8,6 +8,7 @@ using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Resources;
+using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.Infrastructure.Extensions
 {
@@ -32,13 +33,18 @@ namespace RecipeManager.Infrastructure.Extensions
             return query;
         }
 
-        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T> specification) where T : BaseEntity
+        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T>? specification) where T : BaseEntity
         {
+            if (specification == null)
+            {
+                specification = new Specification<T>();
+            }
+
             var query = specification.ServerCriteria.Aggregate(
                 inputQuery, 
-                (current, criterion) => current.Where(criterion));
+                (current, criterion) => current.Where(criterion)) ?? inputQuery;
 
-            IOrderedQueryable<T> ordered = null;
+            IOrderedQueryable<T>? ordered = null;
             foreach (var clause in specification.OrderByClauses)
             {
                 if (ordered == null)
@@ -54,7 +60,7 @@ namespace RecipeManager.Infrastructure.Extensions
             }
 
             // TODO: Cache compile calls. If no expression analysis is done, ClientCauses could store them directly instead of the expressions
-            var raw = await query.ToListAsync();
+            var raw = await query.ToListAsync().ConfigureAwait(false);
             var filtered = specification.ClientCriteria.Aggregate(
                 (IEnumerable<T>)raw,
                 (current, criterion) => current.Where(criterion.Compile()))

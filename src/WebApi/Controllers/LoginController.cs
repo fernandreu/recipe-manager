@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -28,7 +29,16 @@ namespace RecipeManager.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var result = await this.signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
+            if (login == null)
+            {
+                return this.BadRequest(new LoginResult
+                {
+                    Successful = false,
+                    Error = "Username and password must be provided.",
+                });
+            }
+
+            var result = await this.signInManager.PasswordSignInAsync(login.Email, login.Password, false, false).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 return this.BadRequest(new LoginResult
@@ -45,7 +55,7 @@ namespace RecipeManager.WebApi.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtSecurityKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(this.configuration["JwtExpiryInDays"]));
+            var expiry = DateTime.Now.AddDays(Convert.ToInt32(this.configuration["JwtExpiryInDays"], CultureInfo.InvariantCulture));
 
             var token = new JwtSecurityToken(
                 this.configuration["JwtIssuer"],

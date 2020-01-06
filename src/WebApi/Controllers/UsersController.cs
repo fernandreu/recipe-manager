@@ -26,7 +26,7 @@ namespace RecipeManager.WebApi.Controllers
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.userService = userService;
-            this.defaultPagingOptions = defaultPagingOptionsWrapper.Value;
+            this.defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
         }
         
         [Authorize]
@@ -36,6 +36,11 @@ namespace RecipeManager.WebApi.Controllers
         public async Task<ActionResult<PagedCollection<UserResource>>> ListAllUsers(
             [FromQuery] SpecificationOptions<User> options)
         {
+            if (options == null)
+            {
+                options = new SpecificationOptions<User>();
+            }
+
             if (options.Paging == null)
             {
                 options.Paging = this.defaultPagingOptions;
@@ -45,7 +50,7 @@ namespace RecipeManager.WebApi.Controllers
             options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
 
             var spec = new UserSpecification(options);
-            var users = await this.userService.ListAsync(spec);
+            var users = await this.userService.ListAsync(spec).ConfigureAwait(false);
 
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAllUsers)), 
@@ -59,7 +64,7 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<UserResource>> GetUserById(Guid userId)
         {
-            var user = await this.userService.GetByIdAsync(userId);
+            var user = await this.userService.GetByIdAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
                 return this.NotFound();

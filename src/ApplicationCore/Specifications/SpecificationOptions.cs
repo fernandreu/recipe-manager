@@ -12,18 +12,18 @@ namespace RecipeManager.ApplicationCore.Specifications
     public class SpecificationOptions<T> : IValidatableObject
         where T : BaseEntity
     {
-        public string[]? Search { get; set; }
+        public IReadOnlyCollection<string>? Search { get; set; }
 
-        public string[]? OrderBy { get; set; }
+        public IReadOnlyCollection<string>? OrderBy { get; set; }
         
         public PagingOptions? Paging { get;set; }
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return this.ValidateSearchOptions(validationContext).Concat(this.ValidateSortOptions(validationContext));
+            return this.ValidateSearchOptions().Concat(this.ValidateSortOptions());
         }
 
-        private IEnumerable<ValidationResult> ValidateSearchOptions(ValidationContext validationContext)
+        private IEnumerable<ValidationResult> ValidateSearchOptions()
         {
             if (this.Search == null)
             {
@@ -42,7 +42,7 @@ namespace RecipeManager.ApplicationCore.Specifications
             }
         }
 
-        private IEnumerable<ValidationResult> ValidateSortOptions(ValidationContext validationContext)
+        private IEnumerable<ValidationResult> ValidateSortOptions()
         {
             if (this.OrderBy == null)
             {

@@ -14,6 +14,11 @@ namespace RecipeManager.ApplicationCore.Extensions
     {
         public static bool IsMatch(this IIngredient ingredient, IngredientSearchTerm searchTerm)
         {
+            if (ingredient == null || searchTerm == null)
+            {
+                return false;
+            }
+
             if (!ingredient.Name.Contains(searchTerm.Name, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
@@ -70,8 +75,13 @@ namespace RecipeManager.ApplicationCore.Extensions
             return false;
         }
 
-        public static string FullName(this IIngredient ingredient)
+        public static string? FullName(this IIngredient ingredient)
         {
+            if (ingredient == null)
+            {
+                return null;
+            }
+
             if (ingredient.Units == null)
             {
                 return $"{ingredient.Quantity} {ingredient.Name}";

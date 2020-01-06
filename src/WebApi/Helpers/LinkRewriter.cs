@@ -12,7 +12,7 @@ namespace RecipeManager.WebApi.Helpers
             this.urlHelper = urlHelper;
         }
 
-        public Link Rewrite(Link original)
+        public Link? Rewrite(Link? original)
         {
             if (original == null)
             {

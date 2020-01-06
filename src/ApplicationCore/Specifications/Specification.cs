@@ -51,9 +51,9 @@ namespace RecipeManager.ApplicationCore.Specifications
 
         protected void ApplyOptions(SpecificationOptions<T> options)
         {
-            new SearchOptionsProcessor<T>(options.Search).Apply(this);
-            new SortOptionsProcessor<T>(options.OrderBy).Apply(this);
-            if (options.Paging != null)
+            new SearchOptionsProcessor<T>(options?.Search).Apply(this);
+            new SortOptionsProcessor<T>(options?.OrderBy).Apply(this);
+            if (options?.Paging != null)
             {
                 this.Paging(options.Paging.Offset ?? 0, options.Paging.Limit ?? int.MaxValue);
             }

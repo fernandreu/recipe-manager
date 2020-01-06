@@ -18,7 +18,7 @@ namespace RecipeManager.ApplicationCore.Search
                 return base.Evaluate(left, op, right);
             }
 
-            var searchTerm = IngredientSearchTerm.Parse(right.Value?.ToString());
+            var searchTerm = IngredientSearchTerm.Parse(right?.Value?.ToString());
             
             var result = new ExpressionResult();
             if (searchTerm == null)
@@ -36,13 +36,17 @@ namespace RecipeManager.ApplicationCore.Search
             // The expression is: Items.IsMatch(right), with Items being IEnumerable<Ingredient>
             // However, IsMatch is an extension method, so in reality the expression is: IngredientExtensions.IsMatch(Items, right)
             var isMatchMethod = typeof(IngredientExtensions).GetMethod(nameof(IngredientExtensions.IsMatch), new[] { typeof(IEnumerable<IIngredient>), typeof(string) });
-            result.ClientSide = Expression.Call(isMatchMethod, left, right);
+            if (isMatchMethod != null && right != null)
+            {
+                result.ClientSide = Expression.Call(isMatchMethod, left, right);
+            }
+
             return result;
         }
 
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<Ingredient, bool>> predicate = x => x.Name.Contains(ingredient);
+            Expression<Func<Ingredient, bool>> predicate = x => x.Name.Contains(ingredient, StringComparison.InvariantCultureIgnoreCase);
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
             var genericAny = any.MakeGenericMethod(typeof(Ingredient));
 

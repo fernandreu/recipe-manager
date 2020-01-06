@@ -24,13 +24,22 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromBody] RegisterModel model)
         {
+            if (model == null)
+            {
+                return this.BadRequest(new RegisterResult
+                {
+                    Successful = false,
+                    Errors = new[] {"No registration data passed"},
+                });
+            }
+
             var newUser = new IdentityUser
             {
                 UserName = model.Email, 
                 Email = model.Email,
             };
 
-            var result = await this.userManager.CreateAsync(newUser, model.Password);
+            var result = await this.userManager.CreateAsync(newUser, model.Password).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description);
@@ -48,16 +57,22 @@ namespace RecipeManager.WebApi.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult GetUser()
+        public IActionResult ReadUser()
         {
             if (!this.User.Identity.IsAuthenticated)
             {
                 return this.Ok(LoggedOutUser);
             }
 
+            var name = this.User.Identity.Name;
+            if (name == null)
+            {
+                return this.NotFound();
+            }
+
             return this.Ok(new UserModel
             {
-                Email = this.User.Identity.Name,
+                Email = name,
                 IsAuthenticated = true,
             });
         }

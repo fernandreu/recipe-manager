@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Models;
 
@@ -6,6 +8,7 @@ namespace RecipeManager.ApplicationCore.Search
 {
     public class DecimalToIntSearchExpressionProvider : SearchExpressionProvider
     {
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Exceptions are not localized")]
         public override ConstantExpression GetValue(string input)
         {
             if (!decimal.TryParse(input, out var dec))
@@ -25,17 +28,20 @@ namespace RecipeManager.ApplicationCore.Search
 
         public override ExpressionResult Evaluate(MemberExpression left, string op, ConstantExpression right)
         {
-            // TODO: Add contains operator for strings
-            switch (op.ToLower())
+            if (op == null)
             {
-                case "gt": return new ExpressionResult { ServerSide = Expression.GreaterThan(left, right) };
-                case "gte": return new ExpressionResult { ServerSide = Expression.GreaterThanOrEqual(left, right) };
-                case "lt": return new ExpressionResult { ServerSide = Expression.LessThan(left, right) };
-                case "lte": return new ExpressionResult { ServerSide = Expression.LessThanOrEqual(left, right) };
-
-                // If nothing matches, fall back to base implementation
-                default: return base.Evaluate(left, op, right);
+                throw new ArgumentNullException(nameof(op));
             }
+
+            // TODO: Add contains operator for strings
+            return op.ToUpperInvariant() switch
+            {
+                "GT" => new ExpressionResult {ServerSide = Expression.GreaterThan(left, right)},
+                "GTE" => new ExpressionResult {ServerSide = Expression.GreaterThanOrEqual(left, right)},
+                "LT" => new ExpressionResult {ServerSide = Expression.LessThan(left, right)},
+                "LTE" => new ExpressionResult {ServerSide = Expression.LessThanOrEqual(left, right)},
+                _ => base.Evaluate(left, op, right)
+            };
         }
     }
 }

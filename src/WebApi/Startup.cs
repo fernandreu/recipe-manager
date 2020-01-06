@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
 using RecipeManager.WebApi.Errors;
@@ -31,7 +30,7 @@ namespace RecipeManager.WebApi
 
         public IConfiguration Configuration { get; }
 
-        public IWebHostEnvironment CurrentEnvironment { get; set; }
+        public IWebHostEnvironment? CurrentEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)

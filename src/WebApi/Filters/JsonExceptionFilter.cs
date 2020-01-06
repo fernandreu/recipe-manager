@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +16,7 @@ namespace RecipeManager.WebApi.Filters
             this.env = env;
         }
 
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "ASP.Net Core would not pass a null argument")]
         public void OnException(ExceptionContext context)
         {
             ApiError error;

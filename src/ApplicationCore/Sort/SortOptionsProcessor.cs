@@ -13,9 +13,9 @@ namespace RecipeManager.ApplicationCore.Sort
 {
     public class SortOptionsProcessor<T> where T : BaseEntity
     {
-        private readonly string[]? orderBy;
+        private readonly IReadOnlyCollection<string>? orderBy;
 
-        public SortOptionsProcessor(string[]? orderBy)
+        public SortOptionsProcessor(IReadOnlyCollection<string>? orderBy)
         {
             this.orderBy = orderBy;
         }
@@ -121,6 +121,11 @@ namespace RecipeManager.ApplicationCore.Sort
 
         public void Apply(ISpecification<T> spec)
         {
+            if (spec == null)
+            {
+                throw new ArgumentNullException(nameof(spec));
+            }
+
             spec.OrderByClauses.Clear();
 
             var terms = this.GetValidTerms().ToArray();

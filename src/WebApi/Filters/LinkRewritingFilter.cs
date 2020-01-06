@@ -12,7 +12,7 @@ using RecipeManager.WebApi.Helpers;
 
 namespace RecipeManager.WebApi.Filters
 {
-    public class LinkRewritingFilter : IAsyncResultFilter
+    internal class LinkRewritingFilter : IAsyncResultFilter
     {
         private readonly IUrlHelperFactory urlHelperFactory;
 
@@ -24,7 +24,7 @@ namespace RecipeManager.WebApi.Filters
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
             var asObjectResult = context.Result as ObjectResult;
-            var shouldSkip = asObjectResult?.StatusCode >= 400 || !(asObjectResult?.Value is BaseResource);
+            var shouldSkip = asObjectResult == null || asObjectResult.StatusCode >= 400 || !(asObjectResult.Value is BaseResource);
 
             if (shouldSkip)
             {
@@ -32,12 +32,12 @@ namespace RecipeManager.WebApi.Filters
             }
 
             var rewriter = new LinkRewriter(this.urlHelperFactory.GetUrlHelper(context));
-            RewriteAllLinks(asObjectResult.Value, rewriter);
+            RewriteAllLinks(asObjectResult!.Value, rewriter);
 
             return next();
         }
 
-        private static void RewriteAllLinks(object model, LinkRewriter rewriter)
+        private static void RewriteAllLinks(object? model, LinkRewriter rewriter)
         {
             if (model == null)
             {
@@ -58,13 +58,15 @@ namespace RecipeManager.WebApi.Filters
 
                 linkProperty.SetValue(model, rewritten);
 
-                // Special handling of the hidden Self property: unwrap into the root object
-                if (linkProperty.Name == nameof(BaseResource.Self))
+                if (linkProperty.Name != nameof(BaseResource.Self))
                 {
-                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Href))?.SetValue(model, rewritten.Href);
-                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Method))?.SetValue(model, rewritten.Method);
-                    allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Relations))?.SetValue(model, rewritten.Relations);
+                    continue;
                 }
+
+                // Special handling of the hidden Self property: unwrap into the root object
+                allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Href))?.SetValue(model, rewritten.Href);
+                allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Method))?.SetValue(model, rewritten.Method);
+                allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Relations))?.SetValue(model, rewritten.Relations);
             }
 
             var arrayProperties = allProperties.Where(p => p.PropertyType.IsArray).ToList();
@@ -96,7 +98,7 @@ namespace RecipeManager.WebApi.Filters
 
             foreach (var arrayProperty in arrayProperties)
             {
-                var array = arrayProperty.GetValue(model) as Array ?? new Array[0];
+                var array = arrayProperty.GetValue(model) as Array ?? Array.Empty<object>();
 
                 foreach (var element in array)
                 {

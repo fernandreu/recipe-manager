@@ -10,12 +10,12 @@ namespace RecipeManager.Infrastructure.Data
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            await AddTestData(services.GetRequiredService<ApplicationDbContext>());
+            await AddTestData(services.GetRequiredService<ApplicationDbContext>()).ConfigureAwait(false);
         }
 
         public static async Task AddTestData(ApplicationDbContext context)
         {
-            if (context.Recipes.Any())
+            if (context == null || context.Recipes.Any())
             {
                 // Already has data
                 return;
@@ -243,7 +243,7 @@ namespace RecipeManager.Infrastructure.Data
                 }
             });
 
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

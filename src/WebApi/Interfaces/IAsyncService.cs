@@ -10,12 +10,12 @@ namespace RecipeManager.WebApi.Interfaces
         where TEntity : BaseEntity
         where TResource : BaseResource
     {
-        Task<TResource> GetByIdAsync(Guid id);
+        Task<TResource?> GetByIdAsync(Guid id);
 
         Task<PagedResults<TResource>> ListAsync(ISpecification<TEntity> spec);
 
         Task<TResource> CreateAsync(TResource model);
 
-        Task<TResource> UpdateAsync(Guid id, TResource model);
+        Task<TResource?> UpdateAsync(Guid id, TResource model);
     }
 }

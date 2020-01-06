@@ -17,9 +17,9 @@ namespace RecipeManager.WebApi.Services
         where TEntity : BaseEntity
         where TResource : BaseResource
     {
-        protected readonly ApplicationDbContext Context;
+        protected ApplicationDbContext Context { get; }
 
-        protected readonly IConfigurationProvider MappingConfiguration;
+        protected IConfigurationProvider MappingConfiguration { get; }
 
         public ServiceBase(ApplicationDbContext context, IConfigurationProvider mappingConfiguration)
         {
@@ -27,9 +27,12 @@ namespace RecipeManager.WebApi.Services
             this.MappingConfiguration = mappingConfiguration;
         }
 
-        public async Task<TResource> GetByIdAsync(Guid id)
+        public async Task<TResource?> GetByIdAsync(Guid id)
         {
-            var entity = await this.Context.Set<TEntity>().IncludeAll(true).FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await this.Context.Set<TEntity>()
+                .IncludeAll(true)
+                .FirstOrDefaultAsync(x => x.Id == id)
+                .ConfigureAwait(false);
             if (entity == null)
             {
                 return null;
@@ -41,7 +44,10 @@ namespace RecipeManager.WebApi.Services
         
         public async Task<PagedResults<TResource>> ListAsync(ISpecification<TEntity> spec)
         {
-            var entities = await this.Context.Set<TEntity>().IncludeAll(false).ApplyAsync(spec);
+            var entities = await this.Context.Set<TEntity>()
+                .IncludeAll(false)
+                .ApplyAsync(spec)
+                .ConfigureAwait(false);
 
             var mapper = this.MappingConfiguration.CreateMapper();
             var items = entities.Items.Select(x => mapper.Map<TResource>(x)).ToArray();
@@ -55,6 +61,11 @@ namespace RecipeManager.WebApi.Services
 
         public async Task<TResource> CreateAsync(TResource model)
         {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
             var mapper = this.MappingConfiguration.CreateMapper();
             var entity = mapper.Map<TEntity>(model);
             entity.Id = Guid.NewGuid();
@@ -63,7 +74,7 @@ namespace RecipeManager.WebApi.Services
             return mapper.Map<TResource>(entity);
         }
 
-        public async Task<TResource> UpdateAsync(Guid id, TResource model)
+        public async Task<TResource?> UpdateAsync(Guid id, TResource model)
         {
             var excludedProperties = new[]
             {
@@ -72,7 +83,10 @@ namespace RecipeManager.WebApi.Services
                 nameof(BaseResource.Relations),
             };
 
-            var entity = await this.Context.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+            var entity = await this.Context.Set<TEntity>()
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
             if (entity == null)
             {
                 return null;
@@ -93,7 +107,7 @@ namespace RecipeManager.WebApi.Services
                 }
 
                 var entityProperty = typeof(TEntity).GetProperty(property.Name);
-                entityProperty.SetValue(entity, value);
+                entityProperty?.SetValue(entity, value);
             }
 
             this.Context.SaveChanges();

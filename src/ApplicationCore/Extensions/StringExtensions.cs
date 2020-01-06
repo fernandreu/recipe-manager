@@ -7,7 +7,7 @@ namespace RecipeManager.ApplicationCore.Extensions
     {
         public static bool Is(this string s, SearchOperator op)
         {
-            return s.Equals(op.Value, StringComparison.OrdinalIgnoreCase);
+            return s?.Equals(op?.Value, StringComparison.OrdinalIgnoreCase) ?? false;
         }
 
         /// <summary>

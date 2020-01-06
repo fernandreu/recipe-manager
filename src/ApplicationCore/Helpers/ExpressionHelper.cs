@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace RecipeManager.ApplicationCore.Helpers
 {
-    public class ExpressionHelper
+    public static class ExpressionHelper
     {
         private static readonly MethodInfo LambdaMethod = typeof(Expression)
             .GetMethods()
@@ -22,16 +22,16 @@ namespace RecipeManager.ApplicationCore.Helpers
         public static ParameterExpression Parameter<T>()
             => Expression.Parameter(typeof(T));
 
-        public static MemberExpression GetPropertyExpression(ParameterExpression obj, PropertyInfo property)
-            => Expression.Property(obj, property);
+        public static MemberExpression GetPropertyExpression(ParameterExpression parameter, PropertyInfo property)
+            => Expression.Property(parameter, property);
 
-        public static LambdaExpression GetLambda<TSource, TDest>(ParameterExpression obj, Expression arg)
-            => GetLambda(typeof(TSource), typeof(TDest), obj, arg);
+        public static LambdaExpression GetLambda<TSource, TDest>(ParameterExpression parameter, Expression arg)
+            => GetLambda(typeof(TSource), typeof(TDest), parameter, arg);
 
-        public static LambdaExpression GetLambda(Type source, Type dest, ParameterExpression obj, Expression arg)
+        public static LambdaExpression GetLambda(Type source, Type dest, ParameterExpression parameter, Expression arg)
         {
             var lambdaBuilder = GetLambdaFuncBuilder(source, dest);
-            return (LambdaExpression)lambdaBuilder.Invoke(null, new object[] { arg, new[] { obj } });
+            return (LambdaExpression)lambdaBuilder.Invoke(null, new object[] { arg, new[] { parameter } });
         }
 
         public static IQueryable<T> CallWhere<T>(IQueryable<T> query, LambdaExpression predicate)

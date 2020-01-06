@@ -25,7 +25,7 @@ namespace RecipeManager.WebApi.Controllers
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.recipeService = recipeService;
-            this.defaultPagingOptions = defaultPagingOptionsWrapper.Value;
+            this.defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
         }
         
         [HttpGet(Name = nameof(ListAllRecipes))]
@@ -34,6 +34,11 @@ namespace RecipeManager.WebApi.Controllers
         public async Task<ActionResult<PagedCollection<RecipeResource>>> ListAllRecipes(
             [FromQuery] SpecificationOptions<Recipe> options)
         {
+            if (options == null)
+            {
+                options = new SpecificationOptions<Recipe>();
+            }
+
             if (options.Paging == null)
             {
                 options.Paging = this.defaultPagingOptions;
@@ -43,7 +48,7 @@ namespace RecipeManager.WebApi.Controllers
             options.Paging.Limit ??= this.defaultPagingOptions.Limit;
 
             var spec = new RecipeSpecification(options);
-            var recipes = await this.recipeService.ListAsync(spec);
+            var recipes = await this.recipeService.ListAsync(spec).ConfigureAwait(false);
 
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(this.ListAllRecipes)), 
@@ -57,7 +62,7 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<RecipeResource>> GetRecipeById(Guid recipeId)
         {
-            var result = await this.recipeService.GetByIdAsync(recipeId);
+            var result = await this.recipeService.GetByIdAsync(recipeId).ConfigureAwait(false);
             if (result == null)
             {
                 return this.NotFound();
@@ -70,7 +75,7 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<RecipeResource>> CreateRecipe(RecipeResource model)
         {
-            var result = await this.recipeService.CreateAsync(model);
+            var result = await this.recipeService.CreateAsync(model).ConfigureAwait(false);
             return result;
         }
 
@@ -79,7 +84,7 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<RecipeResource>> UpdateRecipe(Guid recipeId, RecipeResource model)
         {
-            var result = await this.recipeService.UpdateAsync(recipeId, model);
+            var result = await this.recipeService.UpdateAsync(recipeId, model).ConfigureAwait(false);
             if (result == null)
             {
                 return this.NotFound();
