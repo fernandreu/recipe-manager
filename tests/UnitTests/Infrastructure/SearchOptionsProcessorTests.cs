@@ -32,8 +32,8 @@ namespace RecipeManager.UnitTests.Infrastructure
             foreach (var (element, term) in elements.Zip(terms, Tuple.Create))
             {
                 Assert.Equal(element, term.Name);
-                Assert.Null(term.Operator);
-                Assert.Null(term.Value);
+                Assert.True(string.IsNullOrEmpty(term.Operator));
+                Assert.True(string.IsNullOrEmpty(term.Value));
                 Assert.False(term.ValidSyntax, "Syntax is actually valid");
             }
         }
