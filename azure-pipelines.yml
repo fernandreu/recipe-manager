@@ -125,6 +125,7 @@ jobs:
       cd $(Build.ArtifactStagingDirectory)/WebClient/wwwroot
       git init
       git checkout -b gh-pages
+      echo * binary > .gitattributes
       git add -A
       git commit -m "Create build $(Build.BuildId)"
       git push -f https://%PAT%@github.com/fernandreu/recipe-manager.git gh-pages
