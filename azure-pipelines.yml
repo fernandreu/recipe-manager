@@ -21,7 +21,7 @@ jobs:
     displayName: Use .NET Core 3.1 SDK
     inputs:
       packageType: 'sdk'
-      version: '3.1.100'
+      version: '3.1.201'
     
   # Important: if WebClient is built, the Azure deployment might fail (give 404 errors)
   - task: DotNetCoreCLI@2
@@ -91,7 +91,7 @@ jobs:
     displayName: Use .NET Core 3.1 SDK
     inputs:
       packageType: 'sdk'
-      version: '3.1.100'
+      version: '3.1.201'
 
   - task: DotNetCoreCLI@2
     displayName: DotNet Build Frontend
@@ -122,7 +122,7 @@ jobs:
   - script: |
       git config --global user.name "%NAME%"
       git config --global user.email "%EMAIL%"
-      cd $(Build.ArtifactStagingDirectory)/WebClient/WebClient/dist
+      cd $(Build.ArtifactStagingDirectory)/WebClient/wwwroot
       git init
       git checkout -b gh-pages
       git add -A
