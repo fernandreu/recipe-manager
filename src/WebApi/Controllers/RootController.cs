@@ -12,12 +12,12 @@ namespace RecipeManager.WebApi.Controllers
         {
             var response = new RootResponse
             {
-                Self = Link.To(nameof(this.GetRoot)),
+                Self = Link.To(nameof(GetRoot)),
                 Recipes = Link.ToCollection(nameof(RecipesController.ListAllRecipes)),
                 Users = Link.ToCollection(nameof(UsersController.ListAllUsers)),
             };
 
-            return this.Ok(response);
+            return Ok(response);
         }
     }
 }

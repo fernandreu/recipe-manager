@@ -16,7 +16,7 @@ namespace RecipeManager.WebApi.Controllers
             var parsedCode = (HttpStatusCode)statusCode;
             var error = new ApiError(statusCode, parsedCode.ToString())
             {
-                Self = Link.To(nameof(this.HandleStatusCode), new { statusCode }),
+                Self = Link.To(nameof(HandleStatusCode), new { statusCode }),
             };
             return error;
         }

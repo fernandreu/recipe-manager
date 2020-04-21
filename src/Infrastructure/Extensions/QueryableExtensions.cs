@@ -35,10 +35,7 @@ namespace RecipeManager.Infrastructure.Extensions
 
         public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T>? specification) where T : BaseEntity
         {
-            if (specification == null)
-            {
-                specification = new Specification<T>();
-            }
+            specification ??= new Specification<T>();
 
             var query = specification.ServerCriteria.Aggregate(
                 inputQuery, 

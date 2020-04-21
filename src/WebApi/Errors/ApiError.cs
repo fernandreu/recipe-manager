@@ -13,21 +13,21 @@ namespace RecipeManager.WebApi.Errors
 
         public ApiError(int statusCode, string statusDescription)
         {
-            this.StatusCode = statusCode;
-            this.StatusDescription = statusDescription;
+            StatusCode = statusCode;
+            StatusDescription = statusDescription;
         }
 
         public ApiError(int statusCode, string statusDescription, string message)
             : this(statusCode, statusDescription)
         {
-            this.Message = message;
+            Message = message;
         }
         
         public ApiError(ModelStateDictionary modelState)
         {
-            this.StatusCode = 400;
-            this.StatusDescription = "Invalid parameters.";
-            this.Message = modelState.FirstOrDefault(x => x.Value.Errors.Any()).Value.Errors.FirstOrDefault()?.ErrorMessage;
+            StatusCode = 400;
+            StatusDescription = "Invalid parameters.";
+            Message = modelState.FirstOrDefault(x => x.Value.Errors.Any()).Value.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         public int StatusCode { get; private set; }

@@ -25,27 +25,27 @@ namespace RecipeManager.ApplicationCore.Specifications
         public Specification<T> Where(Expression<Func<T, bool>> expression)
         {
             // TODO: Analyze the expression to determine if it could be evaluated server-side
-            this.ClientCriteria.Add(expression);
+            ClientCriteria.Add(expression);
             return this;
         }
 
         public Specification<T> OrderBy(Expression<Func<T, object>> expression, bool descending = false)
         {
             var clause = new OrderByClause<T>(expression, descending);
-            return this.OrderBy(clause);
+            return OrderBy(clause);
         }
 
         public Specification<T> OrderBy(OrderByClause<T> clause)
         {
-            this.OrderByClauses.Add(clause);
+            OrderByClauses.Add(clause);
             return this;
         }
 
         public Specification<T> Paging(int skip, int take)
         {
-            this.Skip = skip;
-            this.Take = take;
-            this.IsPagingEnabled = true;
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
             return this;
         }
 
@@ -55,7 +55,7 @@ namespace RecipeManager.ApplicationCore.Specifications
             new SortOptionsProcessor<T>(options?.OrderBy).Apply(this);
             if (options?.Paging != null)
             {
-                this.Paging(options.Paging.Offset ?? 0, options.Paging.Limit ?? int.MaxValue);
+                Paging(options.Paging.Offset ?? 0, options.Paging.Limit ?? int.MaxValue);
             }
         }
     }

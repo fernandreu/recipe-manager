@@ -10,7 +10,7 @@
     {
         public SearchableIngredientsAttribute()
         {
-            this.ExpressionProvider = new IngredientExpressionProvider();
+            ExpressionProvider = new IngredientExpressionProvider();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace RecipeManager.WebApi.Helpers
 
             return new Link
             {
-                Href = this.urlHelper.Link(original.RouteName, original.RouteValues),
+                Href = urlHelper.Link(original.RouteName, original.RouteValues),
                 Method = original.Method,
                 Relations = original.Relations,
             };

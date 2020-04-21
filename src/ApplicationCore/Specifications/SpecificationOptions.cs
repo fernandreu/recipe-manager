@@ -20,17 +20,17 @@ namespace RecipeManager.ApplicationCore.Specifications
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return this.ValidateSearchOptions().Concat(this.ValidateSortOptions());
+            return ValidateSearchOptions().Concat(ValidateSortOptions());
         }
 
         private IEnumerable<ValidationResult> ValidateSearchOptions()
         {
-            if (this.Search == null)
+            if (Search == null)
             {
                 yield break;
             }
 
-            var processor = new SearchOptionsProcessor<T>(this.Search);
+            var processor = new SearchOptionsProcessor<T>(Search);
 
             var validTerms = processor.GetValidTerms().Select(x => x.Name);
             var invalidTerms = processor.GetAllTerms().Select(x => x.Name)
@@ -38,18 +38,18 @@ namespace RecipeManager.ApplicationCore.Specifications
 
             foreach (var term in invalidTerms)
             {
-                yield return new ValidationResult($"Invalid search term '{term}'", new[] { nameof(this.Search) });
+                yield return new ValidationResult($"Invalid search term '{term}'", new[] { nameof(Search) });
             }
         }
 
         private IEnumerable<ValidationResult> ValidateSortOptions()
         {
-            if (this.OrderBy == null)
+            if (OrderBy == null)
             {
                 yield break;
             }
 
-            var processor = new SortOptionsProcessor<T>(this.OrderBy);
+            var processor = new SortOptionsProcessor<T>(OrderBy);
 
             var validTerms = processor.GetValidTerms().Select(x => x.Name);
 
@@ -58,7 +58,7 @@ namespace RecipeManager.ApplicationCore.Specifications
 
             foreach (var term in invalidTerms)
             {
-                yield return new ValidationResult($"Invalid sort term '{term}'", new[] { nameof(this.OrderBy) });
+                yield return new ValidationResult($"Invalid sort term '{term}'", new[] { nameof(OrderBy) });
             }
         }
         

@@ -21,7 +21,7 @@ namespace RecipeManager.WebApi.Filters
         {
             ApiError error;
             
-            if (this.env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 context.ExceptionHandled = false;
                 return;

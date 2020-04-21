@@ -9,7 +9,7 @@
     {
         public SearchableDecimalAttribute()
         {
-            this.ExpressionProvider = new DecimalToIntSearchExpressionProvider();
+            ExpressionProvider = new DecimalToIntSearchExpressionProvider();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace RecipeManager.ApplicationCore.Specifications
     {
         public UserSpecification(SpecificationOptions<User> options)
         {
-            this.ApplyOptions(options);
+            ApplyOptions(options);
         }
     }
 }

@@ -23,10 +23,10 @@ namespace WebClient.Models
                 endpoint = endpoint.Substring(1);
             }
 
-            var builder = new UriBuilder($"{this.BaseUrl}/{endpoint}");
-            if (this.Port > 0)
+            var builder = new UriBuilder($"{BaseUrl}/{endpoint}");
+            if (Port > 0)
             {
-                builder.Port = this.Port;
+                builder.Port = Port;
             }
             
             var query = HttpUtility.ParseQueryString(builder.Query);

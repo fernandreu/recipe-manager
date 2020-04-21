@@ -14,8 +14,8 @@ namespace RecipeManager.ApplicationCore.Paging
         {
             return new PagingOptions
             {
-                Offset = newer?.Offset ?? this.Offset,
-                Limit = newer?.Limit ?? this.Limit,
+                Offset = newer?.Offset ?? Offset,
+                Limit = newer?.Limit ?? Limit,
             };
         }
     }

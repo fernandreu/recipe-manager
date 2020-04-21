@@ -6,10 +6,10 @@
 
 <h1>Register</h1>
 
-@if (ShowErrors)
+@if (showErrors)
 {
     <div class="alert alert-danger" role="alert">
-        @foreach (var error in Errors)
+        @foreach (var error in errors)
         {
             <p>@error</p>
         }
@@ -19,24 +19,24 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="@RegisterModel" OnValidSubmit="@HandleRegistration">
+        <EditForm Model="@registerModel" OnValidSubmit="@HandleRegistration">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
             <div class="form-group">
                 <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="@RegisterModel.Email" />
-                <ValidationMessage For="@(() => RegisterModel.Email)" />
+                <InputText Id="email" Class="form-control" @bind-Value="@registerModel.Email" />
+                <ValidationMessage For="@(() => registerModel.Email)" />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <InputText Id="password" Class="form-control" @bind-Value="@RegisterModel.Password" />
-                <ValidationMessage For="@(() => RegisterModel.Password)" />
+                <InputText Id="password" Class="form-control" @bind-Value="@registerModel.Password" />
+                <ValidationMessage For="@(() => registerModel.Password)" />
             </div>
             <div class="form-group">
                 <label for="password">Confirm Password</label>
-                <InputText Id="password" Class="form-control" @bind-Value="@RegisterModel.ConfirmPassword" />
-                <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+                <InputText Id="password" Class="form-control" @bind-Value="@registerModel.ConfirmPassword" />
+                <ValidationMessage For="@(() => registerModel.ConfirmPassword)" />
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
@@ -45,15 +45,17 @@
 
 @code {
 
-    private RegisterModel RegisterModel = new RegisterModel();
-    private bool ShowErrors;
-    private IEnumerable<string> Errors;
+    private readonly RegisterModel registerModel = new RegisterModel();
+    
+    private bool showErrors;
+    
+    private IEnumerable<string> errors;
 
     private async Task HandleRegistration()
     {
-        ShowErrors = false;
+        showErrors = false;
 
-        var result = await AuthService.Register(RegisterModel);
+        var result = await AuthService.Register(registerModel);
 
         if (result.Successful)
         {
@@ -61,8 +63,8 @@
         }
         else
         {
-            Errors = result.Errors;
-            ShowErrors = true;
+            errors = result.Errors;
+            showErrors = true;
         }
     }
 

@@ -31,17 +31,17 @@ namespace RecipeManager.WebApi.Controllers
         {
             if (login == null)
             {
-                return this.BadRequest(new LoginResult
+                return BadRequest(new LoginResult
                 {
                     Successful = false,
                     Error = "Username and password must be provided.",
                 });
             }
 
-            var result = await this.signInManager.PasswordSignInAsync(login.Email, login.Password, false, false).ConfigureAwait(false);
+            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, false, false).ConfigureAwait(false);
             if (!result.Succeeded)
             {
-                return this.BadRequest(new LoginResult
+                return BadRequest(new LoginResult
                 {
                     Successful = false,
                     Error = "Username and password are invalid.",
@@ -53,18 +53,18 @@ namespace RecipeManager.WebApi.Controllers
                 new Claim(ClaimTypes.Name, login.Email),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JwtSecurityKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(this.configuration["JwtExpiryInDays"], CultureInfo.InvariantCulture));
+            var expiry = DateTime.Now.AddDays(Convert.ToInt32(configuration["JwtExpiryInDays"], CultureInfo.InvariantCulture));
 
             var token = new JwtSecurityToken(
-                this.configuration["JwtIssuer"],
-                this.configuration["JwtAudience"],
+                configuration["JwtIssuer"],
+                configuration["JwtAudience"],
                 claims,
                 expires: expiry,
                 signingCredentials: credentials);
 
-            return this.Ok(new LoginResult
+            return Ok(new LoginResult
             {
                 Successful = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),

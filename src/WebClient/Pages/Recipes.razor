@@ -39,30 +39,29 @@ Search recipes by the ingredients they contain.
 
 @code
 {
+    Collection<RecipeResource> Results { get; set; }
 
-Collection<RecipeResource> Results { get; set; }
+    private string StatusMessage { get; set; } = "Status Message";
 
-private string StatusMessage { get; set; } = "Status Message";
-
-private void OnSearch(string searchText)
-{
-    this.LoadDataAsync(searchText).ConfigureAwait(false);
-}
-
-private async Task LoadDataAsync(string searchText)
-{
-    var queryParameters = new NameValueCollection();
-    if (!string.IsNullOrWhiteSpace(searchText))
+    private void OnSearch(string searchText)
     {
-        queryParameters["search"] = $"ingredients co {searchText}";
+        LoadDataAsync(searchText).ConfigureAwait(false);
     }
 
-    var uri = ServerConfig.UrlTo("recipes", queryParameters);
+    private async Task LoadDataAsync(string searchText)
+    {
+        var queryParameters = new NameValueCollection();
+        if (!string.IsNullOrWhiteSpace(searchText))
+        {
+            queryParameters["search"] = $"ingredients co {searchText}";
+        }
 
-    this.StatusMessage = $"Uri: {uri}";
-    this.Results = null;
-    this.StateHasChanged();
-    this.Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(uri);
-    this.StateHasChanged();
-}
+        var uri = ServerConfig.UrlTo("recipes", queryParameters);
+
+        StatusMessage = $"Uri: {uri}";
+        Results = null;
+        StateHasChanged();
+        Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(uri);
+        StateHasChanged();
+    }
 }

@@ -30,14 +30,14 @@ namespace WebClient.Login
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await this.localStorage.GetItemAsync<string>("authToken");
+            var savedToken = await localStorage.GetItemAsync<string>("authToken");
 
             if (!string.IsNullOrWhiteSpace(savedToken))
             {
-                this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
             }
 
-            var userInfo = await this.httpClient.GetJsonAsync<UserModel>( this.serverConfig.UrlTo("accounts/user"));
+            var userInfo = await httpClient.GetJsonAsync<UserModel>( serverConfig.UrlTo("accounts/user"));
 
             var identity = userInfo.IsAuthenticated
                 ? new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userInfo.Email) }, "apiauth")
@@ -50,14 +50,14 @@ namespace WebClient.Login
         {
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "apiauth"));
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
-            this.NotifyAuthenticationStateChanged(authState);
+            NotifyAuthenticationStateChanged(authState);
         }
 
         public void MarkUserAsLoggedOut()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(anonymousUser));
-            this.NotifyAuthenticationStateChanged(authState);
+            NotifyAuthenticationStateChanged(authState);
         }
     }
 }

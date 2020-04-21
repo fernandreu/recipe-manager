@@ -21,19 +21,19 @@ namespace RecipeManager.ApplicationCore.Search
 
         private SearchOperator(string value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public string Value { get; }
 
         public bool Is(string op)
         {
-            return this.Value.Equals(op, StringComparison.OrdinalIgnoreCase);
+            return Value.Equals(op, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
     }
 }

@@ -8,14 +8,14 @@ namespace RecipeManager.WebApi
     {
         public MappingProfile()
         {
-            this.CreateMap<Recipe, RecipeResource>()
+            CreateMap<Recipe, RecipeResource>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.RecipesController.GetRecipeById), new { recipeId = src.Id })))
                 .ReverseMap();
 
-            this.CreateMap<Ingredient, IngredientResource>()
+            CreateMap<Ingredient, IngredientResource>()
                 .ReverseMap();
 
-            this.CreateMap<User, UserResource>()
+            CreateMap<User, UserResource>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.UsersController.GetUserById), new { userId = src.Id })))
                 .ReverseMap();
         }

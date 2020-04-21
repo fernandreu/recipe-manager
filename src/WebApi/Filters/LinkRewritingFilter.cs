@@ -31,7 +31,7 @@ namespace RecipeManager.WebApi.Filters
                 return next();
             }
 
-            var rewriter = new LinkRewriter(this.urlHelperFactory.GetUrlHelper(context));
+            var rewriter = new LinkRewriter(urlHelperFactory.GetUrlHelper(context));
             RewriteAllLinks(asObjectResult!.Value, rewriter);
 
             return next();

@@ -26,7 +26,7 @@ namespace RecipeManager.WebApi.Controllers
             IOptions<PagingOptions> defaultPagingOptionsWrapper)
         {
             this.userService = userService;
-            this.defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
+            defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
         }
         
         [Authorize]
@@ -36,24 +36,16 @@ namespace RecipeManager.WebApi.Controllers
         public async Task<ActionResult<PagedCollection<UserResource>>> ListAllUsers(
             [FromQuery] SpecificationOptions<User> options)
         {
-            if (options == null)
-            {
-                options = new SpecificationOptions<User>();
-            }
-
-            if (options.Paging == null)
-            {
-                options.Paging = this.defaultPagingOptions;
-            }
-
-            options.Paging.Offset = options.Paging.Offset ?? this.defaultPagingOptions.Offset;
-            options.Paging.Limit = options.Paging.Limit ?? this.defaultPagingOptions.Limit;
+            options ??= new SpecificationOptions<User>();
+            options.Paging ??= defaultPagingOptions;
+            options.Paging.Offset ??= defaultPagingOptions.Offset;
+            options.Paging.Limit ??= defaultPagingOptions.Limit;
 
             var spec = new UserSpecification(options);
-            var users = await this.userService.ListAsync(spec).ConfigureAwait(false);
+            var users = await userService.ListAsync(spec).ConfigureAwait(false);
 
             return PagedCollectionHelper.Create(
-                Link.ToCollection(nameof(this.ListAllUsers)), 
+                Link.ToCollection(nameof(ListAllUsers)), 
                 users.Items.ToArray(), 
                 users.TotalSize, 
                 options.Paging);
@@ -64,10 +56,10 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         public async Task<ActionResult<UserResource>> GetUserById(Guid userId)
         {
-            var user = await this.userService.GetByIdAsync(userId).ConfigureAwait(false);
+            var user = await userService.GetByIdAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
-                return this.NotFound();
+                return NotFound();
             }
 
             return user;

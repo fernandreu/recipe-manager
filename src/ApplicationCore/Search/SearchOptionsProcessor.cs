@@ -21,12 +21,12 @@ namespace RecipeManager.ApplicationCore.Search
 
         public IEnumerable<SearchTerm> GetAllTerms()
         {
-            if (this.searchQuery == null)
+            if (searchQuery == null)
             {
                 yield break;
             }
 
-            foreach (var expression in this.searchQuery)
+            foreach (var expression in searchQuery)
             {
                 if (string.IsNullOrWhiteSpace(expression))
                 {
@@ -60,7 +60,7 @@ namespace RecipeManager.ApplicationCore.Search
 
         public IEnumerable<SearchTerm> GetValidTerms()
         {
-            var queryTerms = this.GetAllTerms()
+            var queryTerms = GetAllTerms()
                 .Where(x => x.ValidSyntax)
                 .ToArray();
 
@@ -101,7 +101,7 @@ namespace RecipeManager.ApplicationCore.Search
             spec.ServerCriteria.Clear();
             spec.ClientCriteria.Clear();
             
-            var terms = this.GetValidTerms().ToArray();
+            var terms = GetValidTerms().ToArray();
             if (!terms.Any())
             {
                 return;

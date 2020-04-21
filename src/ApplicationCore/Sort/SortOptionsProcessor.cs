@@ -22,12 +22,12 @@ namespace RecipeManager.ApplicationCore.Sort
 
         public IEnumerable<SortTerm> GetAllTerms()
         {
-            if (this.orderBy == null)
+            if (orderBy == null)
             {
                 yield break;
             }
 
-            foreach (var term in this.orderBy)
+            foreach (var term in orderBy)
             {
                 if (string.IsNullOrWhiteSpace(term))
                 {
@@ -54,7 +54,7 @@ namespace RecipeManager.ApplicationCore.Sort
 
         public IEnumerable<SortTerm> GetValidTerms()
         {
-            var queryTerms = this.GetAllTerms().ToArray();
+            var queryTerms = GetAllTerms().ToArray();
             if (!queryTerms.Any())
             {
                 yield break;
@@ -83,7 +83,7 @@ namespace RecipeManager.ApplicationCore.Sort
 
         public IQueryable<T> Apply(IQueryable<T> query)
         {
-            var terms = this.GetValidTerms().ToArray();
+            var terms = GetValidTerms().ToArray();
 
             if (!terms.Any())
             {
@@ -128,7 +128,7 @@ namespace RecipeManager.ApplicationCore.Sort
 
             spec.OrderByClauses.Clear();
 
-            var terms = this.GetValidTerms().ToArray();
+            var terms = GetValidTerms().ToArray();
 
             if (!terms.Any())
             {

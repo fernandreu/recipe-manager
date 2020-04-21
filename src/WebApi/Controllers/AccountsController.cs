@@ -26,7 +26,7 @@ namespace RecipeManager.WebApi.Controllers
         {
             if (model == null)
             {
-                return this.BadRequest(new RegisterResult
+                return BadRequest(new RegisterResult
                 {
                     Successful = false,
                     Errors = new[] {"No registration data passed"},
@@ -39,18 +39,18 @@ namespace RecipeManager.WebApi.Controllers
                 Email = model.Email,
             };
 
-            var result = await this.userManager.CreateAsync(newUser, model.Password).ConfigureAwait(false);
+            var result = await userManager.CreateAsync(newUser, model.Password).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description);
-                return this.BadRequest(new RegisterResult
+                return BadRequest(new RegisterResult
                 {
                     Successful = false,
                     Errors = errors,
                 });
             }
 
-            return this.Ok(new RegisterResult
+            return Ok(new RegisterResult
             {
                 Successful = true,
             });
@@ -59,18 +59,18 @@ namespace RecipeManager.WebApi.Controllers
         [HttpGet("user")]
         public IActionResult ReadUser()
         {
-            if (!this.User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
-                return this.Ok(LoggedOutUser);
+                return Ok(LoggedOutUser);
             }
 
-            var name = this.User.Identity.Name;
+            var name = User.Identity.Name;
             if (name == null)
             {
-                return this.NotFound();
+                return NotFound();
             }
 
-            return this.Ok(new UserModel
+            return Ok(new UserModel
             {
                 Email = name,
                 IsAuthenticated = true,

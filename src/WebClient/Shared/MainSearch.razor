@@ -13,16 +13,16 @@ private string searchText;
 [Parameter]
 public string SearchText
 {
-    get => this.searchText;
+    get => searchText;
     set
     {
-        if (this.searchText == value)
+        if (searchText == value)
         {
             return;
         }
 
-        this.searchText = value;
-        this.StateHasChanged();
+        searchText = value;
+        StateHasChanged();
     }
 }
 
@@ -31,7 +31,7 @@ public EventCallback<string> OnSearch { get; set; }
 
 private void OnSearchClicked(MouseEventArgs e)
 {
-    this.OnSearch.InvokeAsync(this.SearchText).ConfigureAwait(false);
+    OnSearch.InvokeAsync(SearchText).ConfigureAwait(false);
 }
 
 }
