@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.VisualBasic;
 using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi.Helpers;
@@ -69,8 +71,8 @@ namespace RecipeManager.WebApi.Filters
                 allProperties.SingleOrDefault(p => p.Name == nameof(BaseResource.Relations))?.SetValue(model, rewritten.Relations);
             }
 
-            var arrayProperties = allProperties.Where(p => p.PropertyType.IsArray).ToList();
-            RewriteLinksInArrays(arrayProperties, model, rewriter);
+            var arrayProperties = allProperties.Where(p => typeof(IEnumerable<object>).IsAssignableFrom(p.PropertyType)).ToList();
+            RewriteLinksInLists(arrayProperties, model, rewriter);
 
             var objectProperties = allProperties.Except(linkProperties).Except(arrayProperties);
             RewriteLinksInNestedObjects(objectProperties, model, rewriter);
@@ -93,12 +95,12 @@ namespace RecipeManager.WebApi.Filters
             }
         }
 
-        private static void RewriteLinksInArrays(IEnumerable<PropertyInfo> arrayProperties, object model, LinkRewriter rewriter)
+        private static void RewriteLinksInLists(IEnumerable<PropertyInfo> arrayProperties, object model, LinkRewriter rewriter)
         {
 
             foreach (var arrayProperty in arrayProperties)
             {
-                var array = arrayProperty.GetValue(model) as Array ?? Array.Empty<object>();
+                var array = arrayProperty.GetValue(model) as IEnumerable<object> ?? Enumerable.Empty<object>();
 
                 foreach (var element in array)
                 {

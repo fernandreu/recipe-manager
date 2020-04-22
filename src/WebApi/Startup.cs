@@ -149,9 +149,9 @@ namespace RecipeManager.WebApi
             app.UseCors("AllowMyApp");
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-            app.UseAuthentication();
-
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
