@@ -14,14 +14,14 @@ using RecipeManager.WebApi.Interfaces;
 namespace RecipeManager.WebApi.Services
 {
     public class ServiceBase<TEntity, TResource> : IAsyncService<TEntity, TResource>
-        where TEntity : BaseEntity
+        where TEntity : SingleEntity
         where TResource : BaseResource
     {
-        protected ApplicationDbContext Context { get; }
+        protected AppDbContext Context { get; }
 
         protected IConfigurationProvider MappingConfiguration { get; }
 
-        public ServiceBase(ApplicationDbContext context, IConfigurationProvider mappingConfiguration)
+        public ServiceBase(AppDbContext context, IConfigurationProvider mappingConfiguration)
         {
             Context = context;
             MappingConfiguration = mappingConfiguration;

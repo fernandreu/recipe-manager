@@ -27,7 +27,7 @@ namespace RecipeManager.FunctionalTests
                 var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
 
                 // Add a database Context (AppDbContext) using an in-memory database for testing.
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryAppDb");
                     options.UseInternalServiceProvider(serviceProvider);
@@ -39,22 +39,12 @@ namespace RecipeManager.FunctionalTests
                 // Create a scope to obtain a reference to the database contexts
                 using var scope = sp.CreateScope();
                 var scopedServices = scope.ServiceProvider;
-                var appDb = scopedServices.GetRequiredService<ApplicationDbContext>();
+                var appDb = scopedServices.GetRequiredService<AppDbContext>();
 
                 var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
                 // Ensure the database is created.
                 appDb.Database.EnsureCreated();
-
-                try
-                {
-                    // Seed the database with some specific test data.
-                    await DbContextSeed.AddTestData(appDb);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, $"An error occurred seeding the database with test messages. Error: {ex.Message}");
-                }
             });
         }
     }

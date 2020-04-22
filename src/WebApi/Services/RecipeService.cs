@@ -8,7 +8,7 @@ namespace RecipeManager.WebApi.Services
 {
     public class RecipeService : ServiceBase<Recipe, RecipeResource>, IRecipeService
     {
-        public RecipeService(ApplicationDbContext context, IConfigurationProvider mappingConfiguration) : 
+        public RecipeService(AppDbContext context, IConfigurationProvider mappingConfiguration) : 
             base(context, mappingConfiguration)
         {
         }

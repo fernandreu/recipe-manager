@@ -11,9 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
+using RecipeManager.Infrastructure.Helpers;
+using RecipeManager.Infrastructure.Seeding;
 using RecipeManager.WebApi.Errors;
 using RecipeManager.WebApi.Filters;
 using RecipeManager.WebApi.Interfaces;
@@ -37,18 +40,21 @@ namespace RecipeManager.WebApi
         {
             services.Configure<PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
 
+            services.Configure<DbOptions>(Configuration.GetSection("DatabaseOptions"));
+
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIngredientService, IngredientService>();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddTransient<IDataSeeder, FakeDataSeeder>();
+            services.AddDbContext<AppDbContext>(options =>
             {
                 // TODO: Swap out for a real database in production
                 options.UseInMemoryDatabase("recipesdb");
             });
 
             services.AddIdentityCore<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -107,8 +113,23 @@ namespace RecipeManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, IOptionsMonitor<DbOptions> options)
         {
+            if (options.CurrentValue.Delete)
+            {
+                context.Database.EnsureDeleted();
+            }
+
+            if (options.CurrentValue.Create)
+            {
+                context.Database.EnsureCreated();
+            }
+
+            if (options.CurrentValue.Migrate)
+            {
+                context.Database.Migrate();
+            }
+            
             CurrentEnvironment = env;
 
             if (env.IsDevelopment())

@@ -46,9 +46,9 @@ namespace RecipeManager.ApplicationCore.Search
 
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<Ingredient, bool>> predicate = x => x.Name.Contains(ingredient, StringComparison.InvariantCultureIgnoreCase);
+            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.Contains(ingredient, StringComparison.InvariantCultureIgnoreCase);
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
-            var genericAny = any.MakeGenericMethod(typeof(Ingredient));
+            var genericAny = any.MakeGenericMethod(typeof(RecipeIngredient));
 
             return Expression.Call(genericAny, left, predicate);
         }

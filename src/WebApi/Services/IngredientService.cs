@@ -6,9 +6,9 @@ using RecipeManager.WebApi.Interfaces;
 
 namespace RecipeManager.WebApi.Services
 {
-    public class IngredientService : ServiceBase<Ingredient, IngredientResource>, IIngredientService
+    public class IngredientService : ServiceBase<RecipeIngredient, IngredientResource>, IIngredientService
     {
-        public IngredientService(ApplicationDbContext context, IConfigurationProvider mappingConfiguration) : 
+        public IngredientService(AppDbContext context, IConfigurationProvider mappingConfiguration) : 
             base(context, mappingConfiguration)
         {
         }

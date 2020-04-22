@@ -14,7 +14,7 @@ namespace RecipeManager.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {
-        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery) where T : BaseEntity
+        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery) where T : SingleEntity
         {
             foreach (var prop in typeof(T).GetTypeInfo().GetAllProperties())
             {
@@ -33,7 +33,7 @@ namespace RecipeManager.Infrastructure.Extensions
             return query;
         }
 
-        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T>? specification) where T : BaseEntity
+        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T>? specification) where T : SingleEntity
         {
             specification ??= new Specification<T>();
 

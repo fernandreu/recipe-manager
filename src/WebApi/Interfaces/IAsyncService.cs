@@ -7,7 +7,7 @@ using RecipeManager.ApplicationCore.Resources;
 namespace RecipeManager.WebApi.Interfaces
 {
     public interface IAsyncService<TEntity, TResource>
-        where TEntity : BaseEntity
+        where TEntity : SingleEntity
         where TResource : BaseResource
     {
         Task<TResource?> GetByIdAsync(Guid id);

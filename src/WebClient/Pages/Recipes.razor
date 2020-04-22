@@ -1,6 +1,6 @@
 ﻿@page "/recipes"
 @using System.Collections.Specialized
-@using System.Web
+@using System.Net.Http.Json
 @using RecipeManager.ApplicationCore.Resources
 @using WebClient.Models
 @inject HttpClient Http
@@ -61,7 +61,7 @@ Search recipes by the ingredients they contain.
         StatusMessage = $"Uri: {uri}";
         Results = null;
         StateHasChanged();
-        Results = await Http.GetJsonAsync<PagedCollection<RecipeResource>>(uri);
+        Results = await Http.GetFromJsonAsync<PagedCollection<RecipeResource>>(uri);
         StateHasChanged();
     }
 }

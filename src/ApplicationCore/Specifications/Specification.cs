@@ -8,7 +8,7 @@ using RecipeManager.ApplicationCore.Sort;
 
 namespace RecipeManager.ApplicationCore.Specifications
 {
-    public class Specification<T> : ISpecification<T> where T : BaseEntity
+    public class Specification<T> : ISpecification<T> where T : SingleEntity
     {
         public ICollection<Expression<Func<T, bool>>> ServerCriteria { get; } = new List<Expression<Func<T, bool>>>();
 

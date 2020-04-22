@@ -10,7 +10,7 @@ using RecipeManager.ApplicationCore.Sort;
 namespace RecipeManager.ApplicationCore.Specifications
 {
     public class SpecificationOptions<T> : IValidatableObject
-        where T : BaseEntity
+        where T : SingleEntity
     {
         public IReadOnlyCollection<string>? Search { get; set; }
 

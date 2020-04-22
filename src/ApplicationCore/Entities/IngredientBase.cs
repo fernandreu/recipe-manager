@@ -1,8 +1,9 @@
-﻿using RecipeManager.ApplicationCore.Interfaces;
+﻿using System;
+using RecipeManager.ApplicationCore.Interfaces;
 
 namespace RecipeManager.ApplicationCore.Entities
 {
-    public class Ingredient : BaseEntity, IIngredient
+    public class IngredientBase : SingleEntity, IIngredient
     {
         public string Name { get; set; } = string.Empty;
 

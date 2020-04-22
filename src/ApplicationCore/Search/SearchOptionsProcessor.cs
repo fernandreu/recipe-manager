@@ -10,7 +10,7 @@ using RecipeManager.ApplicationCore.Interfaces;
 
 namespace RecipeManager.ApplicationCore.Search
 {
-    public class SearchOptionsProcessor<T> where T : BaseEntity
+    public class SearchOptionsProcessor<T> where T : SingleEntity
     {
         private readonly IReadOnlyCollection<string>? searchQuery;
 

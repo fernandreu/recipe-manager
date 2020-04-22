@@ -11,7 +11,7 @@ using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.ApplicationCore.Sort
 {
-    public class SortOptionsProcessor<T> where T : BaseEntity
+    public class SortOptionsProcessor<T> where T : SingleEntity
     {
         private readonly IReadOnlyCollection<string>? orderBy;
 

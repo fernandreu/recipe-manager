@@ -2,7 +2,7 @@
 
 namespace RecipeManager.ApplicationCore.Entities
 {
-    public class BaseEntity
+    public class SingleEntity
     {
         public Guid Id { get; set; }
     }
