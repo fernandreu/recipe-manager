@@ -14,7 +14,7 @@ variables:
 jobs:
 - job: WebAPI
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'macOS-latest'
   steps:
 
   - task: UseDotNet@2
@@ -82,16 +82,6 @@ jobs:
     inputs:
       artifactName: 'WebAPI'
 
-  - task: AzureRmWebAppDeployment@4
-    displayName: 'Publish To Azure Apps'
-    inputs:
-      azureSubscription: 'AzureResources'
-      WebAppName: 'RecipeManager'
-      UseWebDeploy: True
-      DeploymentType: webDeploy
-      Package: $(System.ArtifactsDirectory)/**/*.zip
-      ResourceGroupName: RecipeManagerResourceGroup
-      
 - job: WebClient
   pool:
     # WebCompiler (for SASS files) only works on Windows for now
