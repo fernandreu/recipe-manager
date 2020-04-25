@@ -68,7 +68,7 @@ jobs:
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
-    displayName: Zip Backend
+    displayName: Publish Zipped Backend
     inputs:
       command: publish
       publishWebProjects: False
@@ -78,7 +78,7 @@ jobs:
         src/WebAPI/*.csproj
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Backend'
+    displayName: 'Publish Backend Artifact'
     inputs:
       artifactName: 'WebAPI'
 
