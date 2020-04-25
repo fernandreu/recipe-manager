@@ -35,6 +35,14 @@ jobs:
         src/WebAPI/*.csproj
         tests/**/*.csproj
 
+  - task: DockerCompose@0
+    displayName: Start Development PostgreSQL Database
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      dockerComposeFile: '**/docker-compose.yml'
+      action: 'Run a Docker Compose command'
+      dockerComposeCommand: 'up -d'
+      
   - task: DotNetCoreCLI@2
     displayName: Run Backend Unit Tests
     inputs:

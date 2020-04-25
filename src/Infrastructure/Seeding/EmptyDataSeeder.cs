@@ -16,7 +16,7 @@ using RecipeManager.ApplicationCore.Helpers;
 
 namespace RecipeManager.Infrastructure.Seeding
 {
-    public abstract class EmptyDataSeeder : IDataSeeder
+    public class EmptyDataSeeder : IDataSeeder
     {
         private readonly Random random = new Random(11223344);
         
@@ -31,7 +31,9 @@ namespace RecipeManager.Infrastructure.Seeding
             Seed();
         }
 
-        protected abstract void Seed();
+        protected virtual void Seed()
+        {
+        }
         
         private Guid CreateGuid()
         {
