@@ -14,7 +14,7 @@ variables:
 jobs:
 - job: WebAPI
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   steps:
 
   - task: UseDotNet@2
