@@ -35,6 +35,9 @@ jobs:
         src/WebAPI/*.csproj
         tests/**/*.csproj
 
+  - script: docker volume create --name=recipemanager-dbdata
+    displayName: Create Docker DB Volume
+
   - task: DockerCompose@0
     displayName: Start Development PostgreSQL Database
     inputs:
