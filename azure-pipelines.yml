@@ -14,16 +14,8 @@ variables:
 jobs:
 - job: WebAPI
   pool:
-    vmImage: 'macOS-latest'
+    vmImage: 'ubuntu-latest'
   steps:
-
-  - task: DockerInstaller@0
-    displayName: Install Docker CLI
-    inputs:
-      dockerVersion: '17.09.0-ce'
-
-  - script: docker volume create --name=recipemanager-dbdata
-    displayName: Create Docker DB Volume
 
   - task: UseDotNet@2
     displayName: Use .NET Core 3.1 SDK
@@ -42,6 +34,9 @@ jobs:
         src/Infrastructure/*.csproj
         src/WebApi/*.csproj
         tests/**/*.csproj
+
+  - script: docker volume create --name=recipemanager-dbdata
+    displayName: Create Docker DB Volume
 
   - task: DockerCompose@0
     displayName: Start Development PostgreSQL Database
@@ -78,14 +73,21 @@ jobs:
       command: publish
       publishWebProjects: False
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: True
+      zipAfterPublish: False
       projects: 
         src/WebApi/*.csproj
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Backend Artifact'
+  - task: CopyFiles@2
+    displayName: Add docker-compose Files to Publish
     inputs:
-      artifactName: 'WebAPI'
+      Contents: '**/docker-compose*.yml'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'WebAPI'
+      publishLocation: 'pipeline'
 
   - task: Docker@2
     displayName: Build and Push Docker Image 
