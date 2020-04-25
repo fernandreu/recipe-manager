@@ -106,6 +106,9 @@ jobs:
       command: 'buildAndPush'
       Dockerfile: 'src/WebApi/Dockerfile'
       buildContext: '.'
+      tags: |
+        $(Build.BuildId)
+        latest
 
 - job: WebClient
   pool:
