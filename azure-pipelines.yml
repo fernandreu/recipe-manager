@@ -74,8 +74,7 @@ jobs:
       publishWebProjects: False
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
       zipAfterPublish: True
-      projects: |
-        src/WebAPI/*.csproj
+      projects: 'src/WebAPI/*.csproj'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Backend Artifact'
