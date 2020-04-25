@@ -68,7 +68,7 @@ jobs:
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
-    displayName: Publish Zipped Backend
+    displayName: Dotnet Publish Backend
     inputs:
       command: publish
       publishWebProjects: False
@@ -77,16 +77,25 @@ jobs:
       projects: 
         src/WebApi/*.csproj
 
-  - task: CopyFiles@2
-    displayName: Add docker-compose Files to Publish
-    inputs:
-      Contents: '**/docker-compose*.yml'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
   - task: PublishPipelineArtifact@1
+    displayName: Publish Backend Artifact
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)'
       artifact: 'WebAPI'
+      publishLocation: 'pipeline'
+
+  - task: CopyFiles@2
+    displayName: Copy Docker-Compose Files
+    inputs:
+      contents: '**/docker-compose*.yml'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      cleanTargetFolder: True
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Docker-Compose Artifact
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'DockerCompose'
       publishLocation: 'pipeline'
 
   - task: Docker@2
@@ -96,7 +105,7 @@ jobs:
       repository: 'fernandr/recipemanager'
       command: 'buildAndPush'
       Dockerfile: 'src/WebApi/Dockerfile'
-      buildContext: '$(Agent.BuildDirectory)'
+      buildContext: '.'
 
 - job: WebClient
   pool:
