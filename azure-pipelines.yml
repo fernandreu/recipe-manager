@@ -17,6 +17,14 @@ jobs:
     vmImage: 'macOS-latest'
   steps:
 
+  - task: DockerInstaller@0
+    displayName: Install Docker CLI
+    inputs:
+      dockerVersion: '17.09.0-ce'
+
+  - script: docker volume create --name=recipemanager-dbdata
+    displayName: Create Docker DB Volume
+
   - task: UseDotNet@2
     displayName: Use .NET Core 3.1 SDK
     inputs:
@@ -34,9 +42,6 @@ jobs:
         src/Infrastructure/*.csproj
         src/WebApi/*.csproj
         tests/**/*.csproj
-
-  - script: docker volume create --name=recipemanager-dbdata
-    displayName: Create Docker DB Volume
 
   - task: DockerCompose@0
     displayName: Start Development PostgreSQL Database
@@ -81,6 +86,15 @@ jobs:
     displayName: 'Publish Backend Artifact'
     inputs:
       artifactName: 'WebAPI'
+
+  - task: Docker@2
+    displayName: Build and Push Docker Image 
+    inputs:
+      containerRegistry: 'docker-hub'
+      repository: 'fernandr/recipemanager'
+      command: 'buildAndPush'
+      Dockerfile: 'src/WebApi/Dockerfile'
+      buildContext: '$(Agent.BuildDirectory)'
 
 - job: WebClient
   pool:
