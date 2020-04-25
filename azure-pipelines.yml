@@ -32,7 +32,7 @@ jobs:
       projects: |
         src/ApplicationCore/*.csproj
         src/Infrastructure/*.csproj
-        src/WebAPI/*.csproj
+        src/WebApi/*.csproj
         tests/**/*.csproj
 
   - script: docker volume create --name=recipemanager-dbdata
@@ -74,7 +74,8 @@ jobs:
       publishWebProjects: False
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
       zipAfterPublish: True
-      projects: 'src/WebAPI/*.csproj'
+      projects: 
+        src/WebApi/*.csproj
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Backend Artifact'
