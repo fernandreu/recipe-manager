@@ -9,7 +9,6 @@ services:
     restart: always
     volumes:
       - ./deploy/initdb.d:/docker-entrypoint-initdb.d:ro
-      - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z
     # This is needed for the migrations and to test the server with the real db and without Docker
     ports:
       - "5432:5432"
@@ -31,7 +30,3 @@ services:
       - "5051:443"
     depends_on:
       - db
-
-volumes:
-  recipemanager-dbdata:
-    external: true

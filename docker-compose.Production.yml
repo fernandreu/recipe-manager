@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+
+  db:
+    volumes:
+      - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z
+
+  dbadmin:
+    volumes:
+      - ${APPDATA}/ASP.NET/Https/cert.pem:/certs/server.cert:ro
+      - ${APPDATA}/ASP.NET/Https/privkey.pem:/certs/server.key:ro
+    environment:
+      - PGADMIN_ENABLE_TLS=True
+
+  webapi:
+    image: fernandr/recipemanager
+    container_name: recipemanager-webapi
+    environment:
+      - "ConnectionStrings:AppDB=Host=db;Port=5432;Database=recipemanager;Username=postgres;Password=SuperSecure"
+      - "DatabaseOptions:Type=PostgreSQL"
+      - "DatabaseOptions:Migrate=true"
+      - "DatabaseOptions:Delete=false"
+      - "DatabaseOptions:Create=false"
+      - "DOTNET_USER_SECRETS_FALLBACK_DIR=/root/.aspnet/secrets"
+      - "ASPNETCORE_URLS=https://+:443;http://+:80"
+      - "ASPNETCORE_HTTPS_PORT=443"
+      - "ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/aspnetapp.pfx"
+      - "ASPNETCORE_Kestrel__Certificates__Default__Password=SuperSecure"
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - db
+
+volumes:
+  recipemanager-dbdata:
+    external: true
