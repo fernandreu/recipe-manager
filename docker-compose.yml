@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+
+  db:
+    image: postgres
+    container_name: reciepmanager-db
+    working_dir: /application
+    restart: always
+    volumes:
+      - ./deploy/initdb.d:/docker-entrypoint-initdb.d:ro
+      - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z
+    # This is needed for the migrations and to test the server with the real db and without Docker
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=SuperSecure
+      - POSTGRES_DB=recipemanager
+      - PGDATA=/var/lib/postgresql/data/recipemanager
+
+  dbadmin:
+    image: dpage/pgadmin4
+    container_name: soulhunter-dbadmin
+    volumes:
+      - ./deploy/dbadmin-data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=a@b.c
+      - PGADMIN_DEFAULT_PASSWORD=SuperSecure
+    ports:
+      - "5050:80"
+      - "5051:443"
+    depends_on:
+      - db
+
+volumes:
+  recipemanager-dbdata:
+    external: true

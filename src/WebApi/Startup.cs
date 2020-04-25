@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
+using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.Infrastructure.Helpers;
 using RecipeManager.Infrastructure.Seeding;
 using RecipeManager.WebApi.Errors;
@@ -40,19 +41,12 @@ namespace RecipeManager.WebApi
         {
             services.Configure<PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
 
-            services.Configure<DbOptions>(Configuration.GetSection("DatabaseOptions"));
-
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIngredientService, IngredientService>();
 
-            services.AddTransient<IDataSeeder, FakeDataSeeder>();
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                // TODO: Swap out for a real database in production
-                options.UseInMemoryDatabase("recipesdb");
-            });
-
+            services.AddInfrastructure(Configuration);
+            
             services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

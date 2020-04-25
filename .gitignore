@@ -262,3 +262,7 @@ __pycache__/
 
 # Local history
 .localhistory
+
+# Deploy data
+dbadmin-data/
+db-data/

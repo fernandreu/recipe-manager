@@ -11,6 +11,8 @@ namespace RecipeManager.Infrastructure.Helpers
 {
     public class DbOptions
     {
+        public string? Type { get; set; }
+        
         public bool Migrate { get; set; }
         
         public bool Create { get; set; }
