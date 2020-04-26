@@ -22,7 +22,7 @@ downloadArtifact () {
     wget -q -O ${downloadPath} ${downloadUrl}
     artifactPath="/tmp/${artifactName}"
     rm -rf ${artifactPath}
-    unzip ${downloadPath} -d "/tmp" -q
+    unzip -qq ${downloadPath} -d "/tmp"
     cp -rf "${artifactPath}/." ${destination}
     
     # Remove downloaded / temporarily extracted files
@@ -44,9 +44,9 @@ downloadArtifact "WebAPI" ${refPath}
 # Get the current deployment path from the service
 serviceFile="/etc/systemd/system/${serviceName}.service"
 line=$(sed -n -e '/^ExecStart=/p' ${serviceFile})
-previousPath=$(echo "$line" | awk '{print $2 }')
-previousPath=$(dirname ${previousPath})
-echo Previous source code detected in: ${previousPath}
+previousPath=$(echo "$line" | awk '{print $(NF) }')
+previousPath=$(dirname "${previousPath}")
+echo Service previously executing from: ${previousPath}
 
 # Replace that path with the new one
 echo New line is: ${newLine}
