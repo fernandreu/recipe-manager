@@ -70,7 +70,7 @@ jobs:
       command: publish
       publishWebProjects: False
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: False
+      zipAfterPublish: True
       projects: 
         src/WebApi/*.csproj
 

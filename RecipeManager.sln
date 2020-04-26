@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		docker-compose.yml = docker-compose.yml
 		docker-compose.Production.yml = docker-compose.Production.yml
+		update-service.sh = update-service.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BCB58CA7-E211-4223-9F73-A7595E74D182}"
