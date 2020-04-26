@@ -49,6 +49,7 @@ namespace RecipeManager.WebApi
             
             services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
