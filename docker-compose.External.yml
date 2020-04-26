@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+
+  db:
+    volumes:
+      - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z

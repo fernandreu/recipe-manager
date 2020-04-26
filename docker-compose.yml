@@ -19,7 +19,7 @@ services:
 
   dbadmin:
     image: dpage/pgadmin4
-    container_name: soulhunter-dbadmin
+    container_name: recipemanager-dbadmin
     volumes:
       - ./deploy/dbadmin-data:/var/lib/pgadmin
     environment:

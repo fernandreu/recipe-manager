@@ -2,10 +2,6 @@ version: '3.4'
 
 services:
 
-  db:
-    volumes:
-      - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z
-
   dbadmin:
     volumes:
       - ${APPDATA}/ASP.NET/Https/cert.pem:/certs/server.cert:ro

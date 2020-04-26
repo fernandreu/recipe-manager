@@ -33,8 +33,9 @@ downloadArtifact () {
 # Re-run database
 downloadArtifact "DockerCompose" ${folder}
 composerPath="${folder}/docker-compose.yml"
-docker-compose -f ${composerPath} down
-docker-compose -f ${composerPath} up -d
+composerExternalPath="${folder}/docker-compose.External.yml"
+docker-compose -f ${composerPath} -f ${composerExternalPath} down
+docker-compose -f ${composerPath} -f ${composerExternalPath} up -d
 
 # Download binaries
 mkdir ${refPath}
