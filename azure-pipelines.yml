@@ -70,14 +70,14 @@ jobs:
       command: publish
       publishWebProjects: False
       arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: True
+      zipAfterPublish: False
       projects: 
         src/WebApi/*.csproj
 
   - task: PublishPipelineArtifact@1
     displayName: Publish Backend Artifact
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)'
+      targetPath: '$(Build.ArtifactStagingDirectory)/WebApi'
       artifact: 'WebAPI'
       publishLocation: 'pipeline'
 
