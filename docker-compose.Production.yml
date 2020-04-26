@@ -31,7 +31,3 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - db
-
-volumes:
-  recipemanager-dbdata:
-    external: true

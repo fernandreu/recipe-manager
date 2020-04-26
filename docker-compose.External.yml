@@ -5,3 +5,7 @@ services:
   db:
     volumes:
       - recipemanager-dbdata:/var/lib/postgresql/data/recipemanager:Z
+
+volumes:
+  recipemanager-dbdata:
+    external: true
