@@ -82,30 +82,47 @@ jobs:
       publishLocation: 'pipeline'
 
   - task: CopyFiles@2
-    displayName: Copy Docker-Compose Files
+    displayName: Copy DockerCompose Files
     inputs:
       contents: '**/docker-compose*.yml'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
       cleanTargetFolder: True
 
   - task: PublishPipelineArtifact@1
-    displayName: Publish Docker-Compose Artifact
+    displayName: Publish DockerCompose Artifact
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)'
       artifact: 'DockerCompose'
       publishLocation: 'pipeline'
 
-  - task: Docker@2
-    displayName: Build and Push Docker Image 
+  # This just adds build time and is not being used at the moment
+  # - task: Docker@2
+  #   displayName: Build and Push Docker Image 
+  #   inputs:
+  #     containerRegistry: 'docker-hub'
+  #     repository: 'fernandr/recipemanager'
+  #     command: 'buildAndPush'
+  #     Dockerfile: 'src/WebApi/Dockerfile'
+  #     buildContext: '.'
+  #     tags: |
+  #       $(Build.BuildId)
+  #       latest
+
+  - task: CopyFilesOverSSH@0
+    displayName: Transfer Update Script
     inputs:
-      containerRegistry: 'docker-hub'
-      repository: 'fernandr/recipemanager'
-      command: 'buildAndPush'
-      Dockerfile: 'src/WebApi/Dockerfile'
-      buildContext: '.'
-      tags: |
-        $(Build.BuildId)
-        latest
+      sshEndpoint: 'rpi'
+      contents: 'update-service.sh'
+      targetFolder: '$HOME/recipe-manager'
+      readyTimeout: '20000'
+
+  - task: SSH@0
+    displayName: Update Service
+    inputs:
+      sshEndpoint: 'rpi'
+      runOptions: 'inline'
+      inline: '$HOME/recipe-manager/update-service.sh $(Build.BuildId)'
+      readyTimeout: '20000'
 
 - job: WebClient
   pool:
