@@ -121,7 +121,9 @@ jobs:
     inputs:
       sshEndpoint: 'rpi'
       runOptions: 'inline'
-      inline: '/home/pi/recipe-manager/update-service.sh $(Build.BuildId) 2>&1'
+      inline: |
+        chmod +x /home/pi/recipe-manager/update-service.sh
+        /home/pi/recipe-manager/update-service.sh $(Build.BuildId) 2>&1
       readyTimeout: '20000'
 
 - job: WebClient
