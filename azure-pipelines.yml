@@ -113,7 +113,7 @@ jobs:
     inputs:
       sshEndpoint: 'rpi'
       contents: 'update-service.sh'
-      targetFolder: '$HOME/recipe-manager'
+      targetFolder: '/home/pi/recipe-manager'
       readyTimeout: '20000'
 
   - task: SSH@0
@@ -121,7 +121,7 @@ jobs:
     inputs:
       sshEndpoint: 'rpi'
       runOptions: 'inline'
-      inline: '$HOME/recipe-manager/update-service.sh $(Build.BuildId) 2>&1'
+      inline: '/home/pi/recipe-manager/update-service.sh $(Build.BuildId) 2>&1'
       readyTimeout: '20000'
 
 - job: WebClient
