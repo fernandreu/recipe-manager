@@ -6,7 +6,7 @@ ref="$BUILD_ID"
 folder="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 serviceName=recipe-manager-api
 refPath="${folder}/${ref}"
-newLine="ExecStart=dotnet\ ${refPath}/WebApi.dll"
+newLine="ExecStart=dotnet ${refPath}/WebApi.dll"
 echo New line is: ${newLine}
 if [[ -z "$newLine" ]]; then
     echo "Wrong newLine; aborting"
@@ -52,7 +52,7 @@ echo Service previously executing from: ${previousPath}
 echo New line is: ${newLine}
 escaped=$(sed -e 's/[\/&]/\\&/g' <<< ${newLine})
 echo Escaped: ${escaped}
-sudo sed -i \"/ExecStart=/c\\${escaped}\" ${serviceFile}
+sudo sed -i "/ExecStart=/c\\${escaped}" "${serviceFile}"
 
 # Restart service
 echo Restarting service
