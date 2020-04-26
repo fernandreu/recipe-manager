@@ -6,7 +6,7 @@ ref="$BUILD_ID"
 folder="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 serviceName=recipe-manager-api
 refPath="${folder}/${ref}"
-newLine="ExecStart=dotnet\ ${refPath}"
+newLine="ExecStart=dotnet\ ${refPath}/WebApi.dll"
 echo New line is: ${newLine}
 if [[ -z "$newLine" ]]; then
     echo "Wrong newLine; aborting"
