@@ -19,10 +19,10 @@ downloadArtifact () {
     apiUrl="https://dev.azure.com/fernandreu-public/RecipeManager/_apis/build/builds/${ref}/artifacts?artifactName=${artifactName}&api-version=4.1"
     downloadUrl=$(curl -s ${apiUrl} | grep -Pom 1 '"downloadUrl": *"\K[^"]*')
     downloadPath="/tmp/artifact-${artifactName}.zip"
-    wget -O ${downloadPath} ${downloadUrl}
+    wget -q -O ${downloadPath} ${downloadUrl}
     artifactPath="/tmp/${artifactName}"
     rm -rf ${artifactPath}
-    unzip ${downloadPath} -d "/tmp"
+    unzip ${downloadPath} -d "/tmp" -q
     cp -rf "${artifactPath}/." ${destination}
     
     # Remove downloaded / temporarily extracted files
@@ -45,6 +45,7 @@ downloadArtifact "WebAPI" ${refPath}
 serviceFile="/etc/systemd/system/${serviceName}.service"
 line=$(sed -n -e '/^ExecStart=/p' ${serviceFile})
 previousPath=$(echo "$line" | awk '{print $2 }')
+previousPath=$(dirname ${previousPath})
 echo Previous source code detected in: ${previousPath}
 
 # Replace that path with the new one
