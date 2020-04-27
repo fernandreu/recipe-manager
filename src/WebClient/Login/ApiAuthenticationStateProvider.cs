@@ -30,14 +30,14 @@ namespace WebClient.Login
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await localStorage.GetItemAsync<string>("authToken");
+            var savedToken = await localStorage.GetItemAsync<string>("authToken").ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(savedToken))
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
             }
 
-            var userInfo = await httpClient.GetJsonAsync<UserModel>( serverConfig.UrlTo("accounts/user"));
+            var userInfo = await httpClient.GetJsonAsync<UserModel>( serverConfig.UrlTo("accounts/user").ToString()).ConfigureAwait(false);
 
             var identity = userInfo.IsAuthenticated
                 ? new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userInfo.Email) }, "apiauth")

@@ -7,18 +7,20 @@ namespace WebClient.Models
     public class ServerConfig
     {
 #if DEBUG
-        public string BaseUrl { get; } = "https://localhost";
+        public Uri BaseUrl { get; } = new Uri("https://localhost");
 
         public int Port { get; } = 5001;
 #else
-        public string BaseUrl { get; } = "http://fernandreu.ddns.net";
+        public Uri BaseUrl { get; } = new Uri("https://fernandreu.ddns.net");
 
-        public int Port { get; } = 5000;
+        public int Port { get; } = 5001;
 #endif
 
-        public string UrlTo(string endpoint, NameValueCollection queryParameters = null)
+        public Uri UrlTo(string endpoint, NameValueCollection queryParameters = null)
         {
-            if (endpoint.StartsWith("/"))
+            endpoint ??= string.Empty;
+            
+            if (endpoint.StartsWith("/", StringComparison.InvariantCulture))
             {
                 endpoint = endpoint.Substring(1);
             }
@@ -36,7 +38,7 @@ namespace WebClient.Models
             }
 
             builder.Query = query.ToString();
-            return builder.ToString();
+            return builder.Uri;
         }
     }
 }

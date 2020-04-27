@@ -54,7 +54,7 @@ namespace WebClient.Services
                 };
             }
             
-            var result = await httpClient.PostJsonAsync<LoginResult>(serverConfig.UrlTo("login"), loginModel).ConfigureAwait(false);
+            var result = await httpClient.PostJsonAsync<LoginResult>(serverConfig.UrlTo("login").ToString(), loginModel).ConfigureAwait(false);
 
             if (result.Successful)
             {
