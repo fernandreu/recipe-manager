@@ -17,7 +17,6 @@ using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
 using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.Infrastructure.Helpers;
-using RecipeManager.Infrastructure.Seeding;
 using RecipeManager.WebApi.Errors;
 using RecipeManager.WebApi.Filters;
 using RecipeManager.WebApi.Interfaces;
@@ -139,7 +138,7 @@ namespace RecipeManager.WebApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             
             app.UseCors("AllowMyApp");
             app.UseStatusCodePagesWithReExecute("/error/{0}");
