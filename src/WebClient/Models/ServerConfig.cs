@@ -9,11 +9,11 @@ namespace WebClient.Models
 #if DEBUG
         public string BaseUrl { get; } = "https://localhost";
 
-        public int Port { get; } = 44364;
+        public int Port { get; } = 5001;
 #else
-        public string BaseUrl { get; } = "https://recipemanager.azurewebsites.net";
+        public string BaseUrl { get; } = "http://fernandreu.ddns.net";
 
-        public int Port { get; } = 443;
+        public int Port { get; } = 5000;
 #endif
 
         public string UrlTo(string endpoint, NameValueCollection queryParameters = null)
