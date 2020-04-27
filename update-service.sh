@@ -53,6 +53,8 @@ echo New line is: ${newLine}
 escaped=$(sed -e 's/[\/&]/\\&/g' <<< ${newLine})
 echo Escaped: ${escaped}
 sudo sed -i "/ExecStart=/c\\${escaped}" "${serviceFile}"
+escaped=$(sed -e 's/[\/&]/\\&/g' <<< "WorkingDirectory=${refPath}")
+sudo sed -i "/WorkingDirectory=/c\\${escaped}" "${serviceFile}"
 
 # Restart service
 echo Restarting service
