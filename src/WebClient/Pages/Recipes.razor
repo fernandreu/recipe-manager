@@ -13,7 +13,7 @@ Search recipes by the ingredients they contain.
 
 <p>@StatusMessage</p>
 
-<MainSearch OnSearch="@OnSearch" />
+<MainSearch OnSearch="@OnSearch" IsEnabled="@(!IsSearching)" />
 
 @if (Results != null)
 {
@@ -39,6 +39,8 @@ Search recipes by the ingredients they contain.
 
 @code
 {
+    bool IsSearching { get; set; }
+
     Collection<RecipeResource> Results { get; set; }
 
     private string StatusMessage { get; set; } = "Status Message";
@@ -60,8 +62,18 @@ Search recipes by the ingredients they contain.
 
         StatusMessage = $"Uri: {uri}";
         Results = null;
+        IsSearching = true;
         StateHasChanged();
-        Results = await Http.GetFromJsonAsync<PagedCollection<RecipeResource>>(uri);
+        try
+        {
+            Results = await Http.GetFromJsonAsync<PagedCollection<RecipeResource>>(uri);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage += Environment.NewLine + ex.ToString();
+        }
+        
+        IsSearching = false;
         StateHasChanged();
     }
 }

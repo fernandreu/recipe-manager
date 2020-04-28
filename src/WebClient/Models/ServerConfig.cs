@@ -8,14 +8,11 @@ namespace WebClient.Models
     {
         public ServerConfig()
         {
+            Port = 5001;
 #if DEBUG
             BaseUrl  = new Uri("https://localhost");
-
-            Port = 5001;
 #else
             BaseUrl = new Uri("https://fernandreu.ddns.net");
-
-            Port = 5001;
 #endif
         }
 

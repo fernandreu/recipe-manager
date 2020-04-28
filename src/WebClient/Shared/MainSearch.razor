@@ -2,36 +2,53 @@
 <div>
     <MatTextField @bind-Value="@SearchText" Label="Enter an ingredient you have"/>
 
-    <MatButton Label="Search" Raised="true" Icon="search" OnClick="@OnSearchClicked"/>
+    <MatButton Label="Search" Raised="true" Disabled="@(!IsEnabled)" Icon="search" OnClick="@OnSearchClickedAsync"/>
 </div>
-
 
 @code {
 
-private string searchText;
+    private bool isEnabled;
 
-[Parameter]
-public string SearchText
-{
-    get => searchText;
-    set
+    [Parameter]
+    public bool IsEnabled
     {
-        if (searchText == value)
+        get => isEnabled;
+        set
         {
-            return;
+            if (isEnabled == value)
+            {
+                return;
+            }
+
+            isEnabled = value;
+            StateHasChanged();
         }
-
-        searchText = value;
-        StateHasChanged();
     }
-}
+    
+    private string searchText;
 
-[Parameter]
-public EventCallback<string> OnSearch { get; set; }
+    [Parameter]
+    public string SearchText
+    {
+        get => searchText;
+        set
+        {
+            if (searchText == value)
+            {
+                return;
+            }
 
-private void OnSearchClicked(MouseEventArgs e)
-{
-    OnSearch.InvokeAsync(SearchText).ConfigureAwait(false);
-}
+            searchText = value;
+            StateHasChanged();
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private Task OnSearchClickedAsync(MouseEventArgs e)
+    {
+        return OnSearch.InvokeAsync(SearchText);
+    }
 
 }

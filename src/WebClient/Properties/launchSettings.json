@@ -18,10 +18,22 @@
     "WebClient": {
       "commandName": "Project",
       "launchBrowser": true,
+      "commandLineArgs": "--pathbase=/recipe-manager",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:56043/recipe-manager/"
+      "applicationUrl": "https://localhost:50001"
+    },
+    "WebClientRider": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "\"$(_BlazorDevServerDll)\" serve --pathbase=/recipe-manager --applicationpath \"$(TargetPath)\"",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Kestrel:Endpoints:HTTP:Url": "http://localhost:50000",
+        "Kestrel:Endpoints:HTTPS:Url": "https://localhost:50001"
+      }
     }
   }
 }
