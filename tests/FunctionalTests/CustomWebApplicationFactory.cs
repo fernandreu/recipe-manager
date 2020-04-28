@@ -23,14 +23,12 @@ namespace RecipeManager.FunctionalTests
         {
             builder.ConfigureServices(async services =>
             {
-                // Create a new service provider
-                var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
-
                 // Add a database Context (AppDbContext) using an in-memory database for testing.
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase("InMemoryAppDb");
-                    options.UseInternalServiceProvider(serviceProvider);
+                    // In-memory database does not cause errors due to client-side code being executed on the server.
+                    // Hence, we have to use a full-blown PostgreSQL database
+                    options.UseNpgsql("Host=localhost;Port=5432;Database=recipemanager-tests;Username=postgres;Password=SuperSecure");
                 });
 
                 // Build the service provider
@@ -39,11 +37,13 @@ namespace RecipeManager.FunctionalTests
                 // Create a scope to obtain a reference to the database contexts
                 using var scope = sp.CreateScope();
                 var scopedServices = scope.ServiceProvider;
+                
                 var appDb = scopedServices.GetRequiredService<AppDbContext>();
 
                 var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-                // Ensure the database is created.
+                // Ensure the database is created from scratch.
+                appDb.Database.EnsureDeleted();
                 appDb.Database.EnsureCreated();
             });
         }

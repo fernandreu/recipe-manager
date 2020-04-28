@@ -23,7 +23,7 @@ namespace RecipeManager.Infrastructure.Data
 
         public AppDbContext CreateDbContext(
             string host = "localhost",
-            string database = "recipemanager-tests",
+            string database = "recipemanager-migrations",
             string username = "postgres",
             string password = "SuperSecure",
             int port = 5432)

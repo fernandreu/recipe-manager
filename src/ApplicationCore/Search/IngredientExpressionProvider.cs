@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Entities;
@@ -44,9 +45,10 @@ namespace RecipeManager.ApplicationCore.Search
             return result;
         }
 
+        [SuppressMessage("ReSharper", "CA1307", Justification = "Ignoring case would make server-side evaluation impossible")]
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.Contains(ingredient, StringComparison.InvariantCultureIgnoreCase);
+            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.Contains(ingredient);
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
             var genericAny = any.MakeGenericMethod(typeof(RecipeIngredient));
 

@@ -9,21 +9,20 @@
 
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
+using RecipeManager.ApplicationCore.Search;
+
+using UnitsNet;
+
+using Xunit;
 
 namespace RecipeManager.FunctionalTests.Controllers
 {
-    using System;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
-    using Newtonsoft.Json;
-
-    using RecipeManager.ApplicationCore.Search;
-
-    using UnitsNet;
-
-    using Xunit;
-
     public class RecipesControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient client;
@@ -47,7 +46,7 @@ namespace RecipeManager.FunctionalTests.Controllers
         public async Task GetAllRecipes_SearchByJustIngredientName_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await TestGetAll($"search={nameof(RecipeResource.Ingredients)}+{SearchOperator.Contains}+eggs").ConfigureAwait(false);
+            var recipes = await TestGetAll($"search={nameof(RecipeResource.Ingredients)} {SearchOperator.Contains} eggs").ConfigureAwait(false);
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -205,6 +204,8 @@ namespace RecipeManager.FunctionalTests.Controllers
         {
             Console.WriteLine($"Query: {query}");
             var httpResponse = await client.GetAsync("/recipes" + (query != null ? $"?{query}" : string.Empty));
+            
+            Console.WriteLine($"Status code: {httpResponse.StatusCode}");
             httpResponse.EnsureSuccessStatusCode();
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<PagedCollection<RecipeResource>>(stringResponse);
