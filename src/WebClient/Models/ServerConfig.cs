@@ -6,15 +6,28 @@ namespace WebClient.Models
 {
     public class ServerConfig
     {
+        public ServerConfig()
+        {
 #if DEBUG
-        public Uri BaseUrl { get; } = new Uri("https://localhost");
+            BaseUrl  = new Uri("https://localhost");
 
-        public int Port { get; } = 5001;
+            Port = 5001;
 #else
-        public Uri BaseUrl { get; } = new Uri("https://fernandreu.ddns.net");
+            BaseUrl = new Uri("https://fernandreu.ddns.net");
 
-        public int Port { get; } = 5001;
+            Port = 5001;
 #endif
+        }
+
+        public ServerConfig(Uri baseUrl, int port)
+        {
+            BaseUrl = baseUrl;
+            Port = port;
+        }
+        
+        public Uri BaseUrl { get; }
+
+        public int Port { get; }
 
         public Uri UrlTo(string endpoint, NameValueCollection queryParameters = null)
         {
@@ -25,7 +38,10 @@ namespace WebClient.Models
                 endpoint = endpoint.Substring(1);
             }
 
-            var builder = new UriBuilder($"{BaseUrl}/{endpoint}");
+            var builder = new UriBuilder(BaseUrl)
+            {
+                Path = endpoint,
+            };
             if (Port > 0)
             {
                 builder.Port = Port;
