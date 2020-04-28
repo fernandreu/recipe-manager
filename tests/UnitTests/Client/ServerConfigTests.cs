@@ -9,7 +9,7 @@
 
 using System;
 using FluentAssertions;
-using WebClient.Models;
+using RecipeManager.ApplicationCore.Models;
 using Xunit;
 
 namespace RecipeManager.UnitTests.Client

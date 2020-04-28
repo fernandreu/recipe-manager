@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RecipeManager.ApplicationCore.Models;
 using WebClient.Login;
 using WebClient.Models;
 using WebClient.Services;

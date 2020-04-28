@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\..\src\WebClient\WebClient.csproj" />
   </ItemGroup>
 
 </Project>

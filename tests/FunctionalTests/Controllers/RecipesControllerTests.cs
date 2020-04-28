@@ -47,7 +47,7 @@ namespace RecipeManager.FunctionalTests.Controllers
         public async Task GetAllRecipes_SearchByJustIngredientName_ShouldFindRecipes()
         {
             // Arrange / Act
-            var recipes = await TestGetAll($"search={nameof(RecipeResource.Ingredients)} {SearchOperator.Contains} eggs");
+            var recipes = await TestGetAll($"search={nameof(RecipeResource.Ingredients)}+{SearchOperator.Contains}+eggs").ConfigureAwait(false);
 
             // Assert
             Assert.NotEmpty(recipes.Value);
@@ -203,6 +203,7 @@ namespace RecipeManager.FunctionalTests.Controllers
 
         private async Task<PagedCollection<RecipeResource>> TestGetAll(string query = null)
         {
+            Console.WriteLine($"Query: {query}");
             var httpResponse = await client.GetAsync("/recipes" + (query != null ? $"?{query}" : string.Empty));
             httpResponse.EnsureSuccessStatusCode();
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();

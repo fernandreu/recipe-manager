@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Web;
 
-namespace WebClient.Models
+namespace RecipeManager.ApplicationCore.Models
 {
     public class ServerConfig
     {
