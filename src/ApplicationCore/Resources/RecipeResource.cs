@@ -6,7 +6,7 @@ namespace RecipeManager.ApplicationCore.Resources
     {
         public string Title { get; set; } = string.Empty;
         
-        public IReadOnlyCollection<IngredientResource>? Ingredients { get; set; }
+        public ICollection<IngredientResource>? Ingredients { get; set; }
 
         public string? Details { get; set; }
     }

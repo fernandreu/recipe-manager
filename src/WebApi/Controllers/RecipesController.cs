@@ -65,7 +65,7 @@ namespace RecipeManager.WebApi.Controllers
 
         [HttpPost(Name = nameof(CreateRecipe))]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<RecipeResource>> CreateRecipe(RecipeResource model)
+        public async Task<ActionResult<RecipeResource>> CreateRecipe([FromBody] RecipeResource model)
         {
             var result = await recipeService.CreateAsync(model).ConfigureAwait(false);
             return result;

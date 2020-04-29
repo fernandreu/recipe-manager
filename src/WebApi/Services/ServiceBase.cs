@@ -69,7 +69,8 @@ namespace RecipeManager.WebApi.Services
             var mapper = MappingConfiguration.CreateMapper();
             var entity = mapper.Map<TEntity>(model);
             entity.Id = Guid.NewGuid();
-            await Context.Set<TEntity>().AddAsync(entity);
+            await Context.Set<TEntity>().AddAsync(entity).ConfigureAwait(false);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
             model.Id = entity.Id;
             return mapper.Map<TResource>(entity);
         }
