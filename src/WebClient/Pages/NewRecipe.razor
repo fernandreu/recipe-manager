@@ -1,0 +1,67 @@
+﻿@page "/new-recipe"
+@using RecipeManager.ApplicationCore.Models
+@using RecipeManager.ApplicationCore.Resources
+@inject HttpClient Http
+@inject ServerConfig ServerConfig
+
+<h1>Create New Recipe</h1>
+
+Add a new recipe to the database.
+
+<p>
+    <MatButton Label="Add Ingredient" Raised="true" OnClick="@AddIngredient" Icon="@MatIconNames.Add" />
+    <MatButton Label="Create Recipe" Raised="true" OnClick="@CreateRecipeAsync" Icon="@MatIconNames.Add_box" />
+</p>
+
+<p>@StatusMessage</p>
+
+<MatCard Class="mat-elevation-z3">
+    <MatTextField @bind-Value="@Recipe.Title" Label="Title" Style="margin: 20px;"/>
+    
+    <MatTextField @bind-Value="@Recipe.Details" Label="Details" TextArea="true" Style="margin: 20px"/>
+    
+    <MatTable Items="@Recipe.Ingredients" ShowPaging="false">
+        <MatTableHeader>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Units</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td style="padding: 0"><MatTextField @bind-Value="@context.Name" TValue="string" FullWidth="true" Required="true"/></td>
+            <td style="padding: 0"><MatTextField @bind-Value="@context.Quantity" TValue="double" FullWidth="true" Required="true"/></td>
+            <td style="padding: 0"><MatTextField @bind-Value="@context.Units" TValue="string" FullWidth="true" /></td>
+        </MatTableRow>
+    </MatTable>
+    
+</MatCard>
+
+@code
+{
+    private RecipeResource Recipe { get; } = new RecipeResource()
+    {
+        Ingredients = new List<IngredientResource>(),
+    };
+    
+    private string StatusMessage { get; set; }
+
+    private void AddIngredient()
+    {
+        Recipe.Ingredients?.Add(new IngredientResource());
+        StateHasChanged();
+    }
+
+    private async Task CreateRecipeAsync()
+    {
+        var uri = ServerConfig.UrlTo("recipes");
+
+        try
+        {
+            var created = await Http.PostJsonAsync<RecipeResource>(uri.ToString(), Recipe);
+            StatusMessage = $"Recipe created with ID: {created.Id}";
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
+}

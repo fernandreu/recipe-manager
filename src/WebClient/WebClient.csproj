@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Update="Pages\NewRecipe.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
