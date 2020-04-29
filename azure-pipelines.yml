@@ -110,6 +110,7 @@ jobs:
 
   - task: CopyFilesOverSSH@0
     displayName: Transfer Update Script
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       sshEndpoint: 'rpi'
       contents: 'update-service.sh'
@@ -118,6 +119,7 @@ jobs:
 
   - task: SSH@0
     displayName: Update Service
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       sshEndpoint: 'rpi'
       runOptions: 'inline'
@@ -175,6 +177,7 @@ jobs:
       git commit -m "Create build $(Build.BuildId)"
       git push -f https://%PAT%@github.com/fernandreu/recipe-manager.git gh-pages
     displayName: 'Publish to GitHub Pages'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     env:
       PAT: $(GitHubPAT)
       NAME: $(GitHubName)
