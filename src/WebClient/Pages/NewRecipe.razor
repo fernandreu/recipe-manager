@@ -15,10 +15,10 @@ Add a new recipe to the database.
 
 <p>@StatusMessage</p>
 
-<MatCard Class="mat-elevation-z3">
-    <MatTextField @bind-Value="@Recipe.Title" Label="Title" Style="margin: 20px;"/>
+<MatCard Style="margin: 20px; padding: 20px;" Class="mat-elevation-z3">
+    <MatTextField @bind-Value="@Recipe.Title" Label="Title" Style="margin: 20px 0;"/>
     
-    <MatTextField @bind-Value="@Recipe.Details" Label="Details" TextArea="true" Style="margin: 20px"/>
+    <MatTextField @bind-Value="@Recipe.Details" Label="Details" TextArea="true" Style="margin: 20px 0;"/>
     
     <MatTable Items="@Recipe.Ingredients" ShowPaging="false">
         <MatTableHeader>
@@ -39,7 +39,10 @@ Add a new recipe to the database.
 {
     private RecipeResource Recipe { get; } = new RecipeResource()
     {
-        Ingredients = new List<IngredientResource>(),
+        Ingredients = new List<IngredientResource>
+        {
+            new IngredientResource(),
+        },
     };
     
     private string StatusMessage { get; set; }
