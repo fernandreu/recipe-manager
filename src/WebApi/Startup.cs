@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
 using RecipeManager.Infrastructure.Extensions;
@@ -39,6 +40,7 @@ namespace RecipeManager.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
+            services.Configure<AdminOptions>(Configuration.GetSection("AdminOptions"));
 
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IUserService, UserService>();

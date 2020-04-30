@@ -116,5 +116,16 @@ namespace RecipeManager.WebApi.Services
             var mapper = MappingConfiguration.CreateMapper();
             return mapper.Map<TResource>(entity);
         }
+
+        public async Task<int> DeleteAllAsync()
+        {
+            var entities = await Context.Set<TEntity>()
+                .IncludeAll(false) // This will remove some foreign key constraint errors
+                .ToListAsync()
+                .ConfigureAwait(false);
+            Context.Set<TEntity>().RemoveRange(entities);
+            await Context.SaveChangesAsync().ConfigureAwait(false);
+            return entities.Count;
+        }
     }
 }

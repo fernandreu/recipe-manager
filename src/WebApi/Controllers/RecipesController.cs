@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Specifications;
@@ -20,12 +21,16 @@ namespace RecipeManager.WebApi.Controllers
 
         private readonly PagingOptions defaultPagingOptions;
 
+        private readonly AdminOptions adminOptions;
+        
         public RecipesController(
             IRecipeService recipeService,
-            IOptions<PagingOptions> defaultPagingOptionsWrapper)
+            IOptions<PagingOptions> defaultPagingOptionsWrapper,
+            IOptions<AdminOptions> adminOptions)
         {
             this.recipeService = recipeService;
             defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
+            this.adminOptions = adminOptions?.Value ?? new AdminOptions();
         }
         
         [HttpGet(Name = nameof(ListAllRecipes))]
@@ -83,6 +88,24 @@ namespace RecipeManager.WebApi.Controllers
             }
 
             return result;
+        }
+
+        [HttpDelete(Name = nameof(DeleteAllRecipes))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
+        public async Task<ActionResult<DeleteResult>> DeleteAllRecipes([FromBody] string password)
+        {
+            if (password != adminOptions.Password)
+            {
+                return Forbid();
+            }
+
+            var count = await recipeService.DeleteAllAsync().ConfigureAwait(false);
+            return new DeleteResult
+            {
+                Successful = true,
+                DeleteCount = count,
+            };
         }
     }
 }

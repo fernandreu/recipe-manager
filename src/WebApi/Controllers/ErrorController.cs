@@ -11,6 +11,7 @@ namespace RecipeManager.WebApi.Controllers
     {
         [HttpGet("{statusCode}", Name = nameof(HandleStatusCode))]
         [HttpPut("{statusCode}", Name = nameof(HandleStatusCode))]
+        [HttpDelete("{statusCode}", Name = nameof(HandleStatusCode))]
         public ActionResult<ApiError> HandleStatusCode(int statusCode)
         {
             var parsedCode = (HttpStatusCode)statusCode;

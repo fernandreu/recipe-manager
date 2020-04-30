@@ -17,5 +17,7 @@ namespace RecipeManager.WebApi.Interfaces
         Task<TResource> CreateAsync(TResource model);
 
         Task<TResource?> UpdateAsync(Guid id, TResource model);
+
+        Task<int> DeleteAllAsync();
     }
 }
