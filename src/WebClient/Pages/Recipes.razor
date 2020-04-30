@@ -20,9 +20,9 @@ Search recipes by the ingredients they contain.
 {
     foreach (var recipe in Results.Value)
     {
-        <MatCard Style="margin: 8px; padding: 8px;" Stroke="true">
+        <MatCard Class="mat-elevation-z3" Style="margin: 8px; padding: 8px;" Stroke="true">
             <h1>@recipe.Title</h1>
-            <MatTable Items="@recipe.Ingredients">
+            <MatTable Items="@recipe.Ingredients" ShowPaging="false">
                 <MatTableHeader>
                     <th>Name</th>
                     <th>Quantity</th>
