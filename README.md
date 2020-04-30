@@ -24,7 +24,7 @@ https://fernando.andreu.info/recipe-manager/
 
 To test the REST API of the backend server, visit the following link:
 
-https://recipemanager.azurewebsites.net
+https://fernandreu.ddns.net:5001
 
 Check the [wiki](https://github.com/fernandreu/recipe-manager/wiki/API-Documentation) to know how to interrogate the API.
 
