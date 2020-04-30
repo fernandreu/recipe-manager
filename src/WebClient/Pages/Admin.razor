@@ -1,0 +1,52 @@
+﻿@page "/admin"
+@using RecipeManager.ApplicationCore.Models
+@inject HttpClient Http
+@inject ServerConfig ServerConfig
+
+<h1>Admin Actions</h1>
+
+<p>
+
+    <MatSelect Label="Select an action" @bind-Value="@SelectedAction">
+        <MatOptionString ></MatOptionString>
+        <MatOptionString Value="@("reset")">Remove all recipes and their ingredients</MatOptionString>
+    </MatSelect>
+    <MatTextField @bind-Value="@Password" Label="Password" Type="Password"/>
+    <MatButton Label="Send" Raised="true" OnClick="@SendActionAsync" Icon="@MatIconNames.Send"/>
+</p>
+
+<p>@StatusMessage</p>
+
+@code
+{
+    private string SelectedAction { get; set; }
+
+    private string Password { get; set; }
+    
+    private string StatusMessage { get; set; }
+
+    private Task SendActionAsync()
+    {
+        if (SelectedAction == "reset")
+        {
+            return ResetRecipesAsync();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task ResetRecipesAsync()
+    {
+        var uri = ServerConfig.UrlTo("recipes");
+
+        try
+        {
+            var result = await Http.SendJsonAsync<DeleteResult>(HttpMethod.Delete, uri.ToString(), Password);
+            StatusMessage = $"Successful: {result.Successful}; Deleted: {result.DeleteCount}";
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
+}
