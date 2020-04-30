@@ -45,10 +45,11 @@ namespace RecipeManager.ApplicationCore.Search
             return result;
         }
 
-        [SuppressMessage("ReSharper", "CA1307", Justification = "Ignoring case would make server-side evaluation impossible")]
+        [SuppressMessage("ReSharper", "CA1307", Justification = "Using case-insensitive Contains would make server-side evaluation impossible")]
+        [SuppressMessage("ReSharper", "CA1304", Justification = "Using ToUpperInvariant() would make server-side evaluation impossible")]
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.Contains(ingredient);
+            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.ToUpper().Contains(ingredient.ToUpper());
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
             var genericAny = any.MakeGenericMethod(typeof(RecipeIngredient));
 
