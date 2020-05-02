@@ -29,18 +29,17 @@ namespace RecipeManager.ApplicationCore.Search
 
             result.ServerSide = GenerateContainsExpression(left, searchTerm.Name);
 
-            if (searchTerm.Quantity == null)
+            if (searchTerm.Quantity == null || right == null)
             {
                 return result;
             }
 
-            // The expression is: Items.IsMatch(right), with Items being IEnumerable<Ingredient>
-            // However, IsMatch is an extension method, so in reality the expression is: IngredientExtensions.IsMatch(Items, right)
-            var isMatchMethod = typeof(IngredientExtensions).GetMethod(nameof(IngredientExtensions.IsMatch), new[] { typeof(IEnumerable<IIngredient>), typeof(string) });
-            if (isMatchMethod != null && right != null)
-            {
-                result.ClientSide = Expression.Call(isMatchMethod, left, right);
-            }
+            var genericType = left.Type.GetGenericArguments()[0];
+            
+            result.ClientSide = Expression.Call(
+                typeof(IngredientExtensions),
+                nameof(IngredientExtensions.IsMatch),
+                new[] { genericType }, left, right);
 
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -41,12 +42,12 @@ namespace RecipeManager.Infrastructure.Extensions
             specification ??= new Specification<TDest>();
             var destSpec = mapper.Map<Specification<TSource>>(specification);
             
-            var query = destSpec.ServerCriteria.Aggregate(
+            var query = destSpec.ServerCriteria?.Aggregate(
                 self, 
                 (current, criterion) => current.Where(criterion)) ?? self;
 
             IOrderedQueryable<TSource>? ordered = null;
-            foreach (var clause in destSpec.OrderByClauses)
+            foreach (var clause in destSpec.OrderByClauses ?? Enumerable.Empty<OrderByClause<TSource>>())
             {
                 if (ordered == null)
                 {
@@ -62,10 +63,10 @@ namespace RecipeManager.Infrastructure.Extensions
 
             // TODO: Cache compile calls. If no expression analysis is done, ClientCauses could store them directly instead of the expressions
             var raw = await query.ToListAsync().ConfigureAwait(false);
-            var filtered = destSpec.ClientCriteria.Aggregate(
+            var filtered = destSpec.ClientCriteria?.Aggregate(
                 (IEnumerable<TSource>)raw,
                 (current, criterion) => current.Where(criterion.Compile()))
-                .ToArray();
+                .ToArray() ?? Array.Empty<TSource>();
 
             var result = new PagedResults<TSource>
             {
@@ -74,7 +75,6 @@ namespace RecipeManager.Infrastructure.Extensions
 
             if (specification.IsPagingEnabled)
             {
-
                 filtered = filtered
                     .Skip(specification.Skip)
                     .Take(specification.Take)

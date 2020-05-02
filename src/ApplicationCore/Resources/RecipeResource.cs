@@ -10,7 +10,6 @@ namespace RecipeManager.ApplicationCore.Resources
         [Searchable]
         public string Title { get; set; } = string.Empty;
         
-        [IncludeInAllQueries]
         [SearchableIngredients]
         [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Compromise solution for EFCore")]
         public ICollection<IngredientResource>? Ingredients { get; set; }

@@ -5,14 +5,8 @@ namespace RecipeManager.ApplicationCore.Specifications
 {
     public class OrderByClause<T>
     {
-        public OrderByClause(Expression<Func<T, object>> expression, bool descending = false)
-        {
-            Expression = expression;
-            Descending = descending;
-        }
+        public Expression<Func<T, object>>? Expression { get; set; }
 
-        public Expression<Func<T, object>> Expression { get; }
-
-        public bool Descending { get; }
+        public bool Descending { get; set; }
     }
 }

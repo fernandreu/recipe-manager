@@ -12,7 +12,8 @@ namespace RecipeManager.ApplicationCore.Extensions
     /// </summary>
     public static class IngredientExtensions
     {
-        public static bool IsMatch(this IIngredient ingredient, IngredientSearchTerm searchTerm)
+        public static bool IsMatch<T>(this T ingredient, IngredientSearchTerm searchTerm)
+            where T : IIngredient
         {
             if (ingredient == null || searchTerm == null)
             {
@@ -75,10 +76,15 @@ namespace RecipeManager.ApplicationCore.Extensions
             return false;
         }
 
-        public static bool IsMatch(this IEnumerable<IIngredient> ingredients, string query)
+        public static bool IsMatch<T>(this IEnumerable<T> ingredients, string query)
+            where T : IIngredient
         {
+            if (ingredients == null)
+            {
+                return false;
+            }
+            
             var searchTerm = IngredientSearchTerm.Parse(query);
-
             if (searchTerm == null)
             {
                 // TODO: Perhaps this should raise an exception
