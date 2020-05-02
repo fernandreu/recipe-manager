@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.ApplicationCore.Specifications;
+using RecipeManager.Infrastructure.Entities;
+using RecipeManager.Infrastructure.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 

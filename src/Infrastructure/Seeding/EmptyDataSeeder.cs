@@ -11,8 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Helpers;
+using RecipeManager.ApplicationCore.Interfaces;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.Infrastructure.Seeding
 {
@@ -22,12 +23,12 @@ namespace RecipeManager.Infrastructure.Seeding
         
         private ModelBuilder? modelBuilder;
 
-        private IDictionary<Type, ICollection<SingleEntity>>? cache;
+        private IDictionary<Type, ICollection<ISingleEntity>>? cache;
         
         public void SeedData(ModelBuilder builder)
         {
             modelBuilder = builder;
-            cache = new Dictionary<Type, ICollection<SingleEntity>>();
+            cache = new Dictionary<Type, ICollection<ISingleEntity>>();
             Seed();
         }
 
@@ -43,7 +44,7 @@ namespace RecipeManager.Infrastructure.Seeding
         }
         
         protected IEnumerable<T> Get<T>()
-            where T : SingleEntity
+            where T : ISingleEntity
         {
             if (cache == null)
             {
@@ -65,7 +66,7 @@ namespace RecipeManager.Infrastructure.Seeding
         }
 
         protected void Add<T>(params T[] entities)
-            where T : SingleEntity
+            where T : class, ISingleEntity
         {
             if (modelBuilder == null || cache == null)
             {
@@ -74,7 +75,7 @@ namespace RecipeManager.Infrastructure.Seeding
             
             if (!cache.TryGetValue(typeof(T), out var collection))
             {
-                collection = new List<SingleEntity>();
+                collection = new List<ISingleEntity>();
                 cache[typeof(T)] = collection;
             }
             
@@ -119,13 +120,13 @@ namespace RecipeManager.Infrastructure.Seeding
             }
         }
         
-        protected void Add(params User[] users)
+        protected void Add(params ApplicationUser[] users)
         {
             foreach (var user in users)
             {
                 var ingredients = user.Ingredients;
                 user.Ingredients = null;
-                Add<User>(user);
+                Add<ApplicationUser>(user);
 
                 if (ingredients == null)
                 {

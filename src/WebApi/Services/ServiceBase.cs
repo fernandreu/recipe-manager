@@ -2,19 +2,19 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.Infrastructure.Data;
+using RecipeManager.Infrastructure.Entities;
 using RecipeManager.Infrastructure.Extensions;
+using RecipeManager.Infrastructure.Specifications;
 using RecipeManager.WebApi.Interfaces;
 
 namespace RecipeManager.WebApi.Services
 {
     public class ServiceBase<TEntity, TResource> : IAsyncService<TEntity, TResource>
-        where TEntity : SingleEntity
+        where TEntity : class, ISingleEntity
         where TResource : BaseResource
     {
         protected AppDbContext Context { get; }
@@ -42,7 +42,7 @@ namespace RecipeManager.WebApi.Services
             return mapper.Map<TResource>(entity);
         }
         
-        public async Task<PagedResults<TResource>> ListAsync(ISpecification<TEntity> spec)
+        public async Task<PagedResults<TResource>> ListAsync(Specification<TEntity> spec)
         {
             var entities = await Context.Set<TEntity>()
                 .IncludeAll(false)

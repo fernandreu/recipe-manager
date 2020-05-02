@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.ApplicationCore.Specifications;
+using RecipeManager.Infrastructure.Entities;
+using RecipeManager.Infrastructure.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -34,9 +34,9 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<PagedCollection<UserResource>>> ListAllUsers(
-            [FromQuery] SpecificationOptions<User> options)
+            [FromQuery] SpecificationOptions<ApplicationUser> options)
         {
-            options ??= new SpecificationOptions<User>();
+            options ??= new SpecificationOptions<ApplicationUser>();
             options.Paging ??= defaultPagingOptions;
             options.Paging.Offset ??= defaultPagingOptions.Offset;
             options.Paging.Limit ??= defaultPagingOptions.Limit;

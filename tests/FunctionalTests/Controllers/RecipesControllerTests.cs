@@ -10,19 +10,19 @@
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-
-using RecipeManager.ApplicationCore.Search;
-
+using RecipeManager.Infrastructure.Search;
 using UnitsNet;
 
 using Xunit;
 
 namespace RecipeManager.FunctionalTests.Controllers
 {
+    [SuppressMessage("ReSharper", "CA1707", Justification = "Test methods can contain underscores")]
     public class RecipesControllerTests : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient client;

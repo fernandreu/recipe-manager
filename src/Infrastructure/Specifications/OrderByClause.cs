@@ -1,0 +1,19 @@
+﻿using System;
+using System.Linq.Expressions;
+
+namespace RecipeManager.Infrastructure.Specifications
+{
+    public class OrderByClause<T>
+    {
+        public OrderByClause(Expression<Func<T, object>> expression, bool descending = false)
+        {
+            Expression = expression;
+            Descending = descending;
+        }
+
+        public Expression<Func<T, object>> Expression { get; }
+
+        public bool Descending { get; }
+
+    }
+}

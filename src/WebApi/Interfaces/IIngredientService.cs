@@ -1,5 +1,5 @@
-﻿using RecipeManager.ApplicationCore.Entities;
-using RecipeManager.ApplicationCore.Resources;
+﻿using RecipeManager.ApplicationCore.Resources;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Interfaces
 {

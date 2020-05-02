@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using RecipeManager.ApplicationCore.Models;
 using WebClient.Login;
-using WebClient.Models;
 
 namespace WebClient.Services
 {
