@@ -1,6 +1,6 @@
-﻿using RecipeManager.Infrastructure.Search;
+﻿using RecipeManager.ApplicationCore.Search;
 
-namespace RecipeManager.Infrastructure.Attributes
+namespace RecipeManager.ApplicationCore.Attributes
 {
     // TODO: Both this and the corresponding expression provider should be made as generic as possible
     // Ideally, any item property of any IEnumerable<T> collection could be the target of a search.

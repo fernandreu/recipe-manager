@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Models;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class DecimalToIntSearchExpressionProvider : SearchExpressionProvider
     {

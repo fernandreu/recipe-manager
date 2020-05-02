@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Models;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Extensions;
+using RecipeManager.ApplicationCore.Resources;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class IngredientExpressionProvider : SearchExpressionProvider
     {
@@ -29,18 +29,17 @@ namespace RecipeManager.Infrastructure.Search
 
             result.ServerSide = GenerateContainsExpression(left, searchTerm.Name);
 
-            if (searchTerm.Quantity == null)
+            if (searchTerm.Quantity == null || right == null)
             {
                 return result;
             }
 
-            // The expression is: Items.IsMatch(right), with Items being IEnumerable<Ingredient>
-            // However, IsMatch is an extension method, so in reality the expression is: IngredientExtensions.IsMatch(Items, right)
-            var isMatchMethod = typeof(IngredientExtensions).GetMethod(nameof(IngredientExtensions.IsMatch), new[] { typeof(IEnumerable<IIngredient>), typeof(string) });
-            if (isMatchMethod != null && right != null)
-            {
-                result.ClientSide = Expression.Call(isMatchMethod, left, right);
-            }
+            var genericType = left.Type.GetGenericArguments()[0];
+            
+            result.ClientSide = Expression.Call(
+                typeof(IngredientExtensions),
+                nameof(IngredientExtensions.IsMatch),
+                new[] { genericType }, left, right);
 
             return result;
         }
@@ -49,9 +48,9 @@ namespace RecipeManager.Infrastructure.Search
         [SuppressMessage("ReSharper", "CA1304", Justification = "Using ToUpperInvariant() would make server-side evaluation impossible")]
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.ToUpper().Contains(ingredient.ToUpper());
+            Expression<Func<IngredientResource, bool>> predicate = x => x.Name.ToUpper().Contains(ingredient.ToUpper());
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
-            var genericAny = any.MakeGenericMethod(typeof(RecipeIngredient));
+            var genericAny = any.MakeGenericMethod(typeof(IngredientResource));
 
             return Expression.Call(genericAny, left, predicate);
         }

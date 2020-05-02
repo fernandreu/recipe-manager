@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Search;
-using RecipeManager.Infrastructure.Sort;
+using RecipeManager.ApplicationCore.Search;
+using RecipeManager.ApplicationCore.Sort;
 
-namespace RecipeManager.Infrastructure.Specifications
+namespace RecipeManager.ApplicationCore.Specifications
 {
-    public class Specification<T> where T : ISingleEntity
+    [SuppressMessage("ReSharper", "CA2227")]
+    public sealed class Specification<T> where T : ISingleEntity
     {
-        public ICollection<Expression<Func<T, bool>>> ServerCriteria { get; } = new List<Expression<Func<T, bool>>>();
+        public Specification()
+        {
+        }
+        
+        public Specification(SpecificationOptions<T> options)
+        {
+            ApplyOptions(options);
+        }
+        
+        public ICollection<Expression<Func<T, bool>>>? ServerCriteria { get; set; }
 
-        public ICollection<Expression<Func<T, bool>>> ClientCriteria { get; } = new List<Expression<Func<T, bool>>>();
+        public ICollection<Expression<Func<T, bool>>>? ClientCriteria { get; set; }
 
-        public ICollection<OrderByClause<T>> OrderByClauses { get; } = new List<OrderByClause<T>>();
+        public ICollection<OrderByClause<T>>? OrderByClauses { get; set; }
 
-        public int Take { get; private set; }
+        public int Take { get; set; }
 
-        public int Skip { get; private set; }
+        public int Skip { get; set; }
 
-        public bool IsPagingEnabled { get; private set; } = false;
+        public bool IsPagingEnabled { get; set; }
 
         public Specification<T> Where(Expression<Func<T, bool>> expression)
         {
+            ClientCriteria ??= new List<Expression<Func<T, bool>>>();
             // TODO: Analyze the expression to determine if it could be evaluated server-side
             ClientCriteria.Add(expression);
             return this;
@@ -31,12 +42,17 @@ namespace RecipeManager.Infrastructure.Specifications
 
         public Specification<T> OrderBy(Expression<Func<T, object>> expression, bool descending = false)
         {
-            var clause = new OrderByClause<T>(expression, descending);
+            var clause = new OrderByClause<T>
+            {
+                Expression = expression,
+                Descending = descending,
+            };
             return OrderBy(clause);
         }
 
         public Specification<T> OrderBy(OrderByClause<T> clause)
         {
+            OrderByClauses ??= new List<OrderByClause<T>>();
             OrderByClauses.Add(clause);
             return this;
         }
@@ -49,7 +65,7 @@ namespace RecipeManager.Infrastructure.Specifications
             return this;
         }
 
-        protected void ApplyOptions(SpecificationOptions<T> options)
+        private void ApplyOptions(SpecificationOptions<T> options)
         {
             new SearchOptionsProcessor<T>(options?.Search).Apply(this);
             new SortOptionsProcessor<T>(options?.OrderBy).Apply(this);

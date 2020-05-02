@@ -6,8 +6,7 @@ using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -37,14 +36,14 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<PagedCollection<RecipeResource>>> ListAllRecipes(
-            [FromQuery] SpecificationOptions<Recipe> options)
+            [FromQuery] SpecificationOptions<RecipeResource> options)
         {
-            options ??= new SpecificationOptions<Recipe>();
+            options ??= new SpecificationOptions<RecipeResource>();
             options.Paging ??= defaultPagingOptions;
             options.Paging.Offset ??= defaultPagingOptions.Offset;
             options.Paging.Limit ??= defaultPagingOptions.Limit;
 
-            var spec = new RecipeSpecification(options);
+            var spec = new Specification<RecipeResource>(options);
             var recipes = await recipeService.ListAsync(spec).ConfigureAwait(false);
 
             return PagedCollectionHelper.Create(

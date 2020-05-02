@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -34,14 +33,14 @@ namespace RecipeManager.WebApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<PagedCollection<UserResource>>> ListAllUsers(
-            [FromQuery] SpecificationOptions<ApplicationUser> options)
+            [FromQuery] SpecificationOptions<UserResource> options)
         {
-            options ??= new SpecificationOptions<ApplicationUser>();
+            options ??= new SpecificationOptions<UserResource>();
             options.Paging ??= defaultPagingOptions;
             options.Paging.Offset ??= defaultPagingOptions.Offset;
             options.Paging.Limit ??= defaultPagingOptions.Limit;
 
-            var spec = new UserSpecification(options);
+            var spec = new Specification<UserResource>(options);
             var users = await userService.ListAsync(spec).ConfigureAwait(false);
 
             return PagedCollectionHelper.Create(

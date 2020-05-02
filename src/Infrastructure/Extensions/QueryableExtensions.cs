@@ -1,20 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RecipeManager.ApplicationCore.Attributes;
 using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 
 namespace RecipeManager.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {
-        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery)
+        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> self, bool isSingleResultQuery)
             where T : class, ISingleEntity
         {
             foreach (var prop in typeof(T).GetTypeInfo().GetAllProperties())
@@ -27,24 +28,26 @@ namespace RecipeManager.Infrastructure.Extensions
 
                 if (attribute is IncludeInAllQueriesAttribute || (attribute is IncludeInSingleQueriesAttribute && isSingleResultQuery))
                 {
-                    query = query.Include(prop.Name);
+                    self = self.Include(prop.Name);
                 }
             }
 
-            return query;
+            return self;
         }
 
-        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, Specification<T>? specification)
-            where T : ISingleEntity
+        public static async Task<PagedResults<TSource>> ApplyAsync<TSource, TDest>(this IQueryable<TSource> self, Specification<TDest>? specification, IMapper mapper)
+            where TSource : ISingleEntity
+            where TDest : ISingleEntity
         {
-            specification ??= new Specification<T>();
+            specification ??= new Specification<TDest>();
+            var destSpec = mapper.Map<Specification<TSource>>(specification);
+            
+            var query = destSpec.ServerCriteria?.Aggregate(
+                self, 
+                (current, criterion) => current.Where(criterion)) ?? self;
 
-            var query = specification.ServerCriteria.Aggregate(
-                inputQuery, 
-                (current, criterion) => current.Where(criterion)) ?? inputQuery;
-
-            IOrderedQueryable<T>? ordered = null;
-            foreach (var clause in specification.OrderByClauses)
+            IOrderedQueryable<TSource>? ordered = null;
+            foreach (var clause in destSpec.OrderByClauses ?? Enumerable.Empty<OrderByClause<TSource>>())
             {
                 if (ordered == null)
                 {
@@ -60,19 +63,18 @@ namespace RecipeManager.Infrastructure.Extensions
 
             // TODO: Cache compile calls. If no expression analysis is done, ClientCauses could store them directly instead of the expressions
             var raw = await query.ToListAsync().ConfigureAwait(false);
-            var filtered = specification.ClientCriteria.Aggregate(
-                (IEnumerable<T>)raw,
+            var filtered = destSpec.ClientCriteria?.Aggregate(
+                (IEnumerable<TSource>)raw,
                 (current, criterion) => current.Where(criterion.Compile()))
-                .ToArray();
+                .ToArray() ?? Array.Empty<TSource>();
 
-            var result = new PagedResults<T>
+            var result = new PagedResults<TSource>
             {
                 TotalSize = filtered.Length
             };
 
             if (specification.IsPagingEnabled)
             {
-
                 filtered = filtered
                     .Skip(specification.Skip)
                     .Take(specification.Take)

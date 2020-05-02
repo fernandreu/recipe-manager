@@ -6,10 +6,9 @@ using System.Reflection;
 using RecipeManager.ApplicationCore.Attributes;
 using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 
-namespace RecipeManager.Infrastructure.Sort
+namespace RecipeManager.ApplicationCore.Sort
 {
     public class SortOptionsProcessor<T> where T : ISingleEntity
     {
@@ -126,7 +125,7 @@ namespace RecipeManager.Infrastructure.Sort
                 throw new ArgumentNullException(nameof(spec));
             }
 
-            spec.OrderByClauses.Clear();
+            spec.OrderByClauses = new List<OrderByClause<T>>();
 
             var terms = GetValidTerms().ToArray();
 
@@ -154,7 +153,11 @@ namespace RecipeManager.Infrastructure.Sort
                     continue;
                 }
 
-                spec.OrderByClauses.Add(new OrderByClause<T>(keySelector, term.Descending));
+                spec.OrderByClauses.Add(new OrderByClause<T>
+                {
+                    Expression = keySelector,
+                    Descending = term.Descending,
+                });
             }
         }
 

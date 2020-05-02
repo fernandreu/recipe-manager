@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RecipeManager.ApplicationCore.Attributes;
 using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Attributes;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchOptionsProcessor<T> where T : ISingleEntity
     {
@@ -98,8 +98,8 @@ namespace RecipeManager.Infrastructure.Search
             }
 
             // TODO: Split these between client and server criteria depending on the type of expression
-            spec.ServerCriteria.Clear();
-            spec.ClientCriteria.Clear();
+            spec.ServerCriteria = new List<Expression<Func<T, bool>>>();
+            spec.ClientCriteria = new List<Expression<Func<T, bool>>>();
             
             var terms = GetValidTerms().ToArray();
             if (!terms.Any())
@@ -129,12 +129,14 @@ namespace RecipeManager.Infrastructure.Search
                 if (comparisonExpression.ServerSide != null)
                 {
                     var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ServerSide);
+                    spec.ServerCriteria ??= new List<Expression<Func<T, bool>>>();
                     spec.ServerCriteria.Add(lambdaExpression);
                 }
 
                 if (comparisonExpression.ClientSide != null)
                 {
                     var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ClientSide);
+                    spec.ClientCriteria ??= new List<Expression<Func<T, bool>>>();
                     spec.ClientCriteria.Add(lambdaExpression);
                 }
             }
@@ -148,7 +150,7 @@ namespace RecipeManager.Infrastructure.Search
                 .Select(p => new SearchTerm
                 {
                     Name = p.Name,
-                    ExpressionProvider = p.GetCustomAttribute<SearchableAttribute>().ExpressionProvider,
+                    ExpressionProvider = p.GetCustomAttribute<SearchableAttribute>().ExpressionProvider ?? new SearchExpressionProvider(),
                 });
         }
     }

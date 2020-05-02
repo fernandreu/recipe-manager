@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using RecipeManager.ApplicationCore.Models;
 
-namespace RecipeManager.Infrastructure.Interfaces
+namespace RecipeManager.ApplicationCore.Interfaces
 {
     public interface ISearchExpressionProvider
     {

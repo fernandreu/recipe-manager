@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RecipeManager.Infrastructure.Extensions;
+using RecipeManager.ApplicationCore.Extensions;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class IngredientSearchTerm
     {

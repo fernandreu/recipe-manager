@@ -5,15 +5,14 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Resources;
+using RecipeManager.ApplicationCore.Specifications;
 using RecipeManager.Infrastructure.Data;
-using RecipeManager.Infrastructure.Entities;
 using RecipeManager.Infrastructure.Extensions;
-using RecipeManager.Infrastructure.Specifications;
 using RecipeManager.WebApi.Interfaces;
 
 namespace RecipeManager.WebApi.Services
 {
-    public class ServiceBase<TEntity, TResource> : IAsyncService<TEntity, TResource>
+    public class ServiceBase<TEntity, TResource> : IAsyncService<TResource>
         where TEntity : class, ISingleEntity
         where TResource : BaseResource
     {
@@ -42,14 +41,14 @@ namespace RecipeManager.WebApi.Services
             return mapper.Map<TResource>(entity);
         }
         
-        public async Task<PagedResults<TResource>> ListAsync(Specification<TEntity> spec)
+        public async Task<PagedResults<TResource>> ListAsync(Specification<TResource> spec)
         {
+            var mapper = MappingConfiguration.CreateMapper();
             var entities = await Context.Set<TEntity>()
                 .IncludeAll(false)
-                .ApplyAsync(spec)
+                .ApplyAsync(spec, mapper)
                 .ConfigureAwait(false);
 
-            var mapper = MappingConfiguration.CreateMapper();
             var items = entities.Items.Select(x => mapper.Map<TResource>(x)).ToArray();
             
             return new PagedResults<TResource>

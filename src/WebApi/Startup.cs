@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text;
 using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +79,13 @@ namespace RecipeManager.WebApi
                 options.LowercaseUrls = true;
             });
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(
+                cfg =>
+                {
+                    cfg.AddExpressionMapping();
+                    cfg.AddProfile<MappingProfile>();
+                },
+                Array.Empty<Assembly>());
 
             services.AddApiVersioning(options =>
             {
