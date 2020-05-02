@@ -9,8 +9,8 @@
 
 using System;
 using System.Linq;
+using RecipeManager.ApplicationCore.Sort;
 using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Sort;
 using Xunit;
 
 namespace RecipeManager.UnitTests.Infrastructure

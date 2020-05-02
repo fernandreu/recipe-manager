@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RecipeManager.ApplicationCore.Attributes;
 using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Attributes;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchOptionsProcessor<T> where T : ISingleEntity
     {
@@ -148,7 +148,7 @@ namespace RecipeManager.Infrastructure.Search
                 .Select(p => new SearchTerm
                 {
                     Name = p.Name,
-                    ExpressionProvider = p.GetCustomAttribute<SearchableAttribute>().ExpressionProvider,
+                    ExpressionProvider = p.GetCustomAttribute<SearchableAttribute>().ExpressionProvider ?? new SearchExpressionProvider(),
                 });
         }
     }

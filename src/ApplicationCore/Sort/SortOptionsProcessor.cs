@@ -6,10 +6,9 @@ using System.Reflection;
 using RecipeManager.ApplicationCore.Attributes;
 using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Specifications;
+using RecipeManager.ApplicationCore.Specifications;
 
-namespace RecipeManager.Infrastructure.Sort
+namespace RecipeManager.ApplicationCore.Sort
 {
     public class SortOptionsProcessor<T> where T : ISingleEntity
     {

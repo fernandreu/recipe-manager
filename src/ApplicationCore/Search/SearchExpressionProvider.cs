@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Models;
-using RecipeManager.Infrastructure.Extensions;
-using RecipeManager.Infrastructure.Interfaces;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchExpressionProvider : ISearchExpressionProvider
     {

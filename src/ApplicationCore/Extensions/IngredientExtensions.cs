@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using RecipeManager.ApplicationCore.Interfaces;
-using RecipeManager.Infrastructure.Search;
+using RecipeManager.ApplicationCore.Search;
 using UnitsNet;
 
-namespace RecipeManager.Infrastructure.Extensions
+namespace RecipeManager.ApplicationCore.Extensions
 {
     /// <summary>
     /// Defines all instance methods that are common to both ingredient resources and ingredient entities

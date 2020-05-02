@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Paging;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Search;
-using RecipeManager.Infrastructure.Sort;
+using RecipeManager.ApplicationCore.Search;
+using RecipeManager.ApplicationCore.Sort;
 
-namespace RecipeManager.Infrastructure.Specifications
+namespace RecipeManager.ApplicationCore.Specifications
 {
     public class SpecificationOptions<T> : IValidatableObject
         where T : ISingleEntity

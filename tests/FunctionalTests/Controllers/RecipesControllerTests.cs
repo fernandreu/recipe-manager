@@ -11,11 +11,12 @@ using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.WebApi;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using FluentAssertions;
 using Newtonsoft.Json;
-using RecipeManager.Infrastructure.Search;
+using RecipeManager.ApplicationCore.Search;
 using UnitsNet;
 
 using Xunit;
@@ -206,8 +207,10 @@ namespace RecipeManager.FunctionalTests.Controllers
             var httpResponse = await client.GetAsync("/recipes" + (query != null ? $"?{query}" : string.Empty));
             
             Console.WriteLine($"Status code: {httpResponse.StatusCode}");
-            httpResponse.EnsureSuccessStatusCode();
+
             var stringResponse = await httpResponse.Content.ReadAsStringAsync();
+            httpResponse.StatusCode.Should().Be(HttpStatusCode.OK, $"it should not be {(int) httpResponse.StatusCode} ({httpResponse.StatusCode}): {stringResponse}");
+            
             return JsonConvert.DeserializeObject<PagedCollection<RecipeResource>>(stringResponse);
         }
     }

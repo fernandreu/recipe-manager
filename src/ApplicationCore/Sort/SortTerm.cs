@@ -1,4 +1,4 @@
-﻿namespace RecipeManager.Infrastructure.Sort
+﻿namespace RecipeManager.ApplicationCore.Sort
 {
     public class SortTerm
     {

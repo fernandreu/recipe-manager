@@ -1,7 +1,7 @@
 ﻿using System;
-using RecipeManager.Infrastructure.Search;
+using RecipeManager.ApplicationCore.Search;
 
-namespace RecipeManager.Infrastructure.Attributes
+namespace RecipeManager.ApplicationCore.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class SearchableDecimalAttribute : SearchableAttribute

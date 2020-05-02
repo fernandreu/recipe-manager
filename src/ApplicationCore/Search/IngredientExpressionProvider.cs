@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Models;
-using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Extensions;
+using RecipeManager.ApplicationCore.Resources;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class IngredientExpressionProvider : SearchExpressionProvider
     {
@@ -49,9 +49,9 @@ namespace RecipeManager.Infrastructure.Search
         [SuppressMessage("ReSharper", "CA1304", Justification = "Using ToUpperInvariant() would make server-side evaluation impossible")]
         private static Expression GenerateContainsExpression(MemberExpression left, string ingredient)
         {
-            Expression<Func<RecipeIngredient, bool>> predicate = x => x.Name.ToUpper().Contains(ingredient.ToUpper());
+            Expression<Func<IngredientResource, bool>> predicate = x => x.Name.ToUpper().Contains(ingredient.ToUpper());
             var any = typeof(Enumerable).GetMethods().First(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
-            var genericAny = any.MakeGenericMethod(typeof(RecipeIngredient));
+            var genericAny = any.MakeGenericMethod(typeof(IngredientResource));
 
             return Expression.Call(genericAny, left, predicate);
         }

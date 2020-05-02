@@ -1,6 +1,6 @@
-﻿using RecipeManager.Infrastructure.Interfaces;
+﻿using RecipeManager.ApplicationCore.Interfaces;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     public class SearchTerm
     {

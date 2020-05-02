@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RecipeManager.Infrastructure.Search
+namespace RecipeManager.ApplicationCore.Search
 {
     /// <summary>
     /// Contains all possible operators that can be used in a search query

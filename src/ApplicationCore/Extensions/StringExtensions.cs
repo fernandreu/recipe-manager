@@ -1,4 +1,5 @@
 ﻿using System;
+using RecipeManager.ApplicationCore.Search;
 
 namespace RecipeManager.ApplicationCore.Extensions
 {
@@ -10,6 +11,11 @@ namespace RecipeManager.ApplicationCore.Extensions
         public static bool Contains(this string source, string toCheck, StringComparison comp)
         {
             return source != null && toCheck != null && source.IndexOf(toCheck, comp) >= 0;
+        }
+        
+        public static bool Is(this string s, SearchOperator op)
+        {
+            return s?.Equals(op?.Value, StringComparison.OrdinalIgnoreCase) ?? false;
         }
     }
 }

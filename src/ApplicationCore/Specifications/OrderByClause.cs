@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace RecipeManager.Infrastructure.Specifications
+namespace RecipeManager.ApplicationCore.Specifications
 {
     public class OrderByClause<T>
     {
@@ -14,6 +14,5 @@ namespace RecipeManager.Infrastructure.Specifications
         public Expression<Func<T, object>> Expression { get; }
 
         public bool Descending { get; }
-
     }
 }
