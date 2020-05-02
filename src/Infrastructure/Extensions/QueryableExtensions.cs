@@ -4,17 +4,18 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RecipeManager.ApplicationCore.Attributes;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Extensions;
 using RecipeManager.ApplicationCore.Interfaces;
 using RecipeManager.ApplicationCore.Resources;
-using RecipeManager.ApplicationCore.Specifications;
+using RecipeManager.Infrastructure.Entities;
+using RecipeManager.Infrastructure.Specifications;
 
 namespace RecipeManager.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {
-        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery) where T : SingleEntity
+        public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, bool isSingleResultQuery)
+            where T : class, ISingleEntity
         {
             foreach (var prop in typeof(T).GetTypeInfo().GetAllProperties())
             {
@@ -33,7 +34,8 @@ namespace RecipeManager.Infrastructure.Extensions
             return query;
         }
 
-        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, ISpecification<T>? specification) where T : SingleEntity
+        public static async Task<PagedResults<T>> ApplyAsync<T>(this IQueryable<T> inputQuery, Specification<T>? specification)
+            where T : ISingleEntity
         {
             specification ??= new Specification<T>();
 

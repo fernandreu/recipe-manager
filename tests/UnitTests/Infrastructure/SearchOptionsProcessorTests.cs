@@ -9,8 +9,8 @@
 
 using System;
 using System.Linq;
-using RecipeManager.ApplicationCore.Entities;
-using RecipeManager.ApplicationCore.Search;
+using RecipeManager.Infrastructure.Entities;
+using RecipeManager.Infrastructure.Search;
 using Xunit;
 
 namespace RecipeManager.UnitTests.Infrastructure

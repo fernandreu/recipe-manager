@@ -7,8 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using RecipeManager.ApplicationCore.Entities;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.Infrastructure.Seeding
 {
@@ -189,7 +188,7 @@ namespace RecipeManager.Infrastructure.Seeding
                 });
             }
             
-            Add(new User
+            Add(new ApplicationUser
             {
                 UserName = "fernandreu",
                 Ingredients = new[]

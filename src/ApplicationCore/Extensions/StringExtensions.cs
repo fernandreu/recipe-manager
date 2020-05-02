@@ -1,15 +1,9 @@
 ﻿using System;
-using RecipeManager.ApplicationCore.Search;
 
 namespace RecipeManager.ApplicationCore.Extensions
 {
     public static class StringExtensions
     {
-        public static bool Is(this string s, SearchOperator op)
-        {
-            return s?.Equals(op?.Value, StringComparison.OrdinalIgnoreCase) ?? false;
-        }
-
         /// <summary>
         /// Custom implementation of the Contains method for .NET Standard 2.0
         /// </summary>

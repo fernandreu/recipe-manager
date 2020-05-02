@@ -1,10 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
-using RecipeManager.Infrastructure.Data;
 
 namespace RecipeManager.WebApi
 {

@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
+using RecipeManager.Infrastructure.Entities;
 using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.Infrastructure.Helpers;
 using RecipeManager.WebApi.Errors;
@@ -48,7 +49,7 @@ namespace RecipeManager.WebApi
 
             services.AddInfrastructure(Configuration);
             
-            services.AddIdentityCore<IdentityUser>()
+            services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

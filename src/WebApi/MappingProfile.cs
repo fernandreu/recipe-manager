@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using RecipeManager.ApplicationCore.Entities;
 using RecipeManager.ApplicationCore.Resources;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi
 {
@@ -18,7 +18,7 @@ namespace RecipeManager.WebApi
             CreateMap<UserIngredient, IngredientResource>()
                 .ReverseMap();
             
-            CreateMap<User, UserResource>()
+            CreateMap<ApplicationUser, UserResource>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(Controllers.UsersController.GetUserById), new { userId = src.Id })))
                 .ReverseMap();
         }
