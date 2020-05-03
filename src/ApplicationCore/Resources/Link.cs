@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace RecipeManager.ApplicationCore.Resources
 {
@@ -8,13 +8,14 @@ namespace RecipeManager.ApplicationCore.Resources
     {
         public const string GetMethod = "GET";
 
-        [JsonProperty(Order = -4)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenNull)]
         public string? Href { get; set; }
 
-        [JsonProperty(Order = -3, PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("rel")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenNull)]
         public IReadOnlyCollection<string>? Relations { get; set; }
 
-        [JsonProperty(Order = -2, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenNull)]
         [DefaultValue(GetMethod)]
         public string Method { get; set; } = GetMethod;
 
