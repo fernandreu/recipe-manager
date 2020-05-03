@@ -58,7 +58,7 @@ namespace RecipeManager.WebApi.Controllers
             var user = await userService.GetByIdAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return user;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RecipeManager.ApplicationCore.Models;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Controllers
 {
@@ -12,9 +13,9 @@ namespace RecipeManager.WebApi.Controllers
     {
         private static readonly UserModel LoggedOutUser = new UserModel { IsAuthenticated = false };
 
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AccountsController(UserManager<IdentityUser> userManager)
+        public AccountsController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
         }
@@ -26,14 +27,14 @@ namespace RecipeManager.WebApi.Controllers
         {
             if (model == null)
             {
-                return BadRequest(new RegisterResult
+                return Ok(new RegisterResult
                 {
                     Successful = false,
                     Errors = new[] {"No registration data passed"},
                 });
             }
 
-            var newUser = new IdentityUser
+            var newUser = new ApplicationUser
             {
                 UserName = model.Email, 
                 Email = model.Email,
@@ -43,7 +44,7 @@ namespace RecipeManager.WebApi.Controllers
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(x => x.Description);
-                return BadRequest(new RegisterResult
+                return Ok(new RegisterResult
                 {
                     Successful = false,
                     Errors = errors,

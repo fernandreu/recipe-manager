@@ -10,7 +10,8 @@ namespace RecipeManager.ApplicationCore.Models
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(20, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).*$",  ErrorMessage = "The {0} must contain at least one lowercase letter, one uppercase letter, one digit and one special symbol.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = string.Empty;

@@ -21,13 +21,13 @@
             <ValidationSummary />
 
             <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="@loginModel.Email" />
-                <ValidationMessage For="@(() => loginModel.Email)" />
+                <label for="username">Username</label>
+                <InputText Id="username" Class="form-control" @bind-Value="@loginModel.UserName" />
+                <ValidationMessage For="@(() => loginModel.UserName)" />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <InputText Id="password" Class="form-control" @bind-Value="@loginModel.Password" />
+                <InputText Id="password" Class="form-control" @bind-Value="@loginModel.Password" Type="Password" />
                 <ValidationMessage For="@(() => loginModel.Password)" />
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

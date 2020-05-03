@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RecipeManager.ApplicationCore.Models;
+using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Controllers
 {
@@ -18,9 +19,9 @@ namespace RecipeManager.WebApi.Controllers
     {
         private readonly IConfiguration configuration;
 
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public LoginController(IConfiguration configuration, SignInManager<IdentityUser> signInManager)
+        public LoginController(IConfiguration configuration, SignInManager<ApplicationUser> signInManager)
         {
             this.configuration = configuration;
             this.signInManager = signInManager;
@@ -31,26 +32,26 @@ namespace RecipeManager.WebApi.Controllers
         {
             if (login == null)
             {
-                return BadRequest(new LoginResult
+                return Ok(new LoginResult
                 {
                     Successful = false,
                     Error = "Username and password must be provided.",
                 });
             }
 
-            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, false, false).ConfigureAwait(false);
+            var result = await signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false).ConfigureAwait(false);
             if (!result.Succeeded)
             {
-                return BadRequest(new LoginResult
+                return Ok(new LoginResult
                 {
                     Successful = false,
-                    Error = "Username and password are invalid.",
+                    Error = "Username and / or password are invalid.",
                 });
             }
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, login.Email),
+                new Claim(ClaimTypes.Name, login.UserName),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));

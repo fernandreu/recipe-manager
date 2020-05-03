@@ -3,9 +3,12 @@ using System.Reflection;
 using System.Text;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -51,9 +54,19 @@ namespace RecipeManager.WebApi
             services.AddInfrastructure(Configuration);
             
             services.AddIdentityCore<ApplicationUser>()
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddSignInManager()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, options =>
+                {
+                    options.LoginPath = new PathString("/login");
+                    options.Events = new CookieAuthenticationEvents
+                    {
+                        OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync,
+                    };
+                })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -117,7 +130,7 @@ namespace RecipeManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, IOptionsMonitor<DbOptions> options)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, IOptionsMonitor<DbOptions> options, IUserService userService)
         {
             if (options.CurrentValue.Delete)
             {
@@ -133,6 +146,9 @@ namespace RecipeManager.WebApi
             {
                 context.Database.Migrate();
             }
+
+            // TODO: This system can be used to set an admin password in production too (as long as that is managed securely)
+            userService.SetPasswordAsync("FakeAdmin", "Abcd123#").Wait();
             
             CurrentEnvironment = env;
 
