@@ -7,12 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.Infrastructure.Seeding
 {
     public class FakeDataSeeder : EmptyDataSeeder
     {
+        public const string FakeAdminEmail = "admin@andreu.info";
+        
         protected override void Seed()
         {
             Add(new Recipe
@@ -188,9 +191,11 @@ namespace RecipeManager.Infrastructure.Seeding
                 });
             }
             
-            Add(new ApplicationUser
+            var user = new ApplicationUser
             {
-                UserName = "fernandreu",
+                UserName = "FakeAdmin",
+                Email = FakeAdminEmail,
+                SecurityStamp = Guid.NewGuid().ToString(),
                 Ingredients = new[]
                 {
                     new UserIngredient
@@ -205,7 +210,8 @@ namespace RecipeManager.Infrastructure.Seeding
                         Name = "sugar",
                     },
                 }
-            });
+            };
+            Add(user);
         }
     }
 }

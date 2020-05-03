@@ -53,7 +53,7 @@ namespace WebClient.Services
             if (result.Successful)
             {
                 await localStorage.SetItemAsync("authToken", result.Token).ConfigureAwait(false);
-                ((ApiAuthenticationStateProvider)authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
+                ((ApiAuthenticationStateProvider)authenticationStateProvider).MarkUserAsAuthenticated(loginModel.UserName);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
             }
 

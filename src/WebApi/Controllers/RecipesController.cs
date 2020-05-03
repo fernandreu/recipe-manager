@@ -61,7 +61,7 @@ namespace RecipeManager.WebApi.Controllers
             var result = await recipeService.GetByIdAsync(recipeId).ConfigureAwait(false);
             if (result == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return result;
@@ -83,7 +83,7 @@ namespace RecipeManager.WebApi.Controllers
             var result = await recipeService.UpdateAsync(recipeId, model).ConfigureAwait(false);
             if (result == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return result;
