@@ -125,7 +125,7 @@ namespace RecipeManager.ApplicationCore.Sort
                 throw new ArgumentNullException(nameof(spec));
             }
 
-            spec.OrderByClauses = new List<OrderByClause<T>>();
+            spec.OrderByClauses.Clear();
 
             var terms = GetValidTerms().ToArray();
 
@@ -153,11 +153,7 @@ namespace RecipeManager.ApplicationCore.Sort
                     continue;
                 }
 
-                spec.OrderByClauses.Add(new OrderByClause<T>
-                {
-                    Expression = keySelector,
-                    Descending = term.Descending,
-                });
+                spec.OrderByClauses.Add(new OrderByClause<T>(keySelector, term.Descending));
             }
         }
 

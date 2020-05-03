@@ -98,8 +98,8 @@ namespace RecipeManager.ApplicationCore.Search
             }
 
             // TODO: Split these between client and server criteria depending on the type of expression
-            spec.ServerCriteria = new List<Expression<Func<T, bool>>>();
-            spec.ClientCriteria = new List<Expression<Func<T, bool>>>();
+            spec.ServerCriteria.Clear();
+            spec.ClientCriteria.Clear();
             
             var terms = GetValidTerms().ToArray();
             if (!terms.Any())
@@ -129,14 +129,12 @@ namespace RecipeManager.ApplicationCore.Search
                 if (comparisonExpression.ServerSide != null)
                 {
                     var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ServerSide);
-                    spec.ServerCriteria ??= new List<Expression<Func<T, bool>>>();
                     spec.ServerCriteria.Add(lambdaExpression);
                 }
 
                 if (comparisonExpression.ClientSide != null)
                 {
                     var lambdaExpression = (Expression<Func<T, bool>>)ExpressionHelper.GetLambda<T, bool>(obj, comparisonExpression.ClientSide);
-                    spec.ClientCriteria ??= new List<Expression<Func<T, bool>>>();
                     spec.ClientCriteria.Add(lambdaExpression);
                 }
             }

@@ -19,12 +19,23 @@ namespace RecipeManager.ApplicationCore.Specifications
         {
             ApplyOptions(options);
         }
+
+        // This constructor is needed for AutoMapper
+        public Specification(
+            ICollection<Expression<Func<T, bool>>> serverCriteria,
+            ICollection<Expression<Func<T, bool>>> clientCriteria,
+            ICollection<OrderByClause<T>> orderByClauses)
+        {
+            ServerCriteria = serverCriteria ?? new List<Expression<Func<T, bool>>>();
+            ClientCriteria = clientCriteria ?? new List<Expression<Func<T, bool>>>();
+            OrderByClauses = orderByClauses ?? new List<OrderByClause<T>>();
+        }
         
-        public ICollection<Expression<Func<T, bool>>>? ServerCriteria { get; set; }
+        public ICollection<Expression<Func<T, bool>>> ServerCriteria { get; } = new List<Expression<Func<T, bool>>>();
 
-        public ICollection<Expression<Func<T, bool>>>? ClientCriteria { get; set; }
+        public ICollection<Expression<Func<T, bool>>> ClientCriteria { get; } = new List<Expression<Func<T, bool>>>();
 
-        public ICollection<OrderByClause<T>>? OrderByClauses { get; set; }
+        public ICollection<OrderByClause<T>> OrderByClauses { get; } = new List<OrderByClause<T>>();
 
         public int Take { get; set; }
 
@@ -34,7 +45,6 @@ namespace RecipeManager.ApplicationCore.Specifications
 
         public Specification<T> Where(Expression<Func<T, bool>> expression)
         {
-            ClientCriteria ??= new List<Expression<Func<T, bool>>>();
             // TODO: Analyze the expression to determine if it could be evaluated server-side
             ClientCriteria.Add(expression);
             return this;
@@ -42,17 +52,11 @@ namespace RecipeManager.ApplicationCore.Specifications
 
         public Specification<T> OrderBy(Expression<Func<T, object>> expression, bool descending = false)
         {
-            var clause = new OrderByClause<T>
-            {
-                Expression = expression,
-                Descending = descending,
-            };
-            return OrderBy(clause);
+            return OrderBy(new OrderByClause<T>(expression, descending));
         }
 
         public Specification<T> OrderBy(OrderByClause<T> clause)
         {
-            OrderByClauses ??= new List<OrderByClause<T>>();
             OrderByClauses.Add(clause);
             return this;
         }
