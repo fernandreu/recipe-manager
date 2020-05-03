@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RecipeManager.ApplicationCore.Helpers;
 using RecipeManager.ApplicationCore.Models;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.Infrastructure.Data;
@@ -147,8 +148,12 @@ namespace RecipeManager.WebApi
                 context.Database.Migrate();
             }
 
-            // TODO: This system can be used to set an admin password in production too (as long as that is managed securely)
-            userService.SetPasswordAsync("FakeAdmin", "Abcd123#").Wait();
+            // Without the using statement, Azure Pipelines might get a deadlock
+            using (NoSynchronizationContextScope.Enter())
+            {
+                // TODO: This system can be used to set an admin password in production too (as long as that is managed securely)
+                userService.SetPasswordAsync("FakeAdmin", "Abcd123#").Wait();
+            }
             
             CurrentEnvironment = env;
 
