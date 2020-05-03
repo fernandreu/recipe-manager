@@ -1,12 +1,12 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using RecipeManager.ApplicationCore.Interfaces;
 
 namespace RecipeManager.ApplicationCore.Resources
 {
     public abstract class BaseResource : Link, ISingleEntity
     {
-        [JsonProperty(Order = -3, DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenNull)]
         public Guid Id { get; set; }
 
         [JsonIgnore]
