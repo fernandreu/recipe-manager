@@ -42,7 +42,7 @@ namespace RecipeManager.Infrastructure.Extensions
             specification ??= new Specification<TDest>();
             var destSpec = mapper.Map<Specification<TSource>>(specification);
             
-            var query = destSpec.ServerCriteria?.Aggregate(
+            var query = destSpec.ServerCriteria.Aggregate(
                 self, 
                 (current, criterion) => current.Where(criterion)) ?? self;
 
@@ -63,10 +63,10 @@ namespace RecipeManager.Infrastructure.Extensions
 
             // TODO: Cache compile calls. If no expression analysis is done, ClientCauses could store them directly instead of the expressions
             var raw = await query.ToListAsync().ConfigureAwait(false);
-            var filtered = destSpec.ClientCriteria?.Aggregate(
+            var filtered = destSpec.ClientCriteria.Aggregate(
                 (IEnumerable<TSource>)raw,
                 (current, criterion) => current.Where(criterion.Compile()))
-                .ToArray() ?? Array.Empty<TSource>();
+                .ToArray();
 
             var result = new PagedResults<TSource>
             {
