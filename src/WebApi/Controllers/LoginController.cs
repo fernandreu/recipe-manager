@@ -13,8 +13,8 @@ using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration configuration;

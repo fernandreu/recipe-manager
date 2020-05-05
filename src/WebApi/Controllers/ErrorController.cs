@@ -5,8 +5,8 @@ using RecipeManager.WebApi.Errors;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class ErrorController : ControllerBase
     {
         [HttpGet("{statusCode}", Name = nameof(HandleStatusCode))]

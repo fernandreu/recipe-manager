@@ -12,8 +12,8 @@ using RecipeManager.WebApi.Interfaces;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipeService recipeService;

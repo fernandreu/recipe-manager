@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Reflection;
 using System.Text;
 using AutoMapper;
@@ -81,6 +81,8 @@ namespace RecipeManager.WebApi
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"])),
                     };
                 });
+            
+            
 
             services.AddControllers(options =>
             {

@@ -1,0 +1,69 @@
+﻿@page "/ingredients"
+@using RecipeManager.ApplicationCore.Models
+@using RecipeManager.ApplicationCore.Resources
+@inject HttpClient Http
+@inject ServerConfig ServerConfig
+@inject NavigationManager NavigationManager
+
+
+<h1>Manage Ingredients</h1>
+
+Add / remove / edit the ingredients you have.
+
+<p>
+    <MatButton Label="Add Ingredient" Raised="true" Icon="@MatIconNames.Add" />
+</p>
+
+<p>@StatusMessage</p>
+
+<MatTable Items="@Items" ShowPaging="false">
+    <MatTableHeader>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Units</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Name" TValue="string" FullWidth="true" Required="true"/></td>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Quantity" TValue="double" FullWidth="true" Required="true"/></td>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Units" TValue="string" FullWidth="true" /></td>
+    </MatTableRow>
+</MatTable>
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    
+    private List<IngredientResource> Items { get; } = new List<IngredientResource>
+    {
+        new IngredientResource(),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var user = (await AuthenticationStateTask).User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("login");
+            return;
+        }
+        
+        var uri = ServerConfig.UrlTo("ingredients");
+
+        try
+        {
+            var ingredients = await Http.GetJsonAsync<PagedCollection<IngredientResource>>(uri.ToString());
+            foreach (var ingredient in ingredients.Value)
+            {
+                Items.Add(ingredient);
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
+
+    private string StatusMessage { get; set; }
+}

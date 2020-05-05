@@ -24,6 +24,11 @@
             <ValidationSummary />
 
             <div class="form-group">
+                <label for="username">Username</label>
+                <InputText Id="username" Class="form-control" @bind-Value="@registerModel.Username" />
+                <ValidationMessage For="@(() => registerModel.Username)" />
+            </div>
+            <div class="form-group">
                 <label for="email">Email address</label>
                 <InputText Id="email" Class="form-control" @bind-Value="@registerModel.Email" />
                 <ValidationMessage For="@(() => registerModel.Email)" />
@@ -34,8 +39,8 @@
                 <ValidationMessage For="@(() => registerModel.Password)" />
             </div>
             <div class="form-group">
-                <label for="password">Confirm Password</label>
-                <InputText Id="password" Class="form-control" @bind-Value="@registerModel.ConfirmPassword" Type="Password" />
+                <label for="password-confirm">Confirm Password</label>
+                <InputText Id="password-confirm" Class="form-control" @bind-Value="@registerModel.ConfirmPassword" Type="Password" />
                 <ValidationMessage For="@(() => registerModel.ConfirmPassword)" />
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
