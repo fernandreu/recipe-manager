@@ -1,9 +1,12 @@
 ﻿@page "/ingredients"
 @using RecipeManager.ApplicationCore.Models
 @using RecipeManager.ApplicationCore.Resources
+@using Blazored.LocalStorage
+@using System.Net.Http.Headers
 @inject HttpClient Http
 @inject ServerConfig ServerConfig
 @inject NavigationManager NavigationManager
+@inject ILocalStorageService localStorage
 
 
 <h1>Manage Ingredients</h1>
@@ -50,10 +53,12 @@ Add / remove / edit the ingredients you have.
         }
         
         var uri = ServerConfig.UrlTo("ingredients");
-
+        
         try
         {
             var ingredients = await Http.GetJsonAsync<PagedCollection<IngredientResource>>(uri.ToString());
+            
+            Items.Clear();
             foreach (var ingredient in ingredients.Value)
             {
                 Items.Add(ingredient);

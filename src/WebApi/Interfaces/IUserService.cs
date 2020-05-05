@@ -10,9 +10,9 @@ namespace RecipeManager.WebApi.Interfaces
         /// Automates the process of generating a password reset token and assigning a password for a given user. This
         /// is mostly for admin operations; end users should do the two steps separately. 
         /// </summary>
-        /// <param name="userName">The username for which the password will be reset</param>
+        /// <param name="email">The email for which the password will be reset</param>
         /// <param name="password">The new password</param>
         /// <returns></returns>
-        Task<IdentityResult> SetPasswordAsync(string userName, string password);
+        Task<IdentityResult> SetPasswordAsync(string email, string password);
     }
 }

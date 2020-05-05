@@ -36,7 +36,7 @@ namespace RecipeManager.WebApi.Controllers
 
             var newUser = new ApplicationUser
             {
-                UserName = model.Username, 
+                UserName = model.UserName,
                 Email = model.Email,
             };
 
@@ -58,7 +58,7 @@ namespace RecipeManager.WebApi.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult ReadUser()
+        public ActionResult<UserModel> ReadUser()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -73,7 +73,7 @@ namespace RecipeManager.WebApi.Controllers
 
             return Ok(new UserModel
             {
-                Email = name,
+                UserName = name,
                 IsAuthenticated = true,
             });
         }

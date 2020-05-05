@@ -5,7 +5,7 @@ namespace RecipeManager.ApplicationCore.Resources
 {
     public class UserResource : BaseResource
     {
-        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [IncludeInSingleQueries]
         [SearchableIngredients]
