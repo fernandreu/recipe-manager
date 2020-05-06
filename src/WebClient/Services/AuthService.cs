@@ -54,7 +54,7 @@ namespace WebClient.Services
             {
                 await localStorage.SetItemAsync("authToken", result.Token).ConfigureAwait(false);
                 ((ApiAuthenticationStateProvider)authenticationStateProvider).MarkUserAsAuthenticated(loginModel.UserName);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Token);
             }
 
             return result;

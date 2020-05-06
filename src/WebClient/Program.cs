@@ -1,6 +1,7 @@
-﻿using System;
+﻿﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
+ using System.Net.Http.Headers;
+ using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

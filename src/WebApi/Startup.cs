@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Reflection;
 using System.Text;
 using AutoMapper;
@@ -24,7 +24,8 @@ using RecipeManager.Infrastructure.Data;
 using RecipeManager.Infrastructure.Entities;
 using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.Infrastructure.Helpers;
-using RecipeManager.WebApi.Errors;
+ using RecipeManager.Infrastructure.Seeding;
+ using RecipeManager.WebApi.Errors;
 using RecipeManager.WebApi.Filters;
 using RecipeManager.WebApi.Interfaces;
 using RecipeManager.WebApi.Services;
@@ -72,16 +73,16 @@ namespace RecipeManager.WebApi
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = false,
+                        ValidateIssuerSigningKey = false,
                         ValidIssuer = Configuration["JwtIssuer"],
                         ValidAudience = Configuration["JwtAudience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"])),
                     };
                 });
-
+            
             services.AddControllers(options =>
             {
                 options.Filters.Add<JsonExceptionFilter>();
@@ -152,7 +153,7 @@ namespace RecipeManager.WebApi
             using (NoSynchronizationContextScope.Enter())
             {
                 // TODO: This system can be used to set an admin password in production too (as long as that is managed securely)
-                userService.SetPasswordAsync("FakeAdmin", "Abcd123#").Wait();
+                userService.SetPasswordAsync(FakeDataSeeder.FakeAdminName, "Abcd123#").Wait();
             }
             
             CurrentEnvironment = env;

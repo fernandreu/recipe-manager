@@ -19,9 +19,9 @@ namespace RecipeManager.WebApi.Services
             this.userManager = userManager;
         }
 
-        public async Task<IdentityResult> SetPasswordAsync(string userName, string password)
+        public async Task<IdentityResult> SetPasswordAsync(string username, string password)
         {
-            var user = await Context.Users.FirstOrDefaultAsync(x => x.UserName == userName).ConfigureAwait(false);
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.UserName == username).ConfigureAwait(false);
             if (user == null)
             {
                 return IdentityResult.Failed();

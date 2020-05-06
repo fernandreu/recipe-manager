@@ -3,8 +3,8 @@ using RecipeManager.ApplicationCore.Resources;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("/")]
     [ApiController]
+    [Route("/")]
     public class RootController : ControllerBase
     {
         [HttpGet(Name = nameof(GetRoot))]

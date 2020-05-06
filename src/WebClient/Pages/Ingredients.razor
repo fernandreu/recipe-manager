@@ -1,0 +1,112 @@
+﻿@page "/ingredients"
+@using RecipeManager.ApplicationCore.Models
+@using RecipeManager.ApplicationCore.Resources
+@using Blazored.LocalStorage
+@inject HttpClient Http
+@inject ServerConfig ServerConfig
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+
+<h1>Manage Ingredients</h1>
+
+Add / remove / edit the ingredients you have.
+
+<p>
+    <MatButton Label="Save Changes" Raised="true" Icon="@MatIconNames.Save" OnClick="@UpdateAsync" />
+</p>
+
+<p>@StatusMessage</p>
+
+<MatTable Items="@Items" ShowPaging="false">
+    <MatTableHeader>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Units</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Name" TValue="string" FullWidth="true" Required="true"/></td>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Quantity" TValue="double" FullWidth="true" Required="true"/></td>
+        <td style="padding: 0"><MatTextField @bind-Value="@context.Units" TValue="string" FullWidth="true" /></td>
+        <td style="padding: 0"><MatButton Label="Remove" Raised="true" Icon="@MatIconNames.Remove" OnClick="@(() => RemoveIngredient(context))"/></td>
+    </MatTableRow>
+</MatTable>
+
+<p>
+    <MatButton Label="Add Ingredient" Raised="true" Icon="@MatIconNames.Add" OnClick="@AddIngredient"/>
+</p>
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private string StatusMessage { get; set; }
+    
+    private List<IngredientResource> Items { get; } = new List<IngredientResource>
+    {
+        new IngredientResource(),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var user = (await AuthenticationStateTask).User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("login");
+            return;
+        }
+        
+        var uri = ServerConfig.UrlTo("ingredients");
+        
+        try
+        {
+            var ingredients = await Http.GetJsonAsync<PagedCollection<IngredientResource>>(uri.ToString());
+            
+            Items.Clear();
+            foreach (var ingredient in ingredients.Value)
+            {
+                Items.Add(ingredient);
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
+
+    private void AddIngredient()
+    {
+        Items.Add(new IngredientResource());
+        StateHasChanged();
+    }
+
+    private void RemoveIngredient(IngredientResource ingredient)
+    {
+        Items.Remove(ingredient);
+        StateHasChanged();
+    }
+    
+    private async Task UpdateAsync()
+    {
+        var uri = ServerConfig.UrlTo("ingredients");
+        
+        try
+        {
+            var ingredients = await Http.PutJsonAsync<Collection<IngredientResource>>(uri.ToString(), Items);
+            
+            Items.Clear();
+            foreach (var ingredient in ingredients.Value)
+            {
+                Items.Add(ingredient);
+            }
+
+            StatusMessage = null;
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
+}

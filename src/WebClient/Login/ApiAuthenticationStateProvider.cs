@@ -30,13 +30,13 @@ namespace WebClient.Login
 
             if (!string.IsNullOrWhiteSpace(savedToken))
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
             }
 
             var userInfo = await httpClient.GetJsonAsync<UserModel>( serverConfig.UrlTo("accounts/user").ToString()).ConfigureAwait(false);
 
             var identity = userInfo.IsAuthenticated
-                ? new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userInfo.Email) }, "apiauth")
+                ? new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userInfo.UserName) }, "apiauth")
                 : new ClaimsIdentity();
 
             return new AuthenticationState(new ClaimsPrincipal(identity));

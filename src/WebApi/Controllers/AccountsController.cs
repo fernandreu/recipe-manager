@@ -7,8 +7,8 @@ using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class AccountsController : ControllerBase
     {
         private static readonly UserModel LoggedOutUser = new UserModel { IsAuthenticated = false };
@@ -36,7 +36,7 @@ namespace RecipeManager.WebApi.Controllers
 
             var newUser = new ApplicationUser
             {
-                UserName = model.Email, 
+                UserName = model.UserName,
                 Email = model.Email,
             };
 
@@ -58,7 +58,7 @@ namespace RecipeManager.WebApi.Controllers
         }
 
         [HttpGet("user")]
-        public IActionResult ReadUser()
+        public ActionResult<UserModel> ReadUser()
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -73,7 +73,7 @@ namespace RecipeManager.WebApi.Controllers
 
             return Ok(new UserModel
             {
-                Email = name,
+                UserName = name,
                 IsAuthenticated = true,
             });
         }

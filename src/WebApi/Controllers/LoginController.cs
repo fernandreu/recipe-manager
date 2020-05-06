@@ -13,8 +13,8 @@ using RecipeManager.Infrastructure.Entities;
 
 namespace RecipeManager.WebApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -49,9 +49,11 @@ namespace RecipeManager.WebApi.Controllers
                 });
             }
 
+            var user = await signInManager.UserManager.FindByNameAsync(login.UserName).ConfigureAwait(false);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, login.UserName),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));

@@ -14,7 +14,7 @@ namespace RecipeManager.Infrastructure.Seeding
 {
     public class FakeDataSeeder : EmptyDataSeeder
     {
-        public const string FakeAdminEmail = "admin@andreu.info";
+        public const string FakeAdminName = "FakeAdmin";
         
         protected override void Seed()
         {
@@ -193,8 +193,8 @@ namespace RecipeManager.Infrastructure.Seeding
             
             var user = new ApplicationUser
             {
-                UserName = "FakeAdmin",
-                Email = FakeAdminEmail,
+                UserName = FakeAdminName,
+                Email = "fake.admin@andreu.info",
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Ingredients = new[]
                 {

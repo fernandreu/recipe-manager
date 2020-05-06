@@ -5,6 +5,11 @@ namespace RecipeManager.ApplicationCore.Models
     public class RegisterModel
     {
         [Required]
+        [StringLength(20, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 6)]
+        [Display(Name = "Username")]
+        public string UserName { get; set; } = string.Empty;
+        
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; } = string.Empty;
