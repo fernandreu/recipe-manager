@@ -13,6 +13,7 @@ using RecipeManager.Infrastructure.Data;
 using RecipeManager.Infrastructure.Entities;
 using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.WebApi.Helpers;
+using RecipeManager.WebApi.Interfaces;
 
 namespace RecipeManager.WebApi.Controllers
 {
@@ -25,20 +26,16 @@ namespace RecipeManager.WebApi.Controllers
 
         private readonly UserManager<ApplicationUser> userManager;
 
-        private readonly AppDbContext context;
+        private readonly IIngredientService ingredientService;
 
-        private readonly IConfigurationProvider mappingConfiguration;
-        
         public IngredientsController(
             IOptions<PagingOptions> defaultPagingOptionsWrapper,
             UserManager<ApplicationUser> userManager,
-            AppDbContext context,
-            IConfigurationProvider mappingConfiguration)
+            IIngredientService ingredientService)
         {
             defaultPagingOptions = defaultPagingOptionsWrapper?.Value ?? new PagingOptions();
             this.userManager = userManager;
-            this.context = context;
-            this.mappingConfiguration = mappingConfiguration;
+            this.ingredientService = ingredientService;
         }
         
         [HttpGet(Name = nameof(ListAllUserIngredients))]
@@ -52,27 +49,19 @@ namespace RecipeManager.WebApi.Controllers
             options.Paging.Offset ??= defaultPagingOptions.Offset;
             options.Paging.Limit ??= defaultPagingOptions.Limit;
 
-            var spec = new Specification<IngredientResource>(options);
-            
             var user = await userManager.GetUserAsync(User).ConfigureAwait(false);
             if (user == null)
             {
                 return Forbid();
             }
             
-            var mapper = mappingConfiguration.CreateMapper();
-            var entities = await context.UserIngredients
-                .Where(x => x.UserId == user.Id)
-                .IncludeAll(false)
-                .ToListAsync()
-                .ConfigureAwait(false);
-            
-            var items = entities.Select(x => mapper.Map<IngredientResource>(x)).ToArray();
+            var spec = new Specification<IngredientResource>(options);
+            var items = await ingredientService.ListAsync(spec, user.Id).ConfigureAwait(false);
             
             return PagedCollectionHelper.Create(
                 Link.ToCollection(nameof(ListAllUserIngredients)), 
-                items, 
-                items.Length, 
+                items.Items.ToArray(), 
+                items.TotalSize, 
                 options.Paging);
         }
     }
