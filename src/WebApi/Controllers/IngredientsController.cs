@@ -1,17 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RecipeManager.ApplicationCore.Paging;
 using RecipeManager.ApplicationCore.Resources;
 using RecipeManager.ApplicationCore.Specifications;
-using RecipeManager.Infrastructure.Data;
 using RecipeManager.Infrastructure.Entities;
-using RecipeManager.Infrastructure.Extensions;
 using RecipeManager.WebApi.Helpers;
 using RecipeManager.WebApi.Interfaces;
 
@@ -63,6 +60,29 @@ namespace RecipeManager.WebApi.Controllers
                 items.Items.ToArray(), 
                 items.TotalSize, 
                 options.Paging);
+        }
+        
+        [HttpPut(Name = nameof(UpdateUserIngredients))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<Collection<IngredientResource>>> UpdateUserIngredients(
+            [FromBody] IEnumerable<IngredientResource> ingredients)
+        {
+            var user = await userManager.GetUserAsync(User).ConfigureAwait(false);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            var result = await ingredientService.UpdateAsync(ingredients, user.Id).ConfigureAwait(false);
+
+            var array = result.ToArray();
+            
+            return new Collection<IngredientResource>
+            {
+                Self = Link.ToCollection(nameof(ListAllUserIngredients)),
+                Value = array,
+            };
         }
     }
 }
