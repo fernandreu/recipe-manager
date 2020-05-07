@@ -1,10 +1,13 @@
 ﻿@page "/recipes"
 @using System.Collections.Specialized
 @using System.Net.Http.Json
+@using RecipeManager.ApplicationCore.Extensions
 @using RecipeManager.ApplicationCore.Models
 @using RecipeManager.ApplicationCore.Resources
+@using RecipeManager.ApplicationCore.Search
 @inject HttpClient Http
 @inject ServerConfig ServerConfig
+@inject NavigationManager NavigationManager
 
 <h1>Recipes</h1>
 
@@ -26,11 +29,19 @@ Search recipes by the ingredients they contain.
                     <th>Name</th>
                     <th>Quantity</th>
                     <th>Units</th>
+                    @if (IngredientTerms != null)
+                    {
+                        <th>Available</th>
+                    }
                 </MatTableHeader>
                 <MatTableRow>
                     <td>@context.Name</td>
                     <td>@context.Quantity</td>
                     <td>@context.Units</td>
+                    @if (IngredientTerms != null)
+                    {
+                        <th>@(context.IsAvailable ? "x" : string.Empty)</th>
+                    }
                 </MatTableRow>
             </MatTable>
         </MatCard>
@@ -39,11 +50,51 @@ Search recipes by the ingredients they contain.
 
 @code
 {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    
     bool IsSearching { get; set; }
 
     Collection<RecipeResource> Results { get; set; }
 
+    private ICollection<IngredientSearchTerm> IngredientTerms { get; set; }
+    
     private string StatusMessage { get; set; } = "Status Message";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        
+        await base.OnInitializedAsync();
+        var user = (await AuthenticationStateTask).User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            return;
+        }
+        
+        var uri = ServerConfig.UrlTo("ingredients");
+        
+        try
+        {
+            var ingredients = await Http.GetJsonAsync<PagedCollection<IngredientResource>>(uri.ToString());
+            
+            IngredientTerms = new List<IngredientSearchTerm>();
+            foreach (var ingredient in ingredients.Value)
+            {
+                IngredientTerms.Add(new IngredientSearchTerm
+                {
+                    Name = ingredient.Name,
+                    Operator = SearchOperator.LessThan,
+                    Quantity = ingredient.Quantity,
+                    Units = ingredient.Units,
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = ex.ToString();
+        }
+    }
 
     private void OnSearch(string searchText)
     {
@@ -71,8 +122,22 @@ Search recipes by the ingredients they contain.
         catch (Exception ex)
         {
             StatusMessage += Environment.NewLine + ex;
+            IsSearching = false;
+            StateHasChanged();
+            return;
         }
-        
+
+        if (IngredientTerms != null)
+        {
+            foreach (var recipe in Results.Value)
+            {
+                foreach (var ingredient in recipe.Ingredients)
+                {
+                    ingredient.IsAvailable = IngredientTerms.Any(x => ingredient.IsMatch(x));
+                }
+            }
+        }
+
         IsSearching = false;
         StateHasChanged();
     }

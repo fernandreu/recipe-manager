@@ -9,5 +9,7 @@ namespace RecipeManager.ApplicationCore.Resources
         public double Quantity { get; set; }
 
         public string? Units { get; set; }
+        
+        public bool IsAvailable { get; set; }
     }
 }
