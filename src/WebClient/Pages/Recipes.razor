@@ -5,6 +5,7 @@
 @using RecipeManager.ApplicationCore.Models
 @using RecipeManager.ApplicationCore.Resources
 @using RecipeManager.ApplicationCore.Search
+@using WebClient.Models
 @inject HttpClient Http
 @inject ServerConfig ServerConfig
 @inject NavigationManager NavigationManager
@@ -16,32 +17,32 @@ Search recipes by the ingredients they contain.
 
 <p>@StatusMessage</p>
 
-<MainSearch OnSearch="@OnSearch" IsEnabled="@(!IsSearching)" />
+<MainSearch OnSearch="@LoadDataAsync" IsEnabled="@(!IsSearching)" />
 
 @if (Results != null)
 {
     foreach (var recipe in Results.Value)
     {
         <MatCard Class="mat-elevation-z3" Style="margin: 8px; padding: 8px;" Stroke="true">
-            <h1>@recipe.Title</h1>
+            <h1>@(recipe.Title + (recipe.IsAvailable ? " - Avialable" : string.Empty))</h1>
             <MatTable Items="@recipe.Ingredients" ShowPaging="false">
                 <MatTableHeader>
                     <th>Name</th>
                     <th>Quantity</th>
                     <th>Units</th>
-                    @if (IngredientTerms != null)
-                    {
-                        <th>Available</th>
-                    }
+                     @if (IngredientTerms != null)
+                     {
+                         <th>Available</th>
+                     }
                 </MatTableHeader>
                 <MatTableRow>
                     <td>@context.Name</td>
                     <td>@context.Quantity</td>
                     <td>@context.Units</td>
-                    @if (IngredientTerms != null)
-                    {
-                        <th>@(context.IsAvailable ? "x" : string.Empty)</th>
-                    }
+                     @if (IngredientTerms != null)
+                     {
+                         <th>@(context.IsAvailable ? "x" : string.Empty)</th>
+                     }
                 </MatTableRow>
             </MatTable>
         </MatCard>
@@ -55,7 +56,7 @@ Search recipes by the ingredients they contain.
     
     bool IsSearching { get; set; }
 
-    Collection<RecipeResource> Results { get; set; }
+    PagedCollection<AvailableRecipe> Results { get; set; }
 
     private ICollection<IngredientSearchTerm> IngredientTerms { get; set; }
     
@@ -96,11 +97,6 @@ Search recipes by the ingredients they contain.
         }
     }
 
-    private void OnSearch(string searchText)
-    {
-        LoadDataAsync(searchText).ConfigureAwait(false);
-    }
-
     private async Task LoadDataAsync(string searchText)
     {
         var queryParameters = new NameValueCollection();
@@ -117,7 +113,7 @@ Search recipes by the ingredients they contain.
         StateHasChanged();
         try
         {
-            Results = await Http.GetFromJsonAsync<PagedCollection<RecipeResource>>(uri);
+            Results = await Http.GetFromJsonAsync<PagedCollection<AvailableRecipe>>(uri);
         }
         catch (Exception ex)
         {
@@ -135,6 +131,8 @@ Search recipes by the ingredients they contain.
                 {
                     ingredient.IsAvailable = IngredientTerms.Any(x => ingredient.IsMatch(x));
                 }
+                
+                recipe.IsAvailable = recipe.Ingredients.All(x => x.IsAvailable);
             }
         }
 

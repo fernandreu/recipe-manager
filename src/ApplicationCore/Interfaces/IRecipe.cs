@@ -8,7 +8,9 @@ namespace RecipeManager.ApplicationCore.Interfaces
         Guid Id { get; set; }
 
         string Title { get; set; }
-
+        
+        string? Details { get; set; }
+        
         ICollection<TIngredient>? Ingredients { get; }
     }
 }
