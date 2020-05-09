@@ -1,11 +1,10 @@
 ﻿@page "/recipes"
 @using System.Collections.Specialized
+@using System.Linq
 @using System.Net.Http.Json
-@using RecipeManager.ApplicationCore.Extensions
 @using RecipeManager.ApplicationCore.Models
 @using RecipeManager.ApplicationCore.Resources
 @using RecipeManager.ApplicationCore.Search
-@using WebClient.Models
 @inject HttpClient Http
 @inject ServerConfig ServerConfig
 @inject NavigationManager NavigationManager
@@ -23,9 +22,13 @@ Search recipes by the ingredients they contain.
 {
     foreach (var recipe in Results.Value)
     {
+        var available = recipe.Ingredients
+            .Select(x => IngredientTerms?.Any(y => y.IsMatch(x)) ?? false)
+            .ToList();
+        
         <MatCard Class="mat-elevation-z3" Style="margin: 8px; padding: 8px;" Stroke="true">
-            <h1>@(recipe.Title + (recipe.IsAvailable ? " - Avialable" : string.Empty))</h1>
-            <MatTable Items="@recipe.Ingredients" ShowPaging="false">
+            <h1>@(recipe.Title + (available.All(x => x) ? " - Available" : string.Empty))</h1>
+            <MatTable Items="@recipe.Ingredients.Zip(available, (x, y) => (ingredient: x, isAvailable: y))" ShowPaging="false">
                 <MatTableHeader>
                     <th>Name</th>
                     <th>Quantity</th>
@@ -36,12 +39,12 @@ Search recipes by the ingredients they contain.
                      }
                 </MatTableHeader>
                 <MatTableRow>
-                    <td>@context.Name</td>
-                    <td>@context.Quantity</td>
-                    <td>@context.Units</td>
+                    <td>@context.ingredient.Name</td>
+                    <td>@context.ingredient.Quantity</td>
+                    <td>@context.ingredient.Units</td>
                      @if (IngredientTerms != null)
                      {
-                         <th>@(context.IsAvailable ? "x" : string.Empty)</th>
+                         <th>@(context.isAvailable ? "x" : string.Empty)</th>
                      }
                 </MatTableRow>
             </MatTable>
@@ -56,7 +59,7 @@ Search recipes by the ingredients they contain.
     
     bool IsSearching { get; set; }
 
-    PagedCollection<AvailableRecipe> Results { get; set; }
+    PagedCollection<RecipeResource> Results { get; set; }
 
     private ICollection<IngredientSearchTerm> IngredientTerms { get; set; }
     
@@ -113,7 +116,7 @@ Search recipes by the ingredients they contain.
         StateHasChanged();
         try
         {
-            Results = await Http.GetFromJsonAsync<PagedCollection<AvailableRecipe>>(uri);
+            Results = await Http.GetFromJsonAsync<PagedCollection<RecipeResource>>(uri);
         }
         catch (Exception ex)
         {
@@ -121,19 +124,6 @@ Search recipes by the ingredients they contain.
             IsSearching = false;
             StateHasChanged();
             return;
-        }
-
-        if (IngredientTerms != null)
-        {
-            foreach (var recipe in Results.Value)
-            {
-                foreach (var ingredient in recipe.Ingredients)
-                {
-                    ingredient.IsAvailable = IngredientTerms.Any(x => ingredient.IsMatch(x));
-                }
-                
-                recipe.IsAvailable = recipe.Ingredients.All(x => x.IsAvailable);
-            }
         }
 
         IsSearching = false;
