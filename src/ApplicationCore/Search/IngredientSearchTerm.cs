@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using RecipeManager.ApplicationCore.Extensions;
+using RecipeManager.ApplicationCore.Interfaces;
+using UnitsNet;
 
 namespace RecipeManager.ApplicationCore.Search
 {
@@ -87,6 +89,86 @@ namespace RecipeManager.ApplicationCore.Search
             }
 
             return result;
+        }
+
+        public bool IsMatch(IIngredient ingredient)
+        {
+            return ingredient == null || IsMatch(ingredient.Name, ingredient.Quantity, ingredient.Units);
+        }
+
+        public bool IsMatch(string name, double quantity, string? units)
+        {
+            if (name?.Contains(Name, StringComparison.OrdinalIgnoreCase) != true)
+            {
+                return false;
+            }
+
+            if (Quantity == null)
+            {
+                // Quantity does not need to be checked then
+                return true;
+            }
+            
+            // Check units first, converting the quantity if necessary
+            if (Units == null ^ units == null)
+            {
+                // Either the search was done thinking this was an uncountable ingredient, or the other way
+                // around. In either case, there is no right unit to assume
+                return false;
+            }
+
+            var termQuantity = Quantity.Value;
+            if (Units != null && units != null && !TryConvertUnits(Units, units, ref termQuantity))
+            {
+                return false;
+            }
+
+            const double tolerance = 1e-2;
+
+            if (Operator == SearchOperator.LessThan)
+            {
+                return quantity < termQuantity - tolerance;
+            }
+            
+            if (Operator == SearchOperator.LessThanOrEqual)
+            {
+                return quantity <= termQuantity + tolerance;
+            }
+            
+            if (Operator == SearchOperator.Equal)
+            {
+                return Math.Abs(termQuantity - quantity) < tolerance;
+            }
+
+            if (Operator == SearchOperator.GreaterThanOrEqual)
+            {
+                return quantity >= termQuantity - tolerance;
+            }
+            
+            if (Operator == SearchOperator.GreaterThan)
+            {
+                return quantity > termQuantity + tolerance;
+            }
+            
+            // Unrecognized operator
+            return false;
+        }
+        
+        private static bool TryConvertUnits(string unitsFrom, string unitsTo, ref double result)
+        {
+            foreach (var quantityName in new[] { "Mass", "Volume" })
+            {
+                try
+                {
+                    result = UnitConverter.ConvertByAbbreviation(result, quantityName, unitsFrom, unitsTo);
+                    return true;
+                }
+                catch (UnitNotFoundException)
+                {
+                }
+            }
+
+            return false;
         }
     }
 }
