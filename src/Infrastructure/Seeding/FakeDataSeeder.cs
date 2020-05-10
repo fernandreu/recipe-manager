@@ -200,12 +200,12 @@ namespace RecipeManager.Infrastructure.Seeding
                 {
                     new UserIngredient
                     {
-                        Quantity = 50,
+                        Quantity = 5,
                         Name = "eggs",
                     },
                     new UserIngredient
                     {
-                        Quantity = 200,
+                        Quantity = 2,
                         Units = "kg",
                         Name = "sugar",
                     },
